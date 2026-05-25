@@ -2123,15 +2123,12 @@ footer {
     .detail-inclusions-box {
         padding: 25px;
     }
-    }
 }
 
-.detail-page-wrapper {
-    padding-top: 140px;
-}
 .detail-hero-banner {
     position: relative;
-    padding: 30px 0;
+    padding-top: 160px;
+    padding-bottom: 30px;
     margin: 20px 10px;
     border-radius: 20px;
     overflow: hidden;
@@ -2294,8 +2291,10 @@ footer {
     opacity: 0.8;
 }
 
-    .detail-page-wrapper {
-        padding-top: 90px;
+@media (max-width: 768px) {
+    .detail-hero-banner {
+        padding-top: 120px;
+        padding-bottom: 20px;
     }
     .gallery-modal-content {
         padding: 0 10px;

@@ -4,7 +4,6 @@ $pageDesc = "Welcome to Adaaran Prestige Vadoo – a luxurious adults-only escap
 include 'includes/header.php';
 ?>
 
-<div class="detail-page-wrapper">
     <div class="detail-hero-banner">
     <img src="<?php echo SITE_PATH; ?>/assets/img/hero-bg.webp" alt="Travel Destination" class="detail-hero-bg">
     <div class="detail-hero-overlay"></div>
@@ -256,7 +255,6 @@ include 'includes/header.php';
         </div>
     </div>
 </div>
-</div> <!-- closes .detail-page-wrapper -->
 
 <!-- Gallery Lightbox Modal -->
 <div class="gallery-modal" id="galleryModal">
