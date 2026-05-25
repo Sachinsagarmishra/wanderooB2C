@@ -1392,6 +1392,52 @@ include_once 'includes/header.php';
             </div>
         </div>
     </section>
+    
+    <section class="group-travel-section" style="background-image: url('<?php echo SITE_PATH; ?>/assets/img/patternbg.png');">
+        <div class="group-container">
+            <div class="group-image-col">
+                <img src="<?php echo SITE_PATH; ?>/assets/img/group-hiking.png" alt="Traveling in a Group">
+            </div>
+            <div class="group-content-col">
+                <h2 class="group-title">
+                    <span class="urbanist">Traveling in a Group?</span> <span class="playfair italic">We've Got</span><br>
+                    <span class="playfair italic">You Covered</span>
+                </h2>
+                <p>Planning a trip for groups can be overwhelming — from bookings to coordination. We handle it all, so your group can simply show up and enjoy the experience together.</p>
+                <ul class="group-features">
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="10" cy="10" r="10" fill="var(--primary)"/>
+                            <path d="M6 10L9 13L14 7" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Custom itineraries for teams & groups
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="10" cy="10" r="10" fill="var(--primary)"/>
+                            <path d="M6 10L9 13L14 7" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Best-in-market pricing for 10+ travellers
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="10" cy="10" r="10" fill="var(--primary)"/>
+                            <path d="M6 10L9 13L14 7" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        End-to-end planning & coordination
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="10" cy="10" r="10" fill="var(--primary)"/>
+                            <path d="M6 10L9 13L14 7" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Dedicated support throughout your trip
+                    </li>
+                </ul>
+                <a href="#" class="btn-group-plan">Plan A Group Trip</a>
+            </div>
+        </div>
+    </section>
 </main>
 
 <?php include_once 'includes/footer.php'; ?>
