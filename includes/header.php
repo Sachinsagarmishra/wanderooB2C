@@ -11,11 +11,13 @@ $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with cus
     <title><?php echo $pageTitle; ?></title>
     <meta name="description" content="<?php echo $pageDesc; ?>">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="<?php echo SITE_PATH; ?>/assets/img/favicon.png">
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo SITE_PATH; ?>/assets/img/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo SITE_PATH; ?>/assets/img/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo SITE_PATH; ?>/assets/img/favicon.png">
     
     <!-- Google Fonts & Styles -->
-    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=3.9">
+    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=4.0">
 </head>
 <body>
     <header>
