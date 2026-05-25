@@ -551,14 +551,16 @@ header {
 
 .wander-subtitle {
     text-align: center;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Urbanist', sans-serif;
     font-size: 18px;
     color: #4a4a4a;
+    letter-spacing: 0.4px;
     margin-bottom: 40px;
+    font-weight: 500;
+    line-height: 1.4;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    line-height: 1.6;
 }
 
 /* Tabs styles */
@@ -773,11 +775,13 @@ header {
 }
 
 .group-content-col p {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Urbanist', sans-serif;
     font-size: 18px;
-    line-height: 1.6;
     color: #4a4a4a;
-    margin-bottom: 30px;
+    letter-spacing: 0.4px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 .group-features {
@@ -894,10 +898,13 @@ header {
 }
 
 .faq-subtitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Urbanist', sans-serif;
     font-size: 18px;
-    line-height: 1.6;
     color: #4a4a4a;
+    letter-spacing: 0.4px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 .faq-content {
@@ -1184,7 +1191,7 @@ footer {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #faf9f6;
+    background-color: #ffffff;
     border-top: 1px solid #eee;
 }
 
@@ -1524,19 +1531,31 @@ footer {
 }
 
 .testimonials-title {
-    font-family: 'Caveat', cursive;
-    font-size: 54px;
-    color: #1c2b54;
-    margin-bottom: 10px;
-    font-weight: 700;
+    font-size: 42px;
+    line-height: 1.1;
+    font-weight: 750;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.testimonials-title .urbanist {
+    font-family: 'Urbanist', sans-serif;
+}
+
+.testimonials-title .playfair {
+    font-family: 'Playfair Display', serif;
 }
 
 .testimonials-subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: #5b6a94;
-    margin: 0;
+    font-size: 18px;
+    color: #4a4a4a;
+    font-family: 'Urbanist', sans-serif;
+    letter-spacing: 0.4px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
 }
 
 .testimonials-slider-wrapper {
@@ -1661,10 +1680,452 @@ footer {
     }
     
     .testimonials-title {
-        font-size: 42px;
+        font-size: 34px;
     }
     
     .testimonials-subtitle {
         font-size: 14px;
+    }
+}
+
+/* Package Detail Page Styles */
+.detail-gallery {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px;
+    margin: 30px auto;
+    max-width: 1280px;
+    padding: 0 20px;
+}
+.detail-gallery-main {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    height: 480px;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+.detail-gallery-thumb {
+    height: 232px;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+.detail-gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+.detail-gallery-img:hover {
+    transform: scale(1.03);
+}
+.btn-view-all-images {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.btn-view-all-images:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Layout */
+.detail-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.detail-layout {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 60px;
+    align-items: flex-start;
+}
+.detail-main-content {
+    flex: 1.8;
+}
+.detail-sidebar {
+    flex: 1;
+    position: sticky;
+    top: 100px;
+}
+
+/* Badges */
+.detail-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.detail-badge {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #4a4a4a;
+    background: #f5f5f5;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Headings & Text */
+.detail-title {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 44px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+.detail-main-content h3 {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+.detail-desc {
+    font-size: 18px;
+    color: #4a4a4a;
+    font-family: 'Urbanist', sans-serif;
+    letter-spacing: 0.4px;
+    margin-bottom: 25px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Highlights */
+.detail-highlights {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 35px 0;
+}
+.detail-highlights li {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.detail-highlights li svg {
+    color: #8cd6b7;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* Itinerary Section */
+.itinerary-tabs {
+    display: flex;
+    gap: 10px;
+    background: #f5f5f5;
+    padding: 6px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    width: max-content;
+}
+.itinerary-tab-btn {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #555555;
+    background: transparent;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.itinerary-tab-btn.active {
+    background: #ffffff;
+    color: var(--text-dark);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.itinerary-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+.itinerary-item {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
+    transition: all 0.3s ease;
+}
+.itinerary-item.active {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+}
+.itinerary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 25px;
+    cursor: pointer;
+    user-select: none;
+    background: #ffffff;
+}
+.itinerary-title-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.itinerary-day-badge {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-dark);
+    background: var(--primary);
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-transform: uppercase;
+}
+.itinerary-title-text {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.itinerary-toggle-icon {
+    width: 20px;
+    height: 20px;
+    color: #555;
+    transition: transform 0.3s ease;
+}
+.itinerary-item.active .itinerary-toggle-icon {
+    transform: rotate(180deg);
+}
+.itinerary-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.itinerary-body-content {
+    padding: 0 25px 25px 25px;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 15px;
+    color: #555555;
+    line-height: 1.6;
+}
+.itinerary-details-meta {
+    margin-top: 15px;
+    display: flex;
+    gap: 20px;
+    border-top: 1px dashed rgba(0,0,0,0.08);
+    padding-top: 15px;
+    font-size: 14px;
+}
+.itinerary-details-meta span strong {
+    color: var(--text-dark);
+}
+
+/* Inclusions & Exclusions */
+.detail-inclusions-box {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.015);
+    padding: 35px;
+    margin-bottom: 40px;
+}
+.detail-inclusions-box h3 {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    margin-top: 0 !important;
+}
+.detail-inclusions-columns {
+    display: flex;
+    gap: 40px;
+}
+.detail-inclusions-col {
+    flex: 1;
+}
+.detail-inclusions-col h4 {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 18px;
+    font-weight: 750;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+.detail-inclusions-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.detail-inclusions-col li {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 15px;
+    color: #4a4a4a;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.detail-inclusions-col li svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}
+.detail-inclusions-col.inclusions li svg {
+    color: #8cd6b7;
+}
+.detail-inclusions-col.exclusions li svg {
+    color: #f87171;
+}
+
+/* Sidebar Enquiry Box */
+.detail-sidebar-box {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.03);
+    padding: 35px 30px;
+}
+.detail-sidebar-box h4.sidebar-package-title {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+.detail-sidebar-box h3.sidebar-heading {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    margin-top: 0;
+}
+.enquiry-select-wrapper {
+    margin-bottom: 25px;
+}
+.enquiry-select {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+.enquiry-select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+.btn-enquiry-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    background: var(--primary);
+    color: var(--text-dark);
+    border: none;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 15px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 222, 89, 0.3);
+}
+.btn-enquiry-next:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 222, 89, 0.4);
+}
+
+/* Responsiveness overrides */
+@media (max-width: 1024px) {
+    .detail-gallery {
+        grid-template-columns: 1.5fr 1fr;
+        grid-template-rows: auto;
+    }
+    .detail-gallery-main {
+        height: 380px;
+    }
+    .detail-gallery-thumb:nth-child(n+3) {
+        display: none;
+    }
+    .detail-gallery-thumb {
+        height: 182px;
+    }
+    .detail-layout {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .detail-sidebar {
+        position: static;
+        width: 100%;
+    }
+}
+@media (max-width: 768px) {
+    .detail-gallery {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        padding: 0 15px;
+        gap: 10px;
+    }
+    .detail-gallery-main {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+        height: 280px;
+    }
+    .detail-gallery-thumb {
+        display: none;
+    }
+    .detail-title {
+        font-size: 32px;
+    }
+    .detail-inclusions-columns {
+        flex-direction: column;
+        gap: 25px;
+    }
+    .detail-inclusions-box {
+        padding: 25px;
+    }
+    .itinerary-tabs {
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
     }
 }

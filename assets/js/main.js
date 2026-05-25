@@ -598,4 +598,82 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 200);
         }
     }
+
+    // Package Detail Itinerary Tabs & Accordion Interactivity
+    const itinerarySection = document.querySelector('.itinerary-accordion');
+    if (itinerarySection) {
+        const tabs = document.querySelectorAll('.itinerary-tab-btn');
+        const items = document.querySelectorAll('.itinerary-item');
+        
+        // Sync active state helper
+        function expandItem(item) {
+            // Collapse all others
+            items.forEach(i => {
+                i.classList.remove('active');
+                const body = i.querySelector('.itinerary-body');
+                if (body) body.style.maxHeight = null;
+            });
+            
+            // Expand this one
+            item.classList.add('active');
+            const body = item.querySelector('.itinerary-body');
+            if (body) {
+                body.style.maxHeight = body.scrollHeight + 'px';
+            }
+            
+            // Sync Tab Button
+            const dayId = item.id.replace('day-', '');
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-day') === dayId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+        
+        function collapseItem(item) {
+            item.classList.remove('active');
+            const body = item.querySelector('.itinerary-body');
+            if (body) body.style.maxHeight = null;
+        }
+        
+        // Tab Clicks
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const dayId = tab.getAttribute('data-day');
+                const targetItem = document.getElementById(`day-${dayId}`);
+                if (targetItem) {
+                    expandItem(targetItem);
+                }
+            });
+        });
+        
+        // Accordion Header Clicks
+        items.forEach(item => {
+            const header = item.querySelector('.itinerary-header');
+            if (header) {
+                header.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    if (isActive) {
+                        collapseItem(item);
+                    } else {
+                        expandItem(item);
+                    }
+                });
+            }
+        });
+        
+        // Initialize: expand the first active one on load
+        const activeItem = document.querySelector('.itinerary-item.active');
+        if (activeItem) {
+            const body = activeItem.querySelector('.itinerary-body');
+            if (body) {
+                // Wait slightly for DOM styling to apply
+                setTimeout(() => {
+                    body.style.maxHeight = body.scrollHeight + 'px';
+                }, 100);
+            }
+        }
+    }
 });
