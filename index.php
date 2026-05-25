@@ -45,8 +45,7 @@ include_once 'includes/header.php';
     </section>
 
     <div class="divider" style="max-width: 1280px; margin: 0 auto; border-top: 1px solid #eee; height: 1px;"></div>
-
-    <section class="honeymooners" style="padding: 80px 40px; max-width: 1280px; margin: 0 auto;">
+    <section class="honeymooners" style="padding: 60px 0px; max-width: 1280px; margin: 0 auto;">
         <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
             <div>
                 <h2 style="margin-bottom: 10px;"><span class="urbanist">For</span> <span class="playfair italic">Honeymooners</span></h2>
