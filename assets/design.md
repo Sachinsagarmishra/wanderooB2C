@@ -86,10 +86,14 @@ We employ a distinct mixed-typography style combining a modern geometric sans-se
 * **Hover Interaction**: Translates vertically (`transform: translateY(-3px)`) and changes background to `--primary-dark` (`#e6c850`).
 
 ### Package Cards
-* **Card Container**: Background `#ffffff`, border `1px solid #eee`, border-radius `12px`.
-* **Card Image**: Fixed height `250px`. Zooms smoothly on hover (`scale(1.05)` over `0.5s` transition).
-* **Card Tags**: Small rectangular tags, background `#f8f8f8`, border `1px solid #eee`, size `11px`, weight `600`, color `#666`.
-* **Pricing block**: Outlined card-footer container with `1px solid #FFDE59`, border-radius `10px`. Contains `per person` subtext and an instalment tag background (`#FFDE59`, font-weight `700`, size `11px`).
+* **Card Container**: Borderless, transparent background, natural layout width spacing.
+* **Card Image**: Height `280px`, rounded corners (`border-radius: 16px`), overflow hidden. Features centered absolute pagination dots overlay at the bottom.
+* **Card Meta**: Duration left-aligned; ratings in green (`#10b981`) right-aligned.
+* **City Strip Banner**: Background `#fdfaf0` (light cream beige), border-radius `6px`, bold text displaying itinerary summaries.
+* **Price Details**: Displays old price (crossed out), green save badge (`background: #e6f7ed`, `color: #10b981`), and current price in large bold format with `/Adult`.
+* **Action Buttons**: 
+  * Phone Button: Circular/square button with `1.5px solid var(--primary)` border and primary-colored icon.
+  * Request Callback Button: Flex-grow block button, filled with `--primary` background, dark text, `8px` border radius, and shadow.
 
 ---
 
