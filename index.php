@@ -1,6 +1,6 @@
 <?php
-$pageTitle = "Modern PHP CMS Solution";
-$pageDesc = "Welcome to Wanderoo - The ultimate PHP/MySQL starter for your next big project.";
+$pageTitle = "Wanderoo - Premium Handpicked Getaways & Luxury Honeymoons";
+$pageDesc = "Discover handpicked luxury getaways, romantic honeymoon packages, and custom travel itineraries to Singapore, Maldives, Bali, Japan, and Kerala with Wanderoo.";
 include_once 'includes/header.php';
 ?>
 
@@ -273,6 +273,662 @@ include_once 'includes/header.php';
                 <span class="dot active"></span>
                 <span class="dot"></span>
                 <span class="dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="wander-section" style="background-image: url('<?php echo SITE_PATH; ?>/assets/img/patternbg.png');">
+        <div class="wander-container">
+            <h2 class="wander-title"><span class="urbanist">Where would you</span> <span class="playfair italic">like to wander?</span></h2>
+            <p class="wander-subtitle">Handpicked getaways designed for romance, adventure, and slow travel—crafted for memories that last a lifetime</p>
+            
+            <div class="filter-tabs">
+                <button class="tab-btn active" data-target="singapore">Singapore</button>
+                <button class="tab-btn" data-target="maldives">Maldives</button>
+                <button class="tab-btn" data-target="bali">Bali</button>
+                <button class="tab-btn" data-target="japan">Japan</button>
+                <button class="tab-btn" data-target="kerala">Kerala, India</button>
+            </div>
+            
+            <!-- Singapore Category -->
+            <div class="category-packages active" id="singapore">
+                <div class="packages-grid">
+                    <!-- Singapore Card 1 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&q=80&w=800" alt="Singapore Stopover">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">4 days & 3 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.7 <span class="count">(28)</span></span>
+                            </div>
+                            <h3>Singapore Stopover Package</h3>
+                            <div class="card-tags">
+                                <span class="tag">Stopover</span>
+                                <span class="tag">City Tour</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 95,000</span>
+                                    <span class="save-badge">SAVE INR 15,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 80,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Singapore Card 2 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1563212879-1bf482d8c368?auto=format&fit=crop&q=80&w=800" alt="Gardens by the Bay">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">4 days & 3 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.8 <span class="count">(34)</span></span>
+                            </div>
+                            <h3>Gardens By The Bay Experience</h3>
+                            <div class="card-tags">
+                                <span class="tag">Gardens</span>
+                                <span class="tag">Activities</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 70,000</span>
+                                    <span class="save-badge">SAVE INR 10,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 60,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Singapore Card 3 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1506970113724-bc41ee661c5c?auto=format&fit=crop&q=80&w=800" alt="Flavours of Singapore">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">3 days & 2 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.6 <span class="count">(19)</span></span>
+                            </div>
+                            <h3>Flavours Of Singapore</h3>
+                            <div class="card-tags">
+                                <span class="tag">Food Tour</span>
+                                <span class="tag">Culture</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 55,000</span>
+                                    <span class="save-badge">SAVE INR 8,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 47,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Maldives Category -->
+            <div class="category-packages" id="maldives">
+                <div class="packages-grid">
+                    <!-- Maldives Card 1 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800" alt="Maldives Beachfront">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">5 days & 4 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.9 <span class="count">(42)</span></span>
+                            </div>
+                            <h3>Maldives Beachfront Retreat</h3>
+                            <div class="card-tags">
+                                <span class="tag">Beach Villa</span>
+                                <span class="tag">All Inclusive</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 1,60,000</span>
+                                    <span class="save-badge">SAVE INR 30,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 1,30,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maldives Card 2 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800" alt="Maldives Water Villa">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">7 days & 6 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.9 <span class="count">(88)</span></span>
+                            </div>
+                            <h3>Maldives Water Villa Luxury</h3>
+                            <div class="card-tags">
+                                <span class="tag">Water Villa</span>
+                                <span class="tag">Private Pool</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 2,90,000</span>
+                                    <span class="save-badge">SAVE INR 50,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 2,40,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maldives Card 3 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&q=80&w=800" alt="Maldives Island Adventure">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">6 days & 5 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.7 <span class="count">(23)</span></span>
+                            </div>
+                            <h3>Maldives Island Adventure</h3>
+                            <div class="card-tags">
+                                <span class="tag">Snorkeling</span>
+                                <span class="tag">Speedboat</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 1,20,000</span>
+                                    <span class="save-badge">SAVE INR 20,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 1,00,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bali Category -->
+            <div class="category-packages" id="bali">
+                <div class="packages-grid">
+                    <!-- Bali Card 1 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=800" alt="Bali Jungle">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">5 days & 4 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.8 <span class="count">(64)</span></span>
+                            </div>
+                            <h3>Ubud Jungle Resort Stay</h3>
+                            <div class="card-tags">
+                                <span class="tag">Jungle Villa</span>
+                                <span class="tag">Breakfast</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 85,000</span>
+                                    <span class="save-badge">SAVE INR 15,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 70,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bali Card 2 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?auto=format&fit=crop&q=80&w=800" alt="Bali Beachfront">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">6 days & 5 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.9 <span class="count">(53)</span></span>
+                            </div>
+                            <h3>Seminyak Beachfront Villa</h3>
+                            <div class="card-tags">
+                                <span class="tag">Beachfront</span>
+                                <span class="tag">Private Pool</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 1,40,000</span>
+                                    <span class="save-badge">SAVE INR 25,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 1,15,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bali Card 3 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?auto=format&fit=crop&q=80&w=800" alt="Bali Temple">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">7 days & 6 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.7 <span class="count">(31)</span></span>
+                            </div>
+                            <h3>Bali Cultural Explorer</h3>
+                            <div class="card-tags">
+                                <span class="tag">Temple Tour</span>
+                                <span class="tag">Private Car</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 95,000</span>
+                                    <span class="save-badge">SAVE INR 15,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 80,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Japan Category -->
+            <div class="category-packages" id="japan">
+                <div class="packages-grid">
+                    <!-- Japan Card 1 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=800" alt="Japan Kyoto">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">8 days & 7 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.9 <span class="count">(112)</span></span>
+                            </div>
+                            <h3>Tokyo & Kyoto Highlights</h3>
+                            <div class="card-tags">
+                                <span class="tag">Bullet Train</span>
+                                <span class="tag">City Tour</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 2,50,000</span>
+                                    <span class="save-badge">SAVE INR 40,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 2,10,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Japan Card 2 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1490761668535-35497054764d?auto=format&fit=crop&q=80&w=800" alt="Mount Fuji">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">5 days & 4 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.8 <span class="count">(47)</span></span>
+                            </div>
+                            <h3>Mount Fuji & Hakone Onsen</h3>
+                            <div class="card-tags">
+                                <span class="tag">Hot Spring</span>
+                                <span class="tag">Fuji View</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 1,80,000</span>
+                                    <span class="save-badge">SAVE INR 30,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 1,50,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Japan Card 3 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&q=80&w=800" alt="Osaka Food">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">6 days & 5 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.7 <span class="count">(39)</span></span>
+                            </div>
+                            <h3>Osaka & Nara Foodie Adventure</h3>
+                            <div class="card-tags">
+                                <span class="tag">Food Tour</span>
+                                <span class="tag">Local Guide</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 1,45,000</span>
+                                    <span class="save-badge">SAVE INR 25,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 1,20,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kerala Category -->
+            <div class="category-packages" id="kerala">
+                <div class="packages-grid">
+                    <!-- Kerala Card 1 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&q=80&w=800" alt="Kerala Tea Gardens">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">4 days & 3 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.7 <span class="count">(51)</span></span>
+                            </div>
+                            <h3>Munnar Hills & Tea Gardens</h3>
+                            <div class="card-tags">
+                                <span class="tag">Hills</span>
+                                <span class="tag">Tea Garden</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 45,000</span>
+                                    <span class="save-badge">SAVE INR 8,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 37,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kerala Card 2 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1593693411515-c202e974eb8f?auto=format&fit=crop&q=80&w=800" alt="Kerala Backwaters">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">3 days & 2 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.8 <span class="count">(73)</span></span>
+                            </div>
+                            <h3>Alleppey Houseboat Cruise</h3>
+                            <div class="card-tags">
+                                <span class="tag">Backwaters</span>
+                                <span class="tag">Houseboat</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 35,000</span>
+                                    <span class="save-badge">SAVE INR 7,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 28,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kerala Card 3 -->
+                    <div class="package-card">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&q=80&w=800" alt="Kerala Complete">
+                            <div class="card-img-dots">
+                                <span class="img-dot active"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                                <span class="img-dot"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="duration">7 days & 6 nights</span>
+                                <span class="rating"><span class="star">★</span> 4.9 <span class="count">(92)</span></span>
+                            </div>
+                            <h3>Kerala Complete Experience</h3>
+                            <div class="card-tags">
+                                <span class="tag">Hills</span>
+                                <span class="tag">Houseboat</span>
+                                <span class="tag">Beach</span>
+                            </div>
+                            <div class="price-section">
+                                <div class="old-price-row">
+                                    <span class="old-price">INR 85,000</span>
+                                    <span class="save-badge">SAVE INR 15,000</span>
+                                </div>
+                                <div class="new-price-row">
+                                    <span class="current-price">INR 70,000</span>
+                                    <span class="per-adult">/Adult</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="tel:+1234567890" class="btn-phone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </a>
+                                <a href="#" class="btn-request">Get a quote</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

@@ -504,6 +504,92 @@ header {
     background: var(--primary);
 }
 
+/* Wander Section (Where would you like to wander) */
+.wander-section {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #faf9f6;
+    padding: 80px 40px;
+    border-top: 1px solid #eee;
+}
+
+.wander-container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.wander-title {
+    text-align: center;
+    font-size: 41.4px !important;
+    line-height: 1.1;
+    font-weight: 600 !important;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+.wander-subtitle {
+    text-align: center;
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 40px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* Tabs styles */
+.filter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: transparent;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    border-color: var(--primary);
+    background: rgba(255, 222, 89, 0.1);
+}
+
+.tab-btn.active {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #000000 !important;
+    box-shadow: 0 4px 12px rgba(255, 222, 89, 0.2);
+}
+
+/* Category Packages Switch */
+.category-packages {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.category-packages.active {
+    display: block;
+    opacity: 1;
+}
+
+.wander-section .packages-grid {
+    cursor: default;
+    user-select: auto;
+}
+
 /* Mobile Menu Button */
 .mobile-toggle {
     display: none;
@@ -530,8 +616,12 @@ header {
         height: 30px;
     }
 
-    .packages-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .package-card {
+        flex: 0 0 calc((100% - 30px) / 2) !important;
+    }
+
+    .wander-section .packages-grid {
+        flex-wrap: wrap;
     }
 }
 
@@ -591,8 +681,12 @@ header {
     }
 
     .package-card {
-        min-width: 100%;
+        flex: 0 0 100% !important;
         scroll-snap-align: start;
+    }
+
+    .wander-section .packages-grid {
+        flex-wrap: nowrap;
     }
 
     .hidden-mobile {

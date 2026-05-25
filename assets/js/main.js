@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextArrow = document.querySelector('.slider-arrow-next');
     
     if (sliderContainer && track) {
-        const cards = document.querySelectorAll('.package-card');
-        const dots = document.querySelectorAll('.dot');
+        const cards = sliderContainer.querySelectorAll('.package-card');
+        const dots = sliderContainer.querySelectorAll('.dot');
         let currentIndex = 0;
         let startX = 0;
         let currentTranslate = 0;
@@ -202,3 +202,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 200);
         startAutoSlide();
     }
+
+    // Tabs Filtering for "Where would you like to wander?"
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const categories = document.querySelectorAll('.category-packages');
+    
+    if (tabButtons.length > 0 && categories.length > 0) {
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const target = button.getAttribute('data-target');
+                
+                // Update active button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Show matching category, hide others
+                categories.forEach(cat => {
+                    if (cat.id === target) {
+                        cat.classList.add('active');
+                        cat.style.display = 'block';
+                        setTimeout(() => {
+                            cat.style.opacity = '1';
+                        }, 50);
+                    } else {
+                        cat.classList.remove('active');
+                        cat.style.opacity = '0';
+                        cat.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }
+});
