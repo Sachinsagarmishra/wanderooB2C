@@ -1,0 +1,11 @@
+# IDE files
+.DS_Store
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+
+# Logs
+error_log
+php_errors.log
