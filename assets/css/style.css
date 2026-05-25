@@ -2126,15 +2126,15 @@ footer {
     }
 }
 
-/* Detail Page Hero Banner */
+.detail-page-wrapper {
+    padding-top: 140px;
+}
 .detail-hero-banner {
     position: relative;
-    padding-top: 160px;
-    padding-bottom: 50px;
+    padding: 30px 0;
     margin: 20px 10px;
     border-radius: 20px;
     overflow: hidden;
-    color: var(--text-white);
 }
 .detail-hero-bg {
     position: absolute;
@@ -2294,10 +2294,8 @@ footer {
     opacity: 0.8;
 }
 
-@media (max-width: 768px) {
-    .detail-hero-banner {
-        padding-top: 130px;
-        padding-bottom: 20px;
+    .detail-page-wrapper {
+        padding-top: 90px;
     }
     .gallery-modal-content {
         padding: 0 10px;
