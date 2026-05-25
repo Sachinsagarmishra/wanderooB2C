@@ -1337,11 +1337,13 @@ footer {
 }
 
 .panel-text {
-    font-family: 'Playfair Display', serif;
     font-size: 18px;
-    line-height: 1.6;
     color: #4a4a4a;
-    margin: 0;
+    font-family: 'Urbanist', sans-serif;
+    letter-spacing: 0.4px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 .panel-text strong {
@@ -1481,11 +1483,13 @@ footer {
 }
 
 .why-choose-card p {
-    font-family: 'Playfair Display', serif;
     font-size: 18px;
-    line-height: 1.6;
     color: #4a4a4a;
-    margin: 0;
+    font-family: 'Urbanist', sans-serif;
+    letter-spacing: 0.4px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 /* Responsive Why Choose */

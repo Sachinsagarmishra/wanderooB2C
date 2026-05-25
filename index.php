@@ -43,46 +43,6 @@ include_once 'includes/header.php';
             </a>
         </div>
     </section>
-    
-    <section class="why-choose-section" style="background-image: url('<?php echo SITE_PATH; ?>/assets/img/patternbg.png');">
-        <div class="why-choose-container">
-            <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 50px;">
-                <div>
-                    <h2 class="why-choose-title"><span class="urbanist">Why Choose</span> <span class="playfair italic">Wanderoo</span></h2>
-                </div>
-                <a href="#" class="btn-enquire">Enquire Now</a>
-            </div>
-            
-            <div class="why-choose-grid">
-                <!-- Col 1 -->
-                <div class="why-choose-card">
-                    <div class="why-icon-wrapper">
-                        <img src="<?php echo SITE_PATH; ?>/assets/img/Tailored-Just-for-You.svg" alt="Tailored Just For You">
-                    </div>
-                    <h3>Tailored Just For You</h3>
-                    <p>Every itinerary is designed around your pace, interests, and budget.</p>
-                </div>
-                
-                <!-- Col 2 -->
-                <div class="why-choose-card">
-                    <div class="why-icon-wrapper">
-                        <img src="<?php echo SITE_PATH; ?>/assets/img/Dedicated-Destination-Experts.svg" alt="Dedicated Destination Experts">
-                    </div>
-                    <h3>Dedicated Destination Experts</h3>
-                    <p>Real people who know your dream destination inside-out.</p>
-                </div>
-                
-                <!-- Col 3 -->
-                <div class="why-choose-card">
-                    <div class="why-icon-wrapper">
-                        <img src="<?php echo SITE_PATH; ?>/assets/img/Hassle-Free-Experience.svg" alt="Hassle-Free Experience">
-                    </div>
-                    <h3>Hassle-Free Experience</h3>
-                    <p>From flights to local gems, we handle it all so you can just enjoy</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <div class="divider" style="max-width: 1280px; margin: 0 auto; border-top: 1px solid #eee; height: 1px;"></div>
     <section class="honeymooners" style="padding: 60px 0px; max-width: 1280px; margin: 0 auto;">
@@ -1594,6 +1554,46 @@ include_once 'includes/header.php';
                             <img src="<?php echo SITE_PATH; ?>/assets/img/how-it-works.png" alt="How it works">
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="why-choose-section" style="background-image: url('<?php echo SITE_PATH; ?>/assets/img/patternbg.png');">
+        <div class="why-choose-container">
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 50px;">
+                <div>
+                    <h2 class="why-choose-title"><span class="urbanist">Why Choose</span> <span class="playfair italic">Wanderoo</span></h2>
+                </div>
+                <a href="#" class="btn-enquire">Enquire Now</a>
+            </div>
+            
+            <div class="why-choose-grid">
+                <!-- Col 1 -->
+                <div class="why-choose-card">
+                    <div class="why-icon-wrapper">
+                        <img src="<?php echo SITE_PATH; ?>/assets/img/Tailored-Just-for-You.svg" alt="Tailored Just For You">
+                    </div>
+                    <h3>Tailored Just For You</h3>
+                    <p>Every itinerary is designed around your pace, interests, and budget.</p>
+                </div>
+                
+                <!-- Col 2 -->
+                <div class="why-choose-card">
+                    <div class="why-icon-wrapper">
+                        <img src="<?php echo SITE_PATH; ?>/assets/img/Dedicated-Destination-Experts.svg" alt="Dedicated Destination Experts">
+                    </div>
+                    <h3>Dedicated Destination Experts</h3>
+                    <p>Real people who know your dream destination inside-out.</p>
+                </div>
+                
+                <!-- Col 3 -->
+                <div class="why-choose-card">
+                    <div class="why-icon-wrapper">
+                        <img src="<?php echo SITE_PATH; ?>/assets/img/Hassle-Free-Experience.svg" alt="Hassle-Free Experience">
+                    </div>
+                    <h3>Hassle-Free Experience</h3>
+                    <p>From flights to local gems, we handle it all so you can just enjoy</p>
                 </div>
             </div>
         </div>
