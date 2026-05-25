@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const track = sliderContainer.querySelector('.packages-grid');
         const prevArrow = sliderContainer.querySelector('.slider-arrow-prev');
         const nextArrow = sliderContainer.querySelector('.slider-arrow-next');
-        const dots = sliderContainer.querySelectorAll('.dot');
+        const dotsContainer = sliderContainer.querySelector('.slider-dots');
         const cards = sliderContainer.querySelectorAll('.package-card');
         
         if (!track || cards.length === 0) return;
@@ -51,8 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function getVisibleCards() {
             if (window.innerWidth <= 768) return 1;
             if (window.innerWidth <= 1024) return 2;
-            if (sliderContainer.closest('.wander-section')) return 4;
-            return 3;
+            return 4; // Show 4 cards in a row on desktop for all sections
         }
         
         function getMaxIndex() {
@@ -65,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         function getGap() {
-            return 30; // Gap is 30px
+            return 10; // Gap is now 10px
         }
         
         function setPositionByIndex() {
@@ -81,8 +80,25 @@ document.addEventListener('DOMContentLoaded', () => {
             track.style.transform = `translateX(${currentTranslate}px)`;
         }
         
+        function buildDots() {
+            if (!dotsContainer) return;
+            dotsContainer.innerHTML = '';
+            const maxIndex = getMaxIndex();
+            for (let i = 0; i <= maxIndex; i++) {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                if (i === currentIndex) dot.classList.add('active');
+                dot.addEventListener('click', () => {
+                    resetAutoSlide();
+                    slideTo(i);
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+        
         function updateDots() {
-            if (dots.length > 0) {
+            if (dotsContainer) {
+                const dots = dotsContainer.querySelectorAll('.dot');
                 dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === currentIndex);
                 });
@@ -201,11 +217,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Initial setup and responsive resizing
         window.addEventListener('resize', () => {
+            buildDots();
             slideTo(currentIndex);
         });
         
         // Start slider
         setTimeout(() => {
+            buildDots();
             slideTo(0);
         }, 200);
         startAutoSlide();
@@ -243,4 +261,116 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Staggered card image slideshow auto-cycle
+    const cardsList = document.querySelectorAll('.package-card');
+    const categoryImages = {
+        singapore: [
+            'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1563212879-1bf482d8c368?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1506970113724-bc41ee661c5c?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1540202404-a2f29036bb52?auto=format&fit=crop&q=80&w=800'
+        ],
+        maldives: [
+            'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&q=80&w=800'
+        ],
+        bali: [
+            'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1538964173425-93884d6680c0?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1552083375-1447ce886485?auto=format&fit=crop&q=80&w=800'
+        ],
+        japan: [
+            'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1490761668535-35497054764d?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1542931287-023b922fa89b?auto=format&fit=crop&q=80&w=800'
+        ],
+        kerala: [
+            'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1593693411515-c202e974eb8f?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1589982441164-325cfccb9557?auto=format&fit=crop&q=80&w=800'
+        ],
+        honeymoon: [
+            'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800',
+            'https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=800'
+        ]
+    };
+    
+    cardsList.forEach((card, cardIndex) => {
+        const imgContainer = card.querySelector('.card-img');
+        if (!imgContainer) return;
+        const originalImg = imgContainer.querySelector('img');
+        const dots = imgContainer.querySelectorAll('.img-dot');
+        if (!originalImg || dots.length === 0) return;
+        
+        // Find category: check parent categories, otherwise default to honeymoon
+        const catPackage = card.closest('.category-packages');
+        const category = catPackage ? catPackage.id : 'honeymoon';
+        const images = categoryImages[category] || categoryImages['honeymoon'];
+        
+        const imgElements = [];
+        originalImg.classList.add('active');
+        imgElements.push(originalImg);
+        
+        // Pre-append other images to the container for smooth fading
+        for (let i = 1; i < images.length; i++) {
+            const newImg = document.createElement('img');
+            newImg.src = images[i];
+            newImg.alt = originalImg.alt || 'Destination Image';
+            imgContainer.insertBefore(newImg, imgContainer.querySelector('.card-img-dots'));
+            imgElements.push(newImg);
+        }
+        
+        let activeImgIndex = 0;
+        
+        // Add click events to image pagination dots for manual override
+        dots.forEach((dot, dotIdx) => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (dotIdx === activeImgIndex) return;
+                
+                imgElements[activeImgIndex].classList.remove('active');
+                activeImgIndex = dotIdx;
+                imgElements[activeImgIndex].classList.add('active');
+                
+                dots.forEach((d, idx) => {
+                    d.classList.toggle('active', idx === activeImgIndex);
+                });
+            });
+        });
+        
+        // Add a slight stagger delay based on card index so cards do not slide synchronously
+        const staggerDelay = (cardIndex * 800) % 3000;
+        
+        setTimeout(() => {
+            setInterval(() => {
+                // Deactivate current image
+                imgElements[activeImgIndex].classList.remove('active');
+                
+                // Advance index
+                activeImgIndex = (activeImgIndex + 1) % imgElements.length;
+                
+                // Activate new image
+                imgElements[activeImgIndex].classList.add('active');
+                
+                // Update active class on pagination dots
+                dots.forEach((dot, dotIdx) => {
+                    dot.classList.toggle('active', dotIdx === activeImgIndex);
+                });
+            }, 5000); // Cycle every 5 seconds
+        }, staggerDelay);
+    });
 });

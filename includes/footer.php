@@ -23,6 +23,6 @@
             <p>&copy; <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>. All rights reserved.</p>
         </div>
     </footer>
-    <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=1.4"></script>
+    <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.0"></script>
 </body>
 </html>
