@@ -11,6 +11,22 @@ include 'includes/header.php';
     <div class="detail-gallery">
         <div class="detail-gallery-main">
             <img src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800" alt="Main Honeymoon Image" class="detail-gallery-img">
+            
+            <!-- Mobile Controls -->
+            <div class="mobile-gallery-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            
+            <div class="mobile-gallery-bubbles">
+                <div class="bubble"><img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=150" alt="Thumb 1"></div>
+                <div class="bubble"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=150" alt="Thumb 2"></div>
+                <div class="bubble"><img src="https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=150" alt="Thumb 3"></div>
+                <div class="bubble"><img src="https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=150" alt="Thumb 4"></div>
+            </div>
         </div>
         <div class="detail-gallery-thumb">
             <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=600" alt="Honeymoon hammock" class="detail-gallery-img">
