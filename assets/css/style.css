@@ -2152,6 +2152,10 @@ footer {
     }
 }
 
+.mobile-btn-view-all {
+    display: none;
+}
+
 @media (max-width: 768px) {
     header {
         padding: 40px 25px 15px 25px;
@@ -2204,10 +2208,6 @@ footer {
         right: 15px;
         z-index: 10;
     }
-}
-
-.mobile-btn-view-all {
-    display: none;
 }
 
 .detail-hero-banner {
