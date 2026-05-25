@@ -171,7 +171,7 @@ header {
 }
 
 .trusted-by-img {
-    height: 42px;
+    height: 20px;
     width: auto;
 }
 
@@ -679,7 +679,8 @@ header {
     }
 
     .social-proof .trusted-by-img {
-        height: 30px;
+        height: 16px;
+        margin-bottom: -5px;
     }
 
     .btn-enquire {
@@ -1030,7 +1031,7 @@ header {
 
 /* Footer Section */
 footer {
-    background: linear-gradient(rgba(10, 45, 20, 0.8), rgba(5, 30, 15, 0.9)),
+    background: linear-gradient(rgb(10 45 20 / 40%), rgb(5 30 15 / 28%)),
         url('../img/footerbg.webp?v=1.1');
     background-size: cover;
     background-position: center;
