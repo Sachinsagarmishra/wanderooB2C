@@ -24,11 +24,19 @@ body {
     line-height: 1.6;
 }
 
-h1,
-h2,
-h3 {
+h1 {
     font-family: 'Urbanist', sans-serif;
-    font-weight: 700;
+    font-weight: 500;
+}
+
+h2, h3 {
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 41.4px;
+    line-height: 1.1;
 }
 
 .playfair {

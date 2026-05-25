@@ -33,14 +33,14 @@ We employ a distinct mixed-typography style combining a modern geometric sans-se
 ### Heading Rules & Sizes
 
 > [!WARNING]
-> **Typography Weight Rule**: The font weight of **all headings** across the frontend must be **`500`** (matching the Hero Title / `h1.hero-title` weight). Do not use bold (`700`) weights for headings unless explicitly requested.
+> **Typography Weight Rule**: The font weight of **H1** headings across the frontend must be **`500`** (matching the Hero Title / `h1.hero-title` weight). The font weight of **H2** and **H3** headings must be **`600`**.
 
 | Element / Class | Size (Desktop) | Size (Tablet - 1024px) | Size (Mobile - 768px) | Font Family | Weight | Line Height |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **H1** (`.hero-title`) | `66px` | `50px` | `35px` | `'Urbanist'` / `'Playfair Display'` | `500` | `1.1` |
-| **H2** (Section Titles) | `56px` | `56px` | `40px` | `'Urbanist'` / `'Playfair Display'` | `500` | `1.1` |
-| **H3** (Card Titles) | `20px` | `20px` | `20px` | `'Urbanist'` | `500` | `1.3` |
-| **H4** (Pricing Highlights)| `28px` | `28px` | `28px` | `'Urbanist'` | `500` | `1.3` |
+| **H2** (Section Titles) | `41.4px` | `41.4px` | `40px` | `'Urbanist'` / `'Playfair Display'` | `600` | `1.1` |
+| **H3** (Card Titles) | `20px` | `20px` | `20px` | `'Urbanist'` | `600` | `1.3` |
+| **H4** (Pricing Highlights)| `28px` | `28px` | `28px` | `'Urbanist'` | `600` | `1.3` |
 
 ### Body & Subtitles
 * **Body Text**: `13px` / `14px` size, `'Urbanist'` font family, weight `400` / `500`, line-height `1.6`. Color: `#1a1a1a` (`--text-dark`) or `#666` for muted descriptions.

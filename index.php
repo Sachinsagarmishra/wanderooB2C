@@ -32,7 +32,7 @@ include_once 'includes/header.php';
 
     <section class="who-we-are" style="padding: 60px 40px; max-width: 1280px; margin: 0 auto; display: flex; gap: 40px; align-items: flex-start;">
         <div style="flex: 1;">
-            <h2 style="font-size: 56px; line-height: 1.1;"><span class="urbanist">Who</span> <span class="playfair italic">We Are</span></h2>
+            <h2 style="line-height: 1.1;"><span class="urbanist">Who</span> <span class="playfair italic">We Are</span></h2>
         </div>
         <div style="flex: 1.5;">
             <p style="font-size: 18px; color: #4a4a4a; margin-bottom: 15px; font-weight: 500; line-height: 1.4;">
@@ -49,7 +49,7 @@ include_once 'includes/header.php';
     <section class="honeymooners" style="padding: 80px 40px; max-width: 1280px; margin: 0 auto;">
         <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
             <div>
-                <h2 style="font-size: 56px; margin-bottom: 10px;"><span class="urbanist">For</span> <span class="playfair italic">Honeymooners</span></h2>
+                <h2 style="margin-bottom: 10px;"><span class="urbanist">For</span> <span class="playfair italic">Honeymooners</span></h2>
                 <p style="font-size: 18px; color: #4a4a4a; font-weight: 500;">Honeymoons crafted for forever memories.</p>
             </div>
             <a href="#" class="btn-enquire">Enquire Now</a>
