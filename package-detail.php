@@ -4,22 +4,27 @@ $pageDesc = "Welcome to Adaaran Prestige Vadoo – a luxurious adults-only escap
 include 'includes/header.php';
 ?>
 
-<div class="detail-gallery">
-    <div class="detail-gallery-main">
-        <img src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800" alt="Main Honeymoon Image" class="detail-gallery-img">
-    </div>
-    <div class="detail-gallery-thumb">
-        <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=600" alt="Honeymoon hammock" class="detail-gallery-img">
-    </div>
-    <div class="detail-gallery-thumb">
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=600" alt="Maldives Beach" class="detail-gallery-img">
-    </div>
-    <div class="detail-gallery-thumb">
-        <img src="https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=600" alt="Couple in Sea" class="detail-gallery-img">
-    </div>
-    <div class="detail-gallery-thumb">
-        <img src="https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=600" alt="Water villas" class="detail-gallery-img">
-        <button class="btn-view-all-images">View All Images</button>
+<div class="detail-hero-banner">
+    <img src="<?php echo SITE_PATH; ?>/assets/img/hero-bg.webp" alt="Travel Destination" class="detail-hero-bg">
+    <div class="detail-hero-overlay"></div>
+    
+    <div class="detail-gallery">
+        <div class="detail-gallery-main">
+            <img src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800" alt="Main Honeymoon Image" class="detail-gallery-img">
+        </div>
+        <div class="detail-gallery-thumb">
+            <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=600" alt="Honeymoon hammock" class="detail-gallery-img">
+        </div>
+        <div class="detail-gallery-thumb">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=600" alt="Maldives Beach" class="detail-gallery-img">
+        </div>
+        <div class="detail-gallery-thumb">
+            <img src="https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=600" alt="Couple in Sea" class="detail-gallery-img">
+        </div>
+        <div class="detail-gallery-thumb">
+            <img src="https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=600" alt="Water villas" class="detail-gallery-img">
+            <button class="btn-view-all-images">View All Images</button>
+        </div>
     </div>
 </div>
 
@@ -249,6 +254,31 @@ include 'includes/header.php';
             </div>
         </div>
     </div>
+</div>
+
+<!-- Gallery Lightbox Modal -->
+<div class="gallery-modal" id="galleryModal">
+    <div class="gallery-modal-close" id="closeGallery">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </div>
+    
+    <div class="gallery-modal-content">
+        <button class="gallery-modal-arrow gallery-modal-arrow-prev" id="prevGalleryImg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        
+        <div class="gallery-modal-image-wrapper">
+            <img src="" alt="Gallery Image" class="gallery-modal-img" id="galleryModalImg">
+            <div class="gallery-modal-counter" id="galleryCounter">1 of 8</div>
+        </div>
+        
+        <button class="gallery-modal-arrow gallery-modal-arrow-next" id="nextGalleryImg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
+    
+    <!-- Thumbnails -->
+    <div class="gallery-modal-thumbs" id="galleryModalThumbs"></div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
