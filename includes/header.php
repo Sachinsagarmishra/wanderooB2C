@@ -17,7 +17,7 @@ $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with cus
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo SITE_PATH; ?>/assets/img/favicon.png">
     
     <!-- Google Fonts & Styles -->
-    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=4.3">
+    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=4.4">
 </head>
 <body>
     <header>
@@ -27,10 +27,10 @@ $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with cus
             </a>
             
             <nav class="nav-glass">
-                <a href="<?php echo SITE_PATH; ?>/" class="active">Home</a>
+                <a href="<?php echo SITE_PATH; ?>/"<?php echo basename($_SERVER['SCRIPT_NAME']) == 'index.php' || basename($_SERVER['SCRIPT_NAME']) == '' ? ' class="active"' : ''; ?>>Home</a>
                 <a href="#">About Us</a>
                 <a href="#">Destinations <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-                <a href="#">Contact Us</a>
+                <a href="<?php echo SITE_PATH; ?>/contact.php"<?php echo basename($_SERVER['SCRIPT_NAME']) == 'contact.php' ? ' class="active"' : ''; ?>>Contact Us</a>
             </nav>
 
             <div class="header-actions">

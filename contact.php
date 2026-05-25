@@ -1,0 +1,123 @@
+<?php
+$pageTitle = "Contact Us";
+$pageDesc = "Get in touch with Wanderoo for bespoke itinerary design, luxury honeymoons, and premium travel planning support.";
+include_once 'includes/header.php';
+?>
+
+<main>
+    <div class="contact-hero-banner">
+        <img src="<?php echo SITE_PATH; ?>/assets/img/group-hiking.png" alt="Contact Us" class="contact-hero-bg">
+        <div class="contact-hero-overlay"></div>
+        <div class="contact-hero-content">
+            <span class="contact-breadcrumb-text"><a href="<?php echo SITE_PATH; ?>/">Home</a> &raquo; Contact</span>
+            <h1 class="contact-hero-title">Contact Us</h1>
+        </div>
+    </div>
+
+    <div class="contact-container">
+        <div class="contact-header-section">
+            <div class="contact-header-left">
+                <h2 class="contact-section-title"><span class="urbanist">Start Your Travel Story With Us,</span><br><span class="playfair italic">Don't Hesitate To Contact Us</span></h2>
+            </div>
+            <div class="contact-header-right">
+                <p class="contact-section-desc">Got questions about your next trip, need itinerary advice, or want help with bookings? Our travel experts are ready to assist. Whether you're planning a relaxing getaway or an adrenaline-filled adventure, we're just a message away!</p>
+            </div>
+        </div>
+
+        <div class="contact-grid">
+            <!-- Contact Form Column -->
+            <div class="contact-form-col">
+                <h3 class="form-title">Lets Get In Touch With Us!</h3>
+                <form action="#" method="POST" class="contact-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" name="fullname" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Id</label>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email ID">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone No.</label>
+                            <div class="phone-input-wrapper">
+                                <span class="flag-prefix">🇮🇳 +91</span>
+                                <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required placeholder="Enter subject">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="message">Your Message <span class="required">*</span></label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Enter your message"></textarea>
+                    </div>
+                    <button type="submit" class="btn-send-message">Send Message</button>
+                </form>
+            </div>
+
+            <!-- Contact Info Column -->
+            <div class="contact-info-col">
+                <!-- Card 1: Email -->
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <div class="info-details">
+                        <h4>Email Address</h4>
+                        <a href="mailto:support@wanderoo.world">support@wanderoo.world</a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Whatsapp -->
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                        </svg>
+                    </div>
+                    <div class="info-details">
+                        <h4>Whatsapp Us</h4>
+                        <a href="https://wa.me/919113515462" target="_blank">+91 91 135 154 62</a>
+                    </div>
+                </div>
+
+                <!-- Card 3: Address -->
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="info-details">
+                        <h4>Address</h4>
+                        <p>Wanderoo<br>The landmark<br>2nd Floor, Santacruz West<br>Mumbai - 400049</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="contact-map-section">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.2127260517743!2d72.8335017!3d19.0544321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c917b12d5cd5%3A0xe9ee95e5d36e885d!2sSantacruz%20West%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1716680000000!5m2!1sen!2sin" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</main>
+
+<?php include_once 'includes/footer.php'; ?>

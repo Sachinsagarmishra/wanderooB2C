@@ -8,9 +8,9 @@
             <div class="footer-col">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/">Home</a></li>
                     <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/contact.php">Contact Us</a></li>
                 </ul>
             </div>
             <div class="footer-col">
