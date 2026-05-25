@@ -429,4 +429,173 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Testimonials Slider Carousel
+    const testimonialSlider = document.querySelector('.testimonials-section');
+    if (testimonialSlider) {
+        const track = testimonialSlider.querySelector('.testimonials-grid');
+        const prevArrow = testimonialSlider.querySelector('.slider-arrow-prev');
+        const nextArrow = testimonialSlider.querySelector('.slider-arrow-next');
+        const dotsContainer = testimonialSlider.querySelector('.slider-dots');
+        const cards = testimonialSlider.querySelectorAll('.testimonial-card');
+        
+        if (track && cards.length > 0) {
+            let currentIndex = 0;
+            let startX = 0;
+            let currentTranslate = 0;
+            let prevTranslate = 0;
+            let isDragging = false;
+            let animationId = 0;
+            
+            function getVisibleCards() {
+                if (window.innerWidth <= 768) return 1;
+                if (window.innerWidth <= 1024) return 2;
+                return 3;
+            }
+            
+            function getMaxIndex() {
+                return Math.max(0, cards.length - getVisibleCards());
+            }
+            
+            function getCardWidth() {
+                const card = cards[0];
+                return card ? card.offsetWidth : 0;
+            }
+            
+            function getGap() {
+                return 10; // Gap is 10px
+            }
+            
+            function setPositionByIndex() {
+                const cardWidth = getCardWidth();
+                const gap = getGap();
+                currentTranslate = -currentIndex * (cardWidth + gap);
+                prevTranslate = currentTranslate;
+                setSliderPosition();
+                updateDots();
+            }
+            
+            function setSliderPosition() {
+                track.style.transform = `translateX(${currentTranslate}px)`;
+            }
+            
+            function buildDots() {
+                if (!dotsContainer) return;
+                dotsContainer.innerHTML = '';
+                const maxIndex = getMaxIndex();
+                for (let i = 0; i <= maxIndex; i++) {
+                    const dot = document.createElement('span');
+                    dot.classList.add('dot');
+                    if (i === currentIndex) dot.classList.add('active');
+                    dot.addEventListener('click', () => {
+                        slideTo(i);
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+            }
+            
+            function updateDots() {
+                if (dotsContainer) {
+                    const dots = dotsContainer.querySelectorAll('.dot');
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === currentIndex);
+                    });
+                }
+            }
+            
+            function slideTo(index) {
+                const maxIndex = getMaxIndex();
+                currentIndex = index;
+                if (currentIndex < 0) {
+                    currentIndex = maxIndex;
+                } else if (currentIndex > maxIndex) {
+                    currentIndex = 0;
+                }
+                track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                setPositionByIndex();
+            }
+            
+            // Event Listeners for Arrows
+            if (nextArrow) {
+                nextArrow.addEventListener('click', () => {
+                    slideTo(currentIndex + 1);
+                });
+            }
+            
+            if (prevArrow) {
+                prevArrow.addEventListener('click', () => {
+                    slideTo(currentIndex - 1);
+                });
+            }
+            
+            // Drag / Swipe Functionality (Cursor & Touch)
+            track.addEventListener('mousedown', dragStart);
+            track.addEventListener('touchstart', dragStart, { passive: true });
+            
+            window.addEventListener('mousemove', dragMove);
+            window.addEventListener('touchmove', dragMove, { passive: true });
+            
+            window.addEventListener('mouseup', dragEnd);
+            window.addEventListener('touchend', dragEnd);
+            
+            function dragStart(e) {
+                isDragging = true;
+                startX = getPositionX(e);
+                track.style.transition = 'none'; // remove transition during drag
+                animationId = requestAnimationFrame(animation);
+            }
+            
+            function dragMove(e) {
+                if (!isDragging) return;
+                const currentX = getPositionX(e);
+                const diffX = currentX - startX;
+                currentTranslate = prevTranslate + diffX;
+            }
+            
+            function dragEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                cancelAnimationFrame(animationId);
+                
+                track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                
+                const movedBy = currentTranslate - prevTranslate;
+                const cardWidth = getCardWidth();
+                const threshold = cardWidth / 4; // swipe 25% of card to slide
+                
+                if (movedBy < -threshold) {
+                    slideTo(Math.min(currentIndex + 1, getMaxIndex()));
+                } else if (movedBy > threshold) {
+                    slideTo(Math.max(currentIndex - 1, 0));
+                } else {
+                    slideTo(currentIndex);
+                }
+            }
+            
+            function getPositionX(e) {
+                return e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            }
+            
+            function animation() {
+                setSliderPosition();
+                if (isDragging) requestAnimationFrame(animation);
+            }
+            
+            // Initial setup and responsive resizing
+            window.addEventListener('resize', () => {
+                const maxIdx = getMaxIndex();
+                if (currentIndex > maxIdx) {
+                    currentIndex = maxIdx;
+                }
+                buildDots();
+                slideTo(currentIndex);
+            });
+            
+            // Start slider
+            setTimeout(() => {
+                buildDots();
+                slideTo(0);
+            }, 200);
+        }
+    }
 });

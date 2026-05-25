@@ -1599,6 +1599,100 @@ include_once 'includes/header.php';
         </div>
     </section>
     
+    <section class="testimonials-section">
+        <div class="testimonials-container">
+            <div class="testimonials-header">
+                <h2 class="testimonials-title">Testimonials</h2>
+                <p class="testimonials-subtitle">Don't just take our word for it&mdash;see what other couples are saying</p>
+            </div>
+            
+            <div class="testimonials-slider-wrapper">
+                <!-- Prev Arrow -->
+                <div class="slider-arrow slider-arrow-prev">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </div>
+                
+                <div class="testimonials-grid-viewport">
+                    <div class="testimonials-grid">
+                        <!-- Card 1 -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-user">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200" alt="Ruby" class="user-avatar">
+                                <span class="user-name">Ruby</span>
+                            </div>
+                            <div class="testimonial-rating">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <p class="testimonial-text">Choosing 30 Sundays was our best decision. Their detailed restaurant recommendations enhanced our trip. With attentive service and seamless organization, it was truly magical. Highly recommended for couples seeking romance in Bali!</p>
+                        </div>
+                        
+                        <!-- Card 2 -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-user">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" alt="Ashutosh Sharma" class="user-avatar">
+                                <span class="user-name">Ashutosh Sharma</span>
+                            </div>
+                            <div class="testimonial-rating">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <p class="testimonial-text">Every trip has small hiccups. What we loved about 30 Sundays was that they respond to every request within minutes. When I travel with 30 Sundays, I know they have our back always :)</p>
+                        </div>
+                        
+                        <!-- Card 3 -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-user">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200" alt="Akshit Chaudhary" class="user-avatar">
+                                <span class="user-name">Akshit Chaudhary</span>
+                            </div>
+                            <div class="testimonial-rating">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <p class="testimonial-text">Our Bali trip with 30 Sundays was exceptional. They don't do standard packages; they truly spend a lot of time with their customers to understand our requirements and personalize every detail. Thank you, 30 Sundays, for making our dream honeymoon a reality!</p>
+                        </div>
+
+                        <!-- Card 4 (for sliding demonstration) -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-user">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Priya Patel" class="user-avatar">
+                                <span class="user-name">Priya Patel</span>
+                            </div>
+                            <div class="testimonial-rating">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <p class="testimonial-text">Absolutely incredible experience. Wanderoo made our honeymoon planning completely stress-free. Every single detail from pickup to resort check-in was flawless. Will definitely book again!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Next Arrow -->
+                <div class="slider-arrow slider-arrow-next">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </div>
+            
+            <div class="slider-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </section>
+    
     <section class="faq-section">
         <div class="faq-container">
             <div class="faq-sidebar">

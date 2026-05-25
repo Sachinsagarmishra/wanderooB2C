@@ -39,6 +39,6 @@
             </a>
         </div>
     </footer>
-    <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.2"></script>
+    <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.3"></script>
 </body>
 </html>
