@@ -651,7 +651,8 @@ header {
         height: 30px;
     }
 
-    .package-card {
+    .package-card,
+    .wander-section .package-card {
         flex: 0 0 calc((100% - 10px) / 2) !important;
     }
 
@@ -706,15 +707,13 @@ header {
 
     .packages-grid {
         display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
         gap: 10px;
         padding-bottom: 20px;
     }
 
-    .package-card {
+    .package-card,
+    .wander-section .package-card {
         flex: 0 0 100% !important;
-        scroll-snap-align: start;
     }
 
 
@@ -1503,13 +1502,22 @@ footer {
     }
 
     .why-choose-grid {
-        flex-direction: column;
-        gap: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px 10px;
         margin-top: 30px;
     }
 
     .why-choose-card {
+        flex: 0 0 calc((100% - 10px) / 2);
+        max-width: calc((100% - 10px) / 2);
         padding: 10px 0;
+        box-sizing: border-box;
+    }
+
+    .why-choose-card:last-child {
+        flex: 0 0 100%;
+        max-width: 100%;
     }
 
     .why-choose-title {
