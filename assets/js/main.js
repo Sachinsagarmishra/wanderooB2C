@@ -770,6 +770,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 10);
             document.body.style.overflow = 'hidden'; // disable page scroll
         }
+
+        window.openGallery = openGallery;
         
         viewAllBtns.forEach(btn => {
             btn.addEventListener('click', () => {

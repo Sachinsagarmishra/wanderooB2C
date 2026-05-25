@@ -282,4 +282,9 @@ include 'includes/header.php';
     <div class="gallery-modal-thumbs" id="galleryModalThumbs"></div>
 </div>
 
+<!-- Mobile Sticky CTA Bar -->
+<div class="mobile-sticky-cta">
+    <a href="#" class="btn-craft-trip">Craft Your Trip</a>
+</div>
+
 <?php include 'includes/footer.php'; ?>

@@ -2215,6 +2215,52 @@ footer {
         right: 15px;
         z-index: 10;
     }
+
+    .detail-layout {
+        margin-bottom: 120px;
+    }
+
+    /* Mobile Sticky CTA Bar */
+    .mobile-sticky-cta {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
+        padding: 15px 20px;
+        z-index: 999;
+        box-sizing: border-box;
+    }
+
+    .btn-craft-trip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background: var(--primary);
+        color: var(--text-dark);
+        border: none;
+        padding: 14px 0;
+        border-radius: 30px;
+        font-family: 'Urbanist', sans-serif;
+        font-size: 16px;
+        font-weight: 750;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(255, 222, 89, 0.3);
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-craft-trip:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+}
+
+.mobile-sticky-cta {
+    display: none;
 }
 
 .detail-hero-banner {
