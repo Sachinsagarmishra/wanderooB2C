@@ -400,4 +400,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // How It Works Tab Switching
+    const howTabs = document.querySelectorAll('.how-tab-btn');
+    const howPanels = document.querySelectorAll('.how-panel');
+    
+    if (howTabs.length > 0 && howPanels.length > 0) {
+        howTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                // Remove active classes from all tabs and hide panels
+                howTabs.forEach(t => t.classList.remove('active'));
+                howPanels.forEach(p => {
+                    p.classList.remove('active');
+                    p.style.display = 'none';
+                });
+                
+                // Add active classes to selected tab and show active panel
+                tab.classList.add('active');
+                const activePanel = document.getElementById(`how-panel-${targetTab}`);
+                if (activePanel) {
+                    activePanel.style.display = 'block';
+                    setTimeout(() => {
+                        activePanel.classList.add('active');
+                    }, 50);
+                }
+            });
+        });
+    }
 });

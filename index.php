@@ -30,7 +30,7 @@ include_once 'includes/header.php';
         </div>
     </section>
 
-    <section class="who-we-are" style="padding: 20px 0px; max-width: 1280px; margin: 0 auto; display: flex; gap: 40px; align-items: flex-start;">
+    <section class="who-we-are" style="padding: 60px 0px; max-width: 1280px; margin: 0 auto; display: flex; gap: 40px; align-items: flex-start;">
         <div style="flex: 1;">
             <h2 style="line-height: 1.1;"><span class="urbanist">Who</span> <span class="playfair italic">We Are</span></h2>
         </div>
@@ -1435,6 +1435,126 @@ include_once 'includes/header.php';
                     </li>
                 </ul>
                 <a href="#" class="btn-group-plan">Plan A Group Trip</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="how-it-works-section" style="background-image: url('<?php echo SITE_PATH; ?>/assets/img/patternbg.png');">
+        <div class="how-it-works-container">
+            <h2 class="how-title">
+                <span class="urbanist">How it</span> <span class="playfair italic">Works</span>
+            </h2>
+            
+            <!-- Tab Navigation Buttons -->
+            <div class="how-tabs">
+                <button class="how-tab-btn active" data-tab="1">
+                    <span class="tab-num">1</span>
+                    <span class="tab-text">Make A Request</span>
+                </button>
+                <button class="how-tab-btn" data-tab="2">
+                    <span class="tab-num">2</span>
+                    <span class="tab-text">Meet Your Expert</span>
+                </button>
+                <button class="how-tab-btn" data-tab="3">
+                    <span class="tab-num">3</span>
+                    <span class="tab-text">Plan And Book</span>
+                </button>
+            </div>
+            
+            <!-- Tab Panels -->
+            <div class="how-panels">
+                <!-- Panel 1 (Active by default) -->
+                <div class="how-panel active" id="how-panel-1" style="display: block;">
+                    <div class="panel-content">
+                        <div class="panel-left">
+                            <div class="panel-item">
+                                <span class="panel-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+                                        <line x1="13" y1="3" x2="15" y2="1" />
+                                        <line x1="3" y1="13" x2="1" y2="15" />
+                                        <line x1="10" y1="10" x2="8" y2="8" />
+                                    </svg>
+                                </span>
+                                <p class="panel-text"><strong>Planning a holiday,</strong> honeymoon, or mates' getaway? We're here to listen.</p>
+                            </div>
+                            <div class="panel-item">
+                                <span class="panel-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </span>
+                                <p class="panel-text"><strong>Fill in a few quick details,</strong> and we'll match you with a destination expert who'll help customise your trip to perfection &mdash; right down to the tiniest detail.</p>
+                            </div>
+                            <a href="#" class="btn-craft-trip">Craft Your Trip</a>
+                        </div>
+                        <div class="panel-right">
+                            <img src="<?php echo SITE_PATH; ?>/assets/img/how-it-works.png" alt="How it works">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Panel 2 -->
+                <div class="how-panel" id="how-panel-2">
+                    <div class="panel-content">
+                        <div class="panel-left">
+                            <div class="panel-item">
+                                <span class="panel-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+                                        <line x1="13" y1="3" x2="15" y2="1" />
+                                        <line x1="3" y1="13" x2="1" y2="15" />
+                                        <line x1="10" y1="10" x2="8" y2="8" />
+                                    </svg>
+                                </span>
+                                <p class="panel-text"><strong>Tell us a few details,</strong> and we'll match you with a destination expert.</p>
+                            </div>
+                            <div class="panel-item">
+                                <span class="panel-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </span>
+                                <p class="panel-text"><strong>Think of them as your travel companion &mdash;</strong> always ready to listen, support, and make sure your holiday feels truly special.</p>
+                            </div>
+                            <a href="#" class="btn-craft-trip">Craft Your Trip</a>
+                        </div>
+                        <div class="panel-right">
+                            <img src="<?php echo SITE_PATH; ?>/assets/img/how-it-works.png" alt="How it works">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Panel 3 -->
+                <div class="how-panel" id="how-panel-3">
+                    <div class="panel-content">
+                        <div class="panel-left">
+                            <div class="panel-item">
+                                <span class="panel-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+                                        <line x1="13" y1="3" x2="15" y2="1" />
+                                        <line x1="3" y1="13" x2="1" y2="15" />
+                                        <line x1="10" y1="10" x2="8" y2="8" />
+                                    </svg>
+                                </span>
+                                <p class="panel-text"><strong>Together, we'll craft a trip</strong> tailored to you &mdash; down to the last detail.</p>
+                            </div>
+                            <div class="panel-item">
+                                <span class="panel-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </span>
+                                <p class="panel-text"><strong>Your expert will stay by your side,</strong> ready to address any questions or updates before your trip.</p>
+                            </div>
+                            <a href="#" class="btn-craft-trip">Craft Your Trip</a>
+                        </div>
+                        <div class="panel-right">
+                            <img src="<?php echo SITE_PATH; ?>/assets/img/how-it-works.png" alt="How it works">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
