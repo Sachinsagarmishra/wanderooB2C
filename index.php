@@ -35,7 +35,7 @@ include_once 'includes/header.php';
             <h2 style="line-height: 1.1;"><span class="urbanist">Who</span> <span class="playfair italic">We Are</span></h2>
         </div>
         <div style="flex: 1.5;">
-            <p style="font-size: 15px; color: #4a4a4a; letter-spacing: 0.4px; margin-bottom: 15px; font-weight: 500; line-height: 1.4;">
+            <p style="font-size: 18px; color: #4a4a4a; letter-spacing: 0.4px; margin-bottom: 15px; font-weight: 500; line-height: 1.4;">
                 We're not just another booking site — we're your travel partner. At Wanderoo, you'll have your own dedicated destination expert to plan every step of your trip with care, clarity, and a genuine local touch.
             </p>
             <a href="#" class="read-more" style="font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 16px; border-bottom: 2px solid var(--primary); width: max-content; padding-bottom: 2px;">
