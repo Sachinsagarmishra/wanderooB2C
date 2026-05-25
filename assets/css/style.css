@@ -2505,8 +2505,8 @@ footer {
 /* Contact Us Page Custom Styling */
 .contact-hero-banner {
     position: relative;
-    padding-top: 120px;
-    padding-bottom: 80px;
+    padding-top: 180px;
+    padding-bottom: 140px;
     margin: 20px 10px;
     border-radius: 20px;
     overflow: hidden;
@@ -2592,10 +2592,13 @@ footer {
 }
 
 .contact-section-desc {
+    font-size: 18px;
+    color: #4a4a4a;
     font-family: 'Urbanist', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #666666;
+    letter-spacing: 0.4px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 .contact-grid {
@@ -2809,12 +2812,16 @@ footer {
 /* Contact Us Page Responsive Styles */
 @media (max-width: 768px) {
     .contact-hero-banner {
-        padding-top: 100px;
-        padding-bottom: 60px;
+        padding-top: 120px;
+        padding-bottom: 80px;
     }
     
     .contact-hero-title {
         font-size: 36px;
+    }
+    
+    .contact-section-desc {
+        font-size: 16px;
     }
     
     .contact-header-section {
