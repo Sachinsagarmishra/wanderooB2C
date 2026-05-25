@@ -89,11 +89,11 @@ We employ a distinct mixed-typography style combining a modern geometric sans-se
 * **Card Container**: Borderless, transparent background, natural layout width spacing.
 * **Card Image**: Height `280px`, rounded corners (`border-radius: 16px`), overflow hidden. Features centered absolute pagination dots overlay at the bottom.
 * **Card Meta**: Duration left-aligned; ratings in green (`#10b981`) right-aligned.
-* **City Strip Banner**: Background `#fdfaf0` (light cream beige), border-radius `6px`, bold text displaying itinerary summaries.
+* **Card Tags**: Small flex-wrap list of tags, background `#fdfaf0` (light cream beige), border-radius `6px`, bold text displaying itinerary cities.
 * **Price Details**: Displays old price (crossed out), green save badge (`background: #e6f7ed`, `color: #10b981`), and current price in large bold format with `/Adult`.
 * **Action Buttons**: 
-  * Phone Button: Circular/square button with `1.5px solid var(--primary)` border and primary-colored icon.
-  * Request Callback Button: Flex-grow block button, filled with `--primary` background, dark text, `8px` border radius, and shadow.
+  * Phone Button: Circular button with `1.5px solid var(--primary)` border, primary-colored icon, and `999px` border-radius.
+  * Get a Quote Button: Flex-grow block button, filled with `--primary` background, dark text, `999px` border-radius, and shadow.
 
 ---
 
