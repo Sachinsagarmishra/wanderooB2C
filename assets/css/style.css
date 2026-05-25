@@ -1031,7 +1031,7 @@ header {
 /* Footer Section */
 footer {
     background: linear-gradient(rgba(10, 45, 20, 0.8), rgba(5, 30, 15, 0.9)),
-        url('../img/footerbg.webp');
+        url('../img/footerbg.webp?v=1.1');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
