@@ -15,7 +15,7 @@ $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with cus
     <link rel="icon" type="image/png" href="<?php echo SITE_PATH; ?>/assets/img/favicon.png">
     
     <!-- Google Fonts & Styles -->
-    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=3.4">
+    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=3.5">
 </head>
 <body>
     <header>

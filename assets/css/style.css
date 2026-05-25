@@ -1955,9 +1955,11 @@ footer {
 .itinerary-body-content {
     padding: 0 25px 25px 25px;
     font-family: 'Urbanist', sans-serif;
-    font-size: 15px;
-    color: #555555;
-    line-height: 1.6;
+    font-size: 18px;
+    color: #4a4a4a;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 .itinerary-details-meta {
@@ -2190,6 +2192,11 @@ footer {
 
     .detail-title {
         font-size: 32px;
+    }
+
+    .detail-desc,
+    .itinerary-body-content {
+        font-size: 16px;
     }
 
     .detail-inclusions-columns {
