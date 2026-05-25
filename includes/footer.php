@@ -3,7 +3,6 @@
             <div class="footer-col brand-col">
                 <div class="footer-brand">
                     <img src="<?php echo SITE_PATH; ?>/assets/img/wanderoo_Logo.png" alt="Wanderoo Logo">
-                    <span class="brand-name">WANDEROO</span>
                 </div>
             </div>
             <div class="footer-col">
