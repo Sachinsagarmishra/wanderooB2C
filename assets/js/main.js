@@ -678,9 +678,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Gallery Lightbox Modal Interactivity
-    const viewAllBtn = document.querySelector('.btn-view-all-images');
+    const viewAllBtns = document.querySelectorAll('.btn-view-all-images');
     const galleryModal = document.getElementById('galleryModal');
-    if (viewAllBtn && galleryModal) {
+    if (viewAllBtns.length > 0 && galleryModal) {
         const closeBtn = document.getElementById('closeGallery');
         const modalImg = document.getElementById('galleryModalImg');
         const prevBtn = document.getElementById('prevGalleryImg');
@@ -771,8 +771,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'hidden'; // disable page scroll
         }
         
-        viewAllBtn.addEventListener('click', () => {
-            openGallery(0);
+        viewAllBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                openGallery(0);
+            });
         });
         
         // Close Modal
@@ -815,78 +817,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key === 'Escape') {
                 closeModal();
             }
-        });
-
-        // Mobile gallery inline slider and click handlers
-        const galleryMain = document.querySelector('.detail-gallery-main');
-        const mainGalleryImg = document.querySelector('.detail-gallery-main .detail-gallery-img');
-        const dots = document.querySelectorAll('.mobile-gallery-dots .dot');
-        const bubbles = document.querySelectorAll('.mobile-gallery-bubbles .bubble');
-        
-        let inlineActiveIdx = 0;
-        
-        function updateInlineGallery(idx) {
-            inlineActiveIdx = idx;
-            // Update main image source
-            if (mainGalleryImg) {
-                // Ensure we get the correct unsplash parameters for sizing
-                mainGalleryImg.src = galleryImages[inlineActiveIdx];
-            }
-            // Update active dot
-            dots.forEach((dot, dIdx) => {
-                dot.classList.toggle('active', dIdx === inlineActiveIdx);
-            });
-        }
-        
-        // Swipe detection for inline image slider
-        if (galleryMain) {
-            let startX = 0;
-            let endX = 0;
-            
-            galleryMain.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            }, { passive: true });
-            
-            galleryMain.addEventListener('touchend', (e) => {
-                endX = e.changedTouches[0].clientX;
-                const diffX = endX - startX;
-                
-                // If it is a swipe, handle it
-                if (Math.abs(diffX) > 50) {
-                    if (diffX < 0) {
-                        // Swipe left -> Next image
-                        let nextIdx = (inlineActiveIdx + 1) % 5; // limit to 5 images shown in dots
-                        updateInlineGallery(nextIdx);
-                    } else {
-                        // Swipe right -> Prev image
-                        let prevIdx = (inlineActiveIdx - 1 + 5) % 5;
-                        updateInlineGallery(prevIdx);
-                    }
-                } else {
-                    // Tap -> Open full screen lightbox at current inline index
-                    // (But only if we didn't tap a bubble)
-                    if (!e.target.closest('.bubble')) {
-                        openGallery(inlineActiveIdx);
-                    }
-                }
-            }, { passive: true });
-        }
-        
-        // Clicking dots slides inline
-        dots.forEach((dot, dIdx) => {
-            dot.addEventListener('click', (e) => {
-                e.stopPropagation();
-                updateInlineGallery(dIdx);
-            });
-        });
-        
-        // Clicking bubbles opens lightbox modal directly at their index
-        bubbles.forEach((bubble, bIdx) => {
-            bubble.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // Bubble index corresponds to gallery image index (bIdx + 1)
-                openGallery(bIdx + 1);
-            });
         });
     }
 });
