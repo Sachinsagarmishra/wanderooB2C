@@ -725,6 +725,10 @@ header {
         flex: 0 0 100% !important;
     }
 
+    .wander-section .package-card {
+        padding: 12px !important;
+    }
+
 
 
     .hidden-mobile {
