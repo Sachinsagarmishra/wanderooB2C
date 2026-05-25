@@ -1,28 +1,44 @@
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3 class="logo"><?php echo SITE_NAME; ?></h3>
-                <p>Building modern experiences with PHP and MySQL. Scalable, secure, and beautiful.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <p><a href="#">Privacy Policy</a></p>
-                <p><a href="#">Terms of Service</a></p>
-                <p><a href="#">Contact Support</a></p>
-            </div>
-            <div class="footer-section">
-                <h3>Newsletter</h3>
-                <p>Subscribe to stay updated with our latest news.</p>
-                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                    <input type="email" placeholder="Email" style="background: var(--surface-light); border: 1px solid var(--border); padding: 0.5rem; border-radius: 0.4rem; color: var(--text); outline: none; flex: 1;">
-                    <button class="btn btn-primary" style="padding: 0.5rem 1rem;">Go</button>
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-brand">
+                    <img src="<?php echo SITE_PATH; ?>/assets/img/wanderoo_Logo.png" alt="Wanderoo Logo">
+                    <span class="brand-name">WANDEROO</span>
                 </div>
             </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Top Destinations:</h3>
+                <ul>
+                    <li><a href="#">Maldives</a></li>
+                    <li><a href="#">Singapore</a></li>
+                    <li><a href="#">Bali</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Policies:</h3>
+                <ul>
+                    <li><a href="#">Terms & Condition</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Sitemap</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>. All rights reserved.</p>
+        <div class="footer-bottom-bar">
+            <p>Copyright &copy; 2025. All Rights Reserved.</p>
+            <a href="https://wa.me/911234567890" target="_blank" class="whatsapp-footer-link">
+                <img src="<?php echo SITE_PATH; ?>/assets/img/whatsapp.svg" alt="WhatsApp">
+                <span>WhatsApp Chat</span>
+            </a>
         </div>
     </footer>
-    <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.0"></script>
+    <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.1"></script>
 </body>
 </html>

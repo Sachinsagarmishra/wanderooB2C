@@ -1438,6 +1438,72 @@ include_once 'includes/header.php';
             </div>
         </div>
     </section>
+    
+    <section class="faq-section">
+        <div class="faq-container">
+            <div class="faq-sidebar">
+                <h2 class="faq-title">
+                    <span class="urbanist">We've got</span> <span class="playfair italic">answers</span>
+                </h2>
+                <p class="faq-subtitle">Everything explained. Before you book.</p>
+            </div>
+            <div class="faq-content">
+                <div class="faq-accordion">
+                    <!-- Item 1 -->
+                    <div class="faq-item active">
+                        <div class="faq-header">
+                            <span class="faq-question">What Does An Wanderoo Trip Include?</span>
+                            <span class="faq-toggle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="faq-body">
+                            <p class="faq-answer">It includes custom planning, accommodations, and expert advice.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 2 -->
+                    <div class="faq-item active">
+                        <div class="faq-header">
+                            <span class="faq-question">Are International Flights Included?</span>
+                            <span class="faq-toggle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="faq-body">
+                            <p class="faq-answer">International flights are not included unless specified.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 3 -->
+                    <div class="faq-item active">
+                        <div class="faq-header">
+                            <span class="faq-question">What Is A Local Expert?</span>
+                            <span class="faq-toggle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="faq-body">
+                            <p class="faq-answer">A vetted local with on-ground knowledge who customizes your trip.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-action-row">
+                    <a href="#" class="btn-more-faqs">More FAQ's</a>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <?php include_once 'includes/footer.php'; ?>
