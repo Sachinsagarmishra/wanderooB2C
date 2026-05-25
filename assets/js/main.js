@@ -28,14 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Packages Slider Carousel (Desktop, Tablet & Mobile)
-    const sliderContainer = document.querySelector('.packages-slider-container');
-    const track = document.querySelector('.packages-grid');
-    const prevArrow = document.querySelector('.slider-arrow-prev');
-    const nextArrow = document.querySelector('.slider-arrow-next');
+    const sliderContainers = document.querySelectorAll('.packages-slider-container');
     
-    if (sliderContainer && track) {
-        const cards = sliderContainer.querySelectorAll('.package-card');
+    sliderContainers.forEach(sliderContainer => {
+        const track = sliderContainer.querySelector('.packages-grid');
+        const prevArrow = sliderContainer.querySelector('.slider-arrow-prev');
+        const nextArrow = sliderContainer.querySelector('.slider-arrow-next');
         const dots = sliderContainer.querySelectorAll('.dot');
+        const cards = sliderContainer.querySelectorAll('.package-card');
+        
+        if (!track || cards.length === 0) return;
+        
         let currentIndex = 0;
         let startX = 0;
         let currentTranslate = 0;
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function getVisibleCards() {
             if (window.innerWidth <= 768) return 1;
             if (window.innerWidth <= 1024) return 2;
+            if (sliderContainer.closest('.wander-section')) return 4;
             return 3;
         }
         
@@ -113,8 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        // Auto slide
+        // Auto slide (Only for Honeymooners to avoid excessive background activity)
+        const shouldAutoSlide = !sliderContainer.closest('.wander-section');
+        
         function startAutoSlide() {
+            if (!shouldAutoSlide) return;
             autoSlideTimer = setInterval(() => {
                 slideTo(currentIndex + 1);
             }, 4000); // slide every 4 seconds
@@ -131,9 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
             startAutoSlide();
         }
         
-        // Pause auto-sliding on hover
-        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
-        sliderContainer.addEventListener('mouseleave', startAutoSlide);
+        if (shouldAutoSlide) {
+            sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+            sliderContainer.addEventListener('mouseleave', startAutoSlide);
+        }
         
         // Drag / Swipe Functionality (Cursor & Touch)
         track.addEventListener('mousedown', dragStart);
@@ -201,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             slideTo(0);
         }, 200);
         startAutoSlide();
-    }
+    });
 
     // Tabs Filtering for "Where would you like to wander?"
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -223,6 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         cat.style.display = 'block';
                         setTimeout(() => {
                             cat.style.opacity = '1';
+                            // Force slider recalculation once visible
+                            window.dispatchEvent(new Event('resize'));
                         }, 50);
                     } else {
                         cat.classList.remove('active');

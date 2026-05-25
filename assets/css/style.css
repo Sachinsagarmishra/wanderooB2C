@@ -585,9 +585,20 @@ header {
     opacity: 1;
 }
 
-.wander-section .packages-grid {
-    cursor: default;
-    user-select: auto;
+/* Custom styling for Wander Section cards (white background, border-radius, padding, card-shadow) */
+.wander-section .package-card {
+    background: #ffffff !important;
+    border-radius: 20px !important;
+    padding: 15px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    flex: 0 0 calc((100% - 90px) / 4) !important;
+}
+
+.wander-section .package-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Mobile Menu Button */
@@ -620,9 +631,6 @@ header {
         flex: 0 0 calc((100% - 30px) / 2) !important;
     }
 
-    .wander-section .packages-grid {
-        flex-wrap: wrap;
-    }
 }
 
 @media (max-width: 768px) {
@@ -685,9 +693,7 @@ header {
         scroll-snap-align: start;
     }
 
-    .wander-section .packages-grid {
-        flex-wrap: nowrap;
-    }
+
 
     .hidden-mobile {
         display: none;
