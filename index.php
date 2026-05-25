@@ -56,6 +56,11 @@ include_once 'includes/header.php';
         </div>
 
         <div class="packages-slider-container">
+            <!-- Prev Arrow -->
+            <div class="slider-arrow slider-arrow-prev">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </div>
+
             <div class="packages-grid">
                 <!-- Card 1 -->
                 <div class="package-card">
@@ -260,8 +265,8 @@ include_once 'includes/header.php';
                 </div>
             </div>
             
-            <!-- Slider Nav Arrow -->
-            <div class="slider-arrow-next">
+            <!-- Next Arrow -->
+            <div class="slider-arrow slider-arrow-next">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
             

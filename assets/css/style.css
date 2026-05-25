@@ -215,13 +215,21 @@ header {
 /* Honeymooners Section */
 .packages-slider-container {
     position: relative;
+    overflow: hidden;
+    width: 100%;
 }
 
 .packages-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: 30px;
-    transition: transform 0.5s ease;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 100%;
+    cursor: grab;
+    user-select: none;
+}
+
+.packages-grid:active {
+    cursor: grabbing;
 }
 
 .package-card {
@@ -231,6 +239,8 @@ header {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
+    flex: 0 0 calc((100% - 60px) / 3);
+    box-sizing: border-box;
 }
 
 .card-img {
@@ -434,34 +444,45 @@ header {
     transform: translateY(-2px);
 }
 
-.slider-arrow-next {
+.slider-arrow {
     position: absolute;
-    right: -24px;
     top: 35%;
     transform: translateY(-50%);
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 10;
     transition: all 0.3s ease;
-    color: #333;
+    color: #000;
 }
 
-.slider-arrow-next:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+.slider-arrow:hover {
+    background: rgba(255, 255, 255, 0.45);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     transform: translateY(-50%) scale(1.05);
 }
 
-.slider-arrow-next svg {
+.slider-arrow svg {
     width: 20px;
     height: 20px;
     stroke-width: 2.5;
+}
+
+.slider-arrow-prev {
+    left: 10px;
+}
+
+.slider-arrow-next {
+    right: 10px;
 }
 
 .slider-dots {

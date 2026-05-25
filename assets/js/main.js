@@ -27,22 +27,178 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Package Slider Auto-slide (Mobile)
-    const packageGrid = document.querySelector('.packages-grid');
-    if (packageGrid && window.innerWidth <= 768) {
-        let index = 0;
+    // Packages Slider Carousel (Desktop, Tablet & Mobile)
+    const sliderContainer = document.querySelector('.packages-slider-container');
+    const track = document.querySelector('.packages-grid');
+    const prevArrow = document.querySelector('.slider-arrow-prev');
+    const nextArrow = document.querySelector('.slider-arrow-next');
+    
+    if (sliderContainer && track) {
         const cards = document.querySelectorAll('.package-card');
         const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let isDragging = false;
+        let animationId = 0;
+        let autoSlideTimer = null;
         
-        setInterval(() => {
-            index = (index + 1) % (cards.length - 2); // Only slide through first 3 on mobile if others are hidden
-            packageGrid.scrollTo({
-                left: cards[index].offsetLeft - 20,
-                behavior: 'smooth'
+        // Calculate dimensions dynamically
+        function getVisibleCards() {
+            if (window.innerWidth <= 768) return 1;
+            if (window.innerWidth <= 1024) return 2;
+            return 3;
+        }
+        
+        function getMaxIndex() {
+            return Math.max(0, cards.length - getVisibleCards());
+        }
+        
+        function getCardWidth() {
+            const card = cards[0];
+            return card ? card.offsetWidth : 0;
+        }
+        
+        function getGap() {
+            return 30; // Gap is 30px
+        }
+        
+        function setPositionByIndex() {
+            const cardWidth = getCardWidth();
+            const gap = getGap();
+            currentTranslate = -currentIndex * (cardWidth + gap);
+            prevTranslate = currentTranslate;
+            setSliderPosition();
+            updateDots();
+        }
+        
+        function setSliderPosition() {
+            track.style.transform = `translateX(${currentTranslate}px)`;
+        }
+        
+        function updateDots() {
+            if (dots.length > 0) {
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIndex);
+                });
+            }
+        }
+        
+        // Navigation function
+        function slideTo(index) {
+            const maxIndex = getMaxIndex();
+            currentIndex = index;
+            if (currentIndex < 0) {
+                currentIndex = maxIndex;
+            } else if (currentIndex > maxIndex) {
+                currentIndex = 0;
+            }
+            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            setPositionByIndex();
+        }
+        
+        // Event Listeners for Arrows
+        if (nextArrow) {
+            nextArrow.addEventListener('click', () => {
+                resetAutoSlide();
+                slideTo(currentIndex + 1);
             });
+        }
+        
+        if (prevArrow) {
+            prevArrow.addEventListener('click', () => {
+                resetAutoSlide();
+                slideTo(currentIndex - 1);
+            });
+        }
+        
+        // Auto slide
+        function startAutoSlide() {
+            autoSlideTimer = setInterval(() => {
+                slideTo(currentIndex + 1);
+            }, 4000); // slide every 4 seconds
+        }
+        
+        function stopAutoSlide() {
+            if (autoSlideTimer) {
+                clearInterval(autoSlideTimer);
+            }
+        }
+        
+        function resetAutoSlide() {
+            stopAutoSlide();
+            startAutoSlide();
+        }
+        
+        // Pause auto-sliding on hover
+        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+        sliderContainer.addEventListener('mouseleave', startAutoSlide);
+        
+        // Drag / Swipe Functionality (Cursor & Touch)
+        track.addEventListener('mousedown', dragStart);
+        track.addEventListener('touchstart', dragStart, { passive: true });
+        
+        window.addEventListener('mousemove', dragMove);
+        window.addEventListener('touchmove', dragMove, { passive: true });
+        
+        window.addEventListener('mouseup', dragEnd);
+        window.addEventListener('touchend', dragEnd);
+        
+        function dragStart(e) {
+            isDragging = true;
+            startX = getPositionX(e);
+            stopAutoSlide();
+            track.style.transition = 'none'; // remove transition during drag
+            animationId = requestAnimationFrame(animation);
+        }
+        
+        function dragMove(e) {
+            if (!isDragging) return;
+            const currentX = getPositionX(e);
+            const diffX = currentX - startX;
+            currentTranslate = prevTranslate + diffX;
+        }
+        
+        function dragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            cancelAnimationFrame(animationId);
             
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-        }, 3000);
+            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            const movedBy = currentTranslate - prevTranslate;
+            const cardWidth = getCardWidth();
+            const threshold = cardWidth / 4; // swipe 25% of card to slide
+            
+            if (movedBy < -threshold) {
+                slideTo(currentIndex + 1);
+            } else if (movedBy > threshold) {
+                slideTo(currentIndex - 1);
+            } else {
+                slideTo(currentIndex);
+            }
+            
+            startAutoSlide();
+        }
+        
+        function getPositionX(e) {
+            return e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        }
+        
+        function animation() {
+            setSliderPosition();
+            if (isDragging) requestAnimationFrame(animation);
+        }
+        
+        // Initial setup and responsive resizing
+        window.addEventListener('resize', () => {
+            slideTo(currentIndex);
+        });
+        
+        // Start slider
+        setTimeout(() => {
+            slideTo(0);
+        }, 200);
+        startAutoSlide();
     }
