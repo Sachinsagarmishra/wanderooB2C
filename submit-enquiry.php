@@ -12,12 +12,25 @@ try {
     $companion = trim($_POST['companion'] ?? '');
     $rooms_config = trim($_POST['rooms_config'] ?? '');
     $fullname = trim($_POST['fullname'] ?? '');
-    $phone = '+91 ' . trim($_POST['phone'] ?? '');
+    $country_code = trim($_POST['country_code'] ?? '+91');
+    $phone_raw = trim($_POST['phone'] ?? '');
+    $phone_digits = preg_replace('/\D/', '', $phone_raw);
+    $phone = $country_code . ' ' . $phone_raw;
     $email = trim($_POST['email'] ?? '');
     $notes = trim($_POST['notes'] ?? '');
 
-    if (empty($fullname) || empty($email) || empty($_POST['phone']) || empty($destination)) {
+    if (empty($fullname) || empty($email) || empty($phone_raw) || empty($destination)) {
         echo json_encode(['success' => false, 'error' => 'Required fields are missing.']);
+        exit;
+    }
+
+    if ($country_code === '+91' && strlen($phone_digits) !== 10) {
+        echo json_encode(['success' => false, 'error' => 'Indian phone number must be exactly 10 digits.']);
+        exit;
+    }
+
+    if (strlen($phone_digits) < 7 || strlen($phone_digits) > 15) {
+        echo json_encode(['success' => false, 'error' => 'Please enter a valid phone number (between 7 and 15 digits).']);
         exit;
     }
 

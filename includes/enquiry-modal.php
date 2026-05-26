@@ -149,8 +149,20 @@
                         <div class="enquiry-input-group">
                             <label for="enquiryPhone" class="enquiry-input-label">Phone Number (with country code) *</label>
                             <div class="enquiry-phone-input-wrapper">
-                                <span class="enquiry-flag-prefix">🇮🇳 +91</span>
-                                <input type="tel" id="enquiryPhone" name="phone" class="enquiry-input-field" placeholder="Enter your phone number">
+                                <select id="enquiryCountryCode" name="country_code" required style="width: auto; padding: 0 10px 0 15px; font-family: inherit; font-size: 15px; font-weight: 700; color: #475569; background-color: #f1f5f9; border: none; border-right: 1.5px solid var(--enquiry-border); height: 52px; outline: none; cursor: pointer; border-radius: 0; flex-shrink: 0;">
+                                    <option value="+91" selected>🇮🇳 +91</option>
+                                    <option value="+1">🇺🇸 +1</option>
+                                    <option value="+44">🇬🇧 +44</option>
+                                    <option value="+65">🇸🇬 +65</option>
+                                    <option value="+971">🇦🇪 +971</option>
+                                    <option value="+62">🇮🇩 +62</option>
+                                    <option value="+81">🇯🇵 +81</option>
+                                    <option value="+960">🇲🇻 +960</option>
+                                    <option value="+60">🇲🇾 +60</option>
+                                    <option value="+66">🇹🇭 +66</option>
+                                    <option value="+61">🇦🇺 +61</option>
+                                </select>
+                                <input type="tel" id="enquiryPhone" name="phone" class="enquiry-input-field" placeholder="Enter 10-digit number">
                             </div>
                         </div>
                         <div class="enquiry-input-group">
@@ -902,6 +914,21 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(id).addEventListener('input', hideError);
     });
 
+    const enquiryCountryCode = document.getElementById('enquiryCountryCode');
+    const enquiryPhone = document.getElementById('enquiryPhone');
+    if (enquiryCountryCode && enquiryPhone) {
+        const updateEnquiryPlaceholder = () => {
+            if (enquiryCountryCode.value === '+91') {
+                enquiryPhone.placeholder = 'Enter 10-digit number';
+            } else {
+                enquiryPhone.placeholder = 'Enter phone number';
+            }
+        };
+        enquiryCountryCode.addEventListener('change', updateEnquiryPlaceholder);
+        enquiryCountryCode.addEventListener('change', hideError);
+        updateEnquiryPlaceholder(); // init
+    }
+
     // Helper functions for dynamic steps
     function getCompanionValue() {
         return document.getElementById('enquiryCompanion').value;
@@ -1031,6 +1058,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (!phone) {
                 showError('Please enter your phone number.');
+                return false;
+            }
+            
+            const phoneDigits = phone.replace(/\D/g, '');
+            const countryCodeVal = document.getElementById('enquiryCountryCode').value;
+            if (countryCodeVal === '+91' && phoneDigits.length !== 10) {
+                showError('Indian phone number must be exactly 10 digits.');
+                return false;
+            }
+            if (phoneDigits.length < 7 || phoneDigits.length > 15) {
+                showError('Please enter a valid phone number (between 7 and 15 digits).');
                 return false;
             }
             if (!email) {

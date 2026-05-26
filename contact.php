@@ -7,12 +7,19 @@ $errorMsg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullname = trim($_POST['fullname'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $phone = '+91 ' . trim($_POST['phone'] ?? '');
+    $country_code = trim($_POST['country_code'] ?? '+91');
+    $phone_raw = trim($_POST['phone'] ?? '');
+    $phone_digits = preg_replace('/\D/', '', $phone_raw);
+    $phone = $country_code . ' ' . $phone_raw;
     $subject = trim($_POST['subject'] ?? '');
     $message = trim($_POST['message'] ?? '');
 
-    if (empty($fullname) || empty($email) || empty($_POST['phone']) || empty($subject) || empty($message)) {
+    if (empty($fullname) || empty($email) || empty($phone_raw) || empty($subject) || empty($message)) {
         $errorMsg = 'All fields marked with an asterisk are required.';
+    } elseif ($country_code === '+91' && strlen($phone_digits) !== 10) {
+        $errorMsg = 'Indian phone numbers must be exactly 10 digits.';
+    } elseif (strlen($phone_digits) < 7 || strlen($phone_digits) > 15) {
+        $errorMsg = 'Please enter a valid phone number (between 7 and 15 digits).';
     } else {
         try {
             $stmt = $pdo->prepare("INSERT INTO leads (type, fullname, email, phone, subject, message) VALUES ('contact', ?, ?, ?, ?, ?)");
@@ -79,8 +86,20 @@ include_once 'includes/header.php';
                         <div class="form-group">
                             <label for="phone">Phone No.</label>
                             <div class="phone-input-wrapper">
-                                <span class="flag-prefix">🇮🇳 +91</span>
-                                <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                                <select id="country_code" name="country_code" required style="padding: 12px 10px 12px 20px; font-family: 'Urbanist', sans-serif; font-size: 15px; font-weight: 600; color: #4a5568; background: #f1f5f9; border: none; border-right: 1px solid #e2e8f0; outline: none; cursor: pointer; height: 100%;">
+                                    <option value="+91" selected>🇮🇳 +91</option>
+                                    <option value="+1">🇺🇸 +1</option>
+                                    <option value="+44">🇬🇧 +44</option>
+                                    <option value="+65">🇸🇬 +65</option>
+                                    <option value="+971">🇦🇪 +971</option>
+                                    <option value="+62">🇮🇩 +62</option>
+                                    <option value="+81">🇯🇵 +81</option>
+                                    <option value="+960">🇲🇻 +960</option>
+                                    <option value="+60">🇲🇾 +60</option>
+                                    <option value="+66">🇹🇭 +66</option>
+                                    <option value="+61">🇦🇺 +61</option>
+                                </select>
+                                <input type="tel" id="phone" name="phone" required placeholder="Enter 10-digit number">
                             </div>
                         </div>
                         <div class="form-group">
@@ -143,6 +162,44 @@ include_once 'includes/header.php';
 
 
     </div>
-</main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const countrySelect = document.getElementById('country_code');
+    const phoneInput = document.getElementById('phone');
+    const contactForm = document.querySelector('.contact-form');
+
+    if (countrySelect && phoneInput) {
+        const updatePlaceholder = () => {
+            if (countrySelect.value === '+91') {
+                phoneInput.placeholder = 'Enter 10-digit number';
+                phoneInput.setAttribute('pattern', '[0-9]{10}');
+                phoneInput.setAttribute('title', 'Indian phone numbers must be exactly 10 digits.');
+            } else {
+                phoneInput.placeholder = 'Enter phone number';
+                phoneInput.removeAttribute('pattern');
+                phoneInput.removeAttribute('title');
+            }
+        };
+
+        countrySelect.addEventListener('change', updatePlaceholder);
+        updatePlaceholder(); // init
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                const phoneVal = phoneInput.value.replace(/\D/g, ''); // strip non-digits
+                if (countrySelect.value === '+91' && phoneVal.length !== 10) {
+                    e.preventDefault();
+                    alert('Please enter a valid 10-digit Indian phone number.');
+                    phoneInput.focus();
+                } else if (phoneVal.length < 7 || phoneVal.length > 15) {
+                    e.preventDefault();
+                    alert('Please enter a valid phone number (between 7 and 15 digits).');
+                    phoneInput.focus();
+                }
+            });
+        }
+    }
+});
+</script>
 
 <?php include_once 'includes/footer.php'; ?>
