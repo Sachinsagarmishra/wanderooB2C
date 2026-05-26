@@ -17,6 +17,10 @@ try {
       UNIQUE KEY `username` (`username`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
+    // Force alter column width for existing tables to prevent password truncating issues
+    $pdo->exec("ALTER TABLE `users` MODIFY COLUMN `password` varchar(255) NOT NULL;");
+    $pdo->exec("ALTER TABLE `users` MODIFY COLUMN `email` varchar(100) NOT NULL;");
+
     // 2. Leads Table
     $pdo->exec("CREATE TABLE IF NOT EXISTS `leads` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -54,20 +58,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Check if username already exists
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
             $stmt->execute([$username]);
+            
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             if ($stmt->fetchColumn() > 0) {
-                $message = "Username already exists!";
-                $messageType = "danger";
+                // Force overwrite existing admin account details
+                $stmt = $pdo->prepare("UPDATE users SET password = ?, email = ? WHERE username = ?");
+                $stmt->execute([$hashed_password, $email, $username]);
+                $message = "Admin user password has been force overwritten successfully! You can now log in.";
+                $messageType = "success";
             } else {
                 // Insert new admin
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $stmt = $pdo->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
                 $stmt->execute([$username, $hashed_password, $email]);
-
                 $message = "Admin user successfully created! You can now log in.";
                 $messageType = "success";
             }
         } catch (PDOException $e) {
-            $message = "Error creating admin: " . $e->getMessage();
+            $message = "Error handling admin registration: " . $e->getMessage();
             $messageType = "danger";
         }
     }
