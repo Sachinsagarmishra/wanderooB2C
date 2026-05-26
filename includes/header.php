@@ -28,8 +28,17 @@ $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with cus
             
             <nav class="nav-glass">
                 <a href="<?php echo SITE_PATH; ?>/"<?php echo basename($_SERVER['SCRIPT_NAME']) == 'index.php' || basename($_SERVER['SCRIPT_NAME']) == '' ? ' class="active"' : ''; ?>>Home</a>
-                <a href="#">About Us</a>
-                <a href="#">Destinations <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                <a href="<?php echo SITE_PATH; ?>/about-us"<?php echo basename($_SERVER['SCRIPT_NAME']) == 'about-us.php' ? ' class="active"' : ''; ?>>About Us</a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-trigger">Destinations <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                    <div class="dropdown-menu">
+                        <a href="<?php echo SITE_PATH; ?>/destination/singapore">Singapore</a>
+                        <a href="<?php echo SITE_PATH; ?>/destination/maldives">Maldives</a>
+                        <a href="<?php echo SITE_PATH; ?>/destination/bali">Bali</a>
+                        <a href="<?php echo SITE_PATH; ?>/destination/japan">Japan</a>
+                        <a href="<?php echo SITE_PATH; ?>/destination/kerala">Kerala</a>
+                    </div>
+                </div>
                 <a href="<?php echo SITE_PATH; ?>/contact"<?php echo basename($_SERVER['SCRIPT_NAME']) == 'contact.php' ? ' class="active"' : ''; ?>>Contact Us</a>
             </nav>
 

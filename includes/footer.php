@@ -9,16 +9,16 @@
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="<?php echo SITE_PATH; ?>/">Home</a></li>
-                    <li><a href="#">About Us</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/about-us">About Us</a></li>
                     <li><a href="<?php echo SITE_PATH; ?>/contact">Contact Us</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h3>Top Destinations:</h3>
                 <ul>
-                    <li><a href="#">Maldives</a></li>
-                    <li><a href="#">Singapore</a></li>
-                    <li><a href="#">Bali</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/destination/maldives">Maldives</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/destination/singapore">Singapore</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/destination/bali">Bali</a></li>
                 </ul>
             </div>
             <div class="footer-col">
