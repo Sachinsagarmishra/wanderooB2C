@@ -17,6 +17,11 @@
     box-sizing: border-box;
 }
 
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Urbanist', sans-serif;
     background-color: var(--text-white);
@@ -1907,7 +1912,15 @@ footer {
     padding: 6px;
     border-radius: 12px;
     margin-bottom: 25px;
-    width: max-content;
+    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.itinerary-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .itinerary-tab-btn {
@@ -1921,6 +1934,7 @@ footer {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
 .itinerary-tab-btn.active {
@@ -2372,16 +2386,16 @@ footer {
         align-items: center;
         justify-content: center;
         width: 100%;
-        background: #ff7a00;
-        color: #ffffff;
-        border: none;
+        background: #ff7a00 !important;
+        color: #ffffff !important;
+        border: none !important;
         padding: 14px 0;
         border-radius: 30px;
         font-family: 'Urbanist', sans-serif;
         font-size: 16px;
         font-weight: 750;
         text-align: center;
-        box-shadow: 0 4px 15px rgba(255, 122, 0, 0.2);
+        box-shadow: 0 4px 15px rgba(255, 122, 0, 0.2) !important;
         transition: all 0.3s ease;
         text-decoration: none;
     }
