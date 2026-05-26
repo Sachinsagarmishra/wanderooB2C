@@ -168,10 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Log In</button>
             </form>
-
-            <div class="auth-footer">
-                Need an account? <a href="create-admin.php">Register Admin</a>
-            </div>
         </div>
     </div>
 
