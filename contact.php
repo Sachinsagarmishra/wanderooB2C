@@ -27,6 +27,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt = $pdo->prepare("INSERT INTO leads (type, fullname, email, phone, subject, message, source_page) VALUES ('contact', ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$fullname, $email, $phone, $subject, $message, $source_page]);
+
+            // Send email notification (fails silently if SMTP disabled or fails)
+            try {
+                $leadData = [
+                    'type' => 'contact',
+                    'fullname' => $fullname,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'subject' => $subject,
+                    'message' => $message,
+                    'source_page' => $source_page
+                ];
+                require_once __DIR__ . '/includes/mailer.php';
+                send_lead_notification($leadData);
+            } catch (\Exception $ex) {
+                // Fallback catch, error_log handled within send_lead_notification
+            }
+
             $successMsg = 'Thank you! Your message has been sent successfully. We will get back to you shortly.';
         } catch (PDOException $e) {
             $errorMsg = 'Error saving lead: ' . $e->getMessage();

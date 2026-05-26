@@ -57,6 +57,27 @@ try {
         $source_page
     ]);
 
+    // Send email notification (fails silently if SMTP disabled or fails)
+    try {
+        $leadData = [
+            'type' => 'enquiry',
+            'fullname' => $fullname,
+            'email' => $email,
+            'phone' => $phone,
+            'destination' => $destination,
+            'departure_date' => $departure_date,
+            'nights' => $nights,
+            'companion' => $companion,
+            'rooms_config' => $rooms_config,
+            'notes' => $notes,
+            'source_page' => $source_page
+        ];
+        require_once __DIR__ . '/includes/mailer.php';
+        send_lead_notification($leadData);
+    } catch (\Exception $ex) {
+        // Fallback catch, error_log handled within send_lead_notification
+    }
+
     echo json_encode(['success' => true]);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'error' => 'Database connection or query error: ' . $e->getMessage()]);
