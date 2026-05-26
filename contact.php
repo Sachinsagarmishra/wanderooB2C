@@ -34,6 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $pageTitle = "Contact Us";
 $pageDesc = "Get in touch with Wanderoo for bespoke itinerary design, luxury honeymoons, and premium travel planning support.";
 include_once 'includes/header.php';
+
+$contactEmail = get_setting('contact_email', 'support@wanderoo.world');
+$contactPhone = get_setting('contact_phone', '+91 91 135 154 62');
+$contactWhatsapp = get_setting('contact_whatsapp', '919113515462');
+$contactAddress = get_setting('contact_address', "Wanderoo\nThe landmark\n2nd Floor, Santacruz West\nMumbai - 400049");
 ?>
 
 <main>
@@ -127,7 +132,7 @@ include_once 'includes/header.php';
                     </div>
                     <div class="info-details">
                         <h4>Email Address</h4>
-                        <a href="mailto:support@wanderoo.world">support@wanderoo.world</a>
+                        <a href="mailto:<?php echo htmlspecialchars($contactEmail); ?>"><?php echo htmlspecialchars($contactEmail); ?></a>
                     </div>
                 </div>
 
@@ -140,7 +145,7 @@ include_once 'includes/header.php';
                     </div>
                     <div class="info-details">
                         <h4>Whatsapp Us</h4>
-                        <a href="https://wa.me/919113515462" target="_blank">+91 91 135 154 62</a>
+                        <a href="https://wa.me/<?php echo htmlspecialchars($contactWhatsapp); ?>" target="_blank"><?php echo htmlspecialchars($contactPhone); ?></a>
                     </div>
                 </div>
 
@@ -154,7 +159,7 @@ include_once 'includes/header.php';
                     </div>
                     <div class="info-details">
                         <h4>Address</h4>
-                        <p>Wanderoo<br>The landmark<br>2nd Floor, Santacruz West<br>Mumbai - 400049</p>
+                        <p><?php echo nl2br(htmlspecialchars($contactAddress)); ?></p>
                     </div>
                 </div>
             </div>

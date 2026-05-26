@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/db.php';
 $pageTitle = isset($pageTitle) ? $pageTitle . " | " . SITE_NAME : SITE_NAME;
 $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with custom admin panel.";
 ?>

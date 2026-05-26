@@ -116,6 +116,32 @@ try {
       KEY `package_id` (`package_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
+    // 9. Settings Table
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `settings` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `setting_key` varchar(100) NOT NULL,
+      `setting_value` text DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `setting_key` (`setting_key`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+    // Seed default settings if they do not exist
+    $defaults = [
+        'contact_email' => 'support@wanderoo.world',
+        'contact_phone' => '+91 91 135 154 62',
+        'contact_whatsapp' => '919113515462',
+        'contact_address' => "Wanderoo\nThe landmark\n2nd Floor, Santacruz West\nMumbai - 400049"
+    ];
+
+    foreach ($defaults as $key => $val) {
+        $stmtCheckSetting = $pdo->prepare("SELECT COUNT(*) FROM settings WHERE setting_key = ?");
+        $stmtCheckSetting->execute([$key]);
+        if ($stmtCheckSetting->fetchColumn() == 0) {
+            $stmtInsertSetting = $pdo->prepare("INSERT INTO settings (setting_key, setting_value) VALUES (?, ?)");
+            $stmtInsertSetting->execute([$key, $val]);
+        }
+    }
+
 } catch (PDOException $e) {
     $message = "Database initialization failed: " . $e->getMessage();
     $messageType = "danger";

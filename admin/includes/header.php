@@ -43,6 +43,7 @@ $currentPage = basename($_SERVER['SCRIPT_NAME']);
                 <a href="dashboard.php" class="nav-item <?php echo $currentPage === 'dashboard.php' ? 'active' : ''; ?>">Dashboard</a>
                 <a href="manage-packages.php" class="nav-item <?php echo $currentPage === 'manage-packages.php' || $currentPage === 'package-form.php' ? 'active' : ''; ?>">Packages</a>
                 <a href="leads.php" class="nav-item <?php echo $currentPage === 'leads.php' ? 'active' : ''; ?>">Leads</a>
+                <a href="settings.php" class="nav-item <?php echo $currentPage === 'settings.php' ? 'active' : ''; ?>">Settings</a>
             </nav>
             <nav class="admin-nav nav-spacer">
                 <div style="padding: 10px 12px; font-size: 11px; color: var(--fg3);">Logged in as: <strong style="color: var(--fg2);"><?php echo htmlspecialchars($_SESSION['admin_username']); ?></strong></div>
