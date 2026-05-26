@@ -19,6 +19,9 @@ try {
     $email = trim($_POST['email'] ?? '');
     $notes = trim($_POST['notes'] ?? '');
     $source_page = trim($_POST['source_page'] ?? '');
+    if (empty($source_page) && !empty($_SERVER['HTTP_REFERER'])) {
+        $source_page = $_SERVER['HTTP_REFERER'];
+    }
 
     if (empty($fullname) || empty($email) || empty($phone_raw) || empty($destination)) {
         echo json_encode(['success' => false, 'error' => 'Required fields are missing.']);

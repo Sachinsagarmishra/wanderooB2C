@@ -95,7 +95,7 @@
                     <h3 class="enquiry-step-title">Select Travel Date</h3>
                     <div class="enquiry-input-group">
                         <label for="enquiryDate" class="enquiry-input-label">Departure Date</label>
-                        <input type="date" id="enquiryDate" name="departure_date" class="enquiry-input-field">
+                        <input type="date" id="enquiryDate" name="departure_date" class="enquiry-input-field" min="<?php echo date('Y-m-d'); ?>">
                     </div>
                 </div>
 
@@ -116,19 +116,19 @@
                     <h3 class="enquiry-step-title">Who Are You Travelling With?</h3>
                     <div class="enquiry-options-grid">
                         <div class="enquiry-option-card with-icon" data-value="Couple">
-                            <span class="option-icon">👫</span>
+                            <span class="option-icon"><img src="<?php echo SITE_PATH; ?>/assets/img/couple.png" alt="Couple"></span>
                             Couple
                         </div>
                         <div class="enquiry-option-card with-icon" data-value="Family">
-                            <span class="option-icon">👨‍👩‍👧‍👦</span>
+                            <span class="option-icon"><img src="<?php echo SITE_PATH; ?>/assets/img/family.png" alt="Family"></span>
                             Family
                         </div>
                         <div class="enquiry-option-card with-icon" data-value="Friends">
-                            <span class="option-icon">👥</span>
+                            <span class="option-icon"><img src="<?php echo SITE_PATH; ?>/assets/img/friends.png" alt="Friends"></span>
                             Friends
                         </div>
                         <div class="enquiry-option-card with-icon" data-value="Solo">
-                            <span class="option-icon">🚶</span>
+                            <span class="option-icon"><img src="<?php echo SITE_PATH; ?>/assets/img/solo.png" alt="Solo"></span>
                             Solo
                         </div>
                     </div>
@@ -192,6 +192,17 @@
                     <button type="button" class="btn-enquiry-next-step" id="enquiryNextBtn">Next &rarr;</button>
                 </div>
             </form>
+
+            <!-- Success Screen -->
+            <div class="enquiry-success-screen" id="enquirySuccessScreen" style="display: none;">
+                <div class="success-icon-wrapper">🎉</div>
+                <h3 class="success-title">Thank You!</h3>
+                <p class="success-desc">Your travel request has been submitted successfully. Our travel experts will contact you shortly to plan your perfect holiday!</p>
+                <div class="success-adventure-card">
+                    <p class="success-adventure-text">🚀 Get ready for an amazing adventure!</p>
+                </div>
+                <p class="success-countdown" id="successCountdown">This popup will close automatically in 5 seconds...</p>
+            </div>
         </div>
     </div>
 </div>
@@ -544,7 +555,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .option-icon {
-    font-size: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f5f9;
+    border: 2px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+.option-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 /* Phone prefix wrapper */
@@ -810,6 +837,82 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transform: translateY(-2px);
 }
 
+/* Success Screen Styles */
+.enquiry-success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 10px;
+    height: 100%;
+    animation: enquiryFadeIn 0.4s ease-out;
+}
+
+@keyframes enquiryFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.success-icon-wrapper {
+    font-size: 64px;
+    margin-bottom: 15px;
+    display: block;
+    animation: enquiryBounce 1s ease infinite alternate;
+}
+
+@keyframes enquiryBounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+}
+
+.success-title {
+    font-family: 'Urbanist', sans-serif !important;
+    font-size: 36px !important;
+    font-weight: 800 !important;
+    color: #16a34a !important; /* Premium green */
+    margin: 0 0 16px 0 !important;
+    letter-spacing: -0.5px;
+}
+
+.success-desc {
+    font-family: 'Urbanist', sans-serif !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+    color: #16a34a !important; /* Premium green */
+    font-weight: 600 !important;
+    max-width: 440px;
+    margin: 0 auto 24px auto !important;
+}
+
+.success-adventure-card {
+    background-color: #f0fdf4; /* Light green-blue background tint */
+    border: 1.5px solid #bbf7d0; /* Soft green border */
+    border-radius: 16px;
+    padding: 18px 24px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.05);
+}
+
+.success-adventure-text {
+    font-family: 'Urbanist', sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 750 !important;
+    color: #1e3a8a !important; /* Slate blue text */
+    margin: 0;
+    text-align: center;
+}
+
+.success-countdown {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 500;
+    margin: 0;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .enquiry-modal-left {
@@ -842,9 +945,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 // Expose the current page's destination slug to Javascript
 window.currentPageDestination = <?php 
     $detectedSlug = '';
-    if (isset($destSlug)) {
+    $currentScript = basename($_SERVER['SCRIPT_NAME']);
+    if ($currentScript === 'package-detail.php' && isset($destSlug)) {
         $detectedSlug = $destSlug;
-    } elseif (isset($slug) && basename($_SERVER['SCRIPT_NAME']) === 'destination.php') {
+    } elseif ($currentScript === 'destination.php' && isset($slug)) {
         $detectedSlug = $slug;
     }
     echo json_encode($detectedSlug); 
@@ -908,6 +1012,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeModal() {
         modal.classList.remove('show');
         document.body.style.overflow = '';
+        
+        // Clear countdown interval if active
+        if (modal.dataset.countdownInterval) {
+            clearInterval(parseInt(modal.dataset.countdownInterval));
+            modal.removeAttribute('data-countdown-interval');
+        }
+        
         setTimeout(() => {
             modal.style.display = 'none';
         }, 300);
@@ -1143,6 +1254,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Reset dynamic rooms
         resetRooms();
+        
+        // Restore visibility of form and progress bar, hide success screen
+        const progressWrapper = document.querySelector('.enquiry-progress-wrapper');
+        if (progressWrapper) progressWrapper.style.display = '';
+        form.style.display = '';
+        const successScreen = document.getElementById('enquirySuccessScreen');
+        if (successScreen) successScreen.style.display = 'none';
+        
         goToStep(1);
     }
 
@@ -1164,8 +1283,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nextBtn.disabled = false;
             
             if (res.success) {
-                alert('Thank you! Your travel request has been submitted successfully. A destination expert will get back to you shortly.');
-                closeModal();
+                showSuccessScreen();
             } else {
                 showError(res.error || 'Failed to submit enquiry. Please try again.');
             }
@@ -1176,6 +1294,41 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', err);
             showError('An error occurred. Please try again.');
         });
+    }
+
+    function showSuccessScreen() {
+        // Hide progress bar wrapper, error banner, and form container
+        const progressWrapper = document.querySelector('.enquiry-progress-wrapper');
+        if (progressWrapper) progressWrapper.style.display = 'none';
+        errorBanner.style.display = 'none';
+        form.style.display = 'none';
+        
+        // Show success screen
+        const successScreen = document.getElementById('enquirySuccessScreen');
+        if (successScreen) {
+            successScreen.style.display = 'flex';
+        }
+        
+        // Start countdown timer
+        let timeLeft = 5;
+        const countdownEl = document.getElementById('successCountdown');
+        if (countdownEl) {
+            countdownEl.textContent = `This popup will close automatically in ${timeLeft} seconds...`;
+        }
+        
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (countdownEl) {
+                countdownEl.textContent = `This popup will close automatically in ${timeLeft} seconds...`;
+            }
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                closeModal();
+            }
+        }, 1000);
+        
+        // Store interval ID on modal
+        modal.dataset.countdownInterval = countdownInterval;
     }
 
     // Rooms Configuration logic functions

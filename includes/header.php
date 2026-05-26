@@ -37,14 +37,14 @@ $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with cus
                         try {
                             $stmtDests = $pdo->query("SELECT * FROM destinations ORDER BY sort_order, name");
                             while ($destRow = $stmtDests->fetch()) {
-                                $destSlug = htmlspecialchars($destRow['slug']);
-                                $destName = htmlspecialchars($destRow['name']);
-                                $destIcon = !empty($destRow['dropdown_icon']) ? htmlspecialchars($destRow['dropdown_icon']) : 'assets/img/Singapur.svg';
-                                $iconUrl = (strpos($destIcon, 'http://') === 0 || strpos($destIcon, 'https://') === 0) ? $destIcon : SITE_PATH . '/' . $destIcon;
+                                $headerDestSlug = htmlspecialchars($destRow['slug']);
+                                $headerDestName = htmlspecialchars($destRow['name']);
+                                $headerDestIcon = !empty($destRow['dropdown_icon']) ? htmlspecialchars($destRow['dropdown_icon']) : 'assets/img/Singapur.svg';
+                                $headerIconUrl = (strpos($headerDestIcon, 'http://') === 0 || strpos($headerDestIcon, 'https://') === 0) ? $headerDestIcon : SITE_PATH . '/' . $headerDestIcon;
                                 ?>
-                                <a href="<?php echo SITE_PATH; ?>/destination/<?php echo $destSlug; ?>">
-                                    <img src="<?php echo $iconUrl; ?>" alt="<?php echo $destName; ?>" class="dropdown-icon">
-                                    <?php echo $destName; ?>
+                                <a href="<?php echo SITE_PATH; ?>/destination/<?php echo $headerDestSlug; ?>">
+                                    <img src="<?php echo $headerIconUrl; ?>" alt="<?php echo $headerDestName; ?>" class="dropdown-icon">
+                                    <?php echo $headerDestName; ?>
                                 </a>
                                 <?php
                             }
