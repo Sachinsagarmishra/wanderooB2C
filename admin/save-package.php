@@ -1,16 +1,26 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
 
+// DEBUG LOGGING to writable uploads directory
+$logFile = __DIR__ . '/../uploads/save_debug.log';
+$logData = date('[Y-m-d H:i:s] ') . "Request received. Method: " . $_SERVER['REQUEST_METHOD'] . "\n";
+$logData .= "POST data: " . print_r($_POST, true) . "\n";
+$logData .= "FILES data: " . print_r($_FILES, true) . "\n";
+$logData .= "Session: " . print_r($_SESSION, true) . "\n";
+file_put_contents($logFile, $logData, FILE_APPEND);
+
 // Enforce admin authentication
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "Auth check failed. Redirecting to index.php.\n", FILE_APPEND);
     header("Location: index.php");
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "Method is not POST. Redirecting to manage-packages.php.\n", FILE_APPEND);
     header("Location: manage-packages.php");
     exit;
 }
@@ -258,9 +268,11 @@ try {
     exit;
 
 } catch (PDOException $e) {
+    file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "PDOException: " . $e->getMessage() . "\nTrace: " . $e->getTraceAsString() . "\n", FILE_APPEND);
     header("Location: manage-packages.php?error=" . urlencode("Database error: " . $e->getMessage()));
     exit;
 } catch (Exception $e) {
+    file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "Exception: " . $e->getMessage() . "\nTrace: " . $e->getTraceAsString() . "\n", FILE_APPEND);
     header("Location: manage-packages.php?error=" . urlencode("Error: " . $e->getMessage()));
     exit;
 }
