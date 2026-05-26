@@ -65,17 +65,27 @@
 
             <!-- Form Multi-steps Container -->
             <form action="#" method="POST" id="enquiryForm" class="enquiry-form-container">
+                <input type="hidden" name="source_page" id="enquirySourcePage" value="">
                 <!-- Step 1: Select Destination -->
                 <div class="enquiry-form-step active" data-step="1">
                     <h3 class="enquiry-step-title">Select Destination</h3>
                     <div class="enquiry-input-group">
                         <select id="enquiryDestination" name="destination" class="enquiry-select-field">
                             <option value="" disabled selected>Choose your dream destination...</option>
-                            <option value="maldives">Maldives</option>
-                            <option value="singapore">Singapore</option>
-                            <option value="bali">Bali</option>
-                            <option value="japan">Japan</option>
-                            <option value="kerala">Kerala, India</option>
+                            <?php
+                            try {
+                                $stmtModalDests = $pdo->query("SELECT slug, name FROM destinations ORDER BY sort_order, name");
+                                while ($mDest = $stmtModalDests->fetch()) {
+                                    echo '<option value="' . htmlspecialchars($mDest['slug']) . '">' . htmlspecialchars($mDest['name']) . '</option>';
+                                }
+                            } catch (Exception $e) {
+                                echo '<option value="singapore">Singapore</option>';
+                                echo '<option value="maldives">Maldives</option>';
+                                echo '<option value="bali">Bali</option>';
+                                echo '<option value="japan">Japan</option>';
+                                echo '<option value="kerala">Kerala</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -829,6 +839,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 </style>
 
 <script>
+// Expose the current page's destination slug to Javascript
+window.currentPageDestination = <?php 
+    $detectedSlug = '';
+    if (isset($destSlug)) {
+        $detectedSlug = $destSlug;
+    } elseif (isset($slug) && basename($_SERVER['SCRIPT_NAME']) === 'destination.php') {
+        $detectedSlug = $slug;
+    }
+    echo json_encode($detectedSlug); 
+?>;
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('enquiryModal');
     const closeBtn = document.getElementById('closeEnquiryModal');
@@ -862,12 +883,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function openModal(dest) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        
+        // Track the source page URL
+        const srcPageInput = document.getElementById('enquirySourcePage');
+        if (srcPageInput) {
+            srcPageInput.value = window.location.href;
+        }
+
         setTimeout(() => {
             modal.classList.add('show');
             resetModal();
-            if (dest) {
+            
+            // Auto pre-fill destination: passed dest first, then page destination
+            const activeDest = dest || window.currentPageDestination;
+            if (activeDest) {
                 const destSelect = document.getElementById('enquiryDestination');
-                destSelect.value = dest;
+                if (destSelect) {
+                    destSelect.value = activeDest;
+                }
             }
         }, 10);
     }

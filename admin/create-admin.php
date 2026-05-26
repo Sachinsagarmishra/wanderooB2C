@@ -21,6 +21,13 @@ try {
     $pdo->exec("ALTER TABLE `users` MODIFY COLUMN `password` varchar(255) NOT NULL;");
     $pdo->exec("ALTER TABLE `users` MODIFY COLUMN `email` varchar(100) NOT NULL;");
 
+    // Alter table leads to add source_page column if it doesn't exist on older installations
+    try {
+        $pdo->exec("ALTER TABLE `leads` ADD COLUMN `source_page` varchar(500) DEFAULT NULL;");
+    } catch (PDOException $e) {
+        // Column might already exist, safe to ignore
+    }
+
     // 2. Leads Table
     $pdo->exec("CREATE TABLE IF NOT EXISTS `leads` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -36,6 +43,7 @@ try {
       `companion` varchar(50) DEFAULT NULL,
       `rooms_config` text DEFAULT NULL,
       `notes` text DEFAULT NULL,
+      `source_page` varchar(500) DEFAULT NULL,
       `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");

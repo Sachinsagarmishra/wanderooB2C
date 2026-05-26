@@ -18,6 +18,7 @@ try {
     $phone = $country_code . ' ' . $phone_raw;
     $email = trim($_POST['email'] ?? '');
     $notes = trim($_POST['notes'] ?? '');
+    $source_page = trim($_POST['source_page'] ?? '');
 
     if (empty($fullname) || empty($email) || empty($phone_raw) || empty($destination)) {
         echo json_encode(['success' => false, 'error' => 'Required fields are missing.']);
@@ -35,9 +36,9 @@ try {
     }
 
     $stmt = $pdo->prepare("INSERT INTO leads (
-        type, fullname, email, phone, destination, departure_date, nights, companion, rooms_config, notes
+        type, fullname, email, phone, destination, departure_date, nights, companion, rooms_config, notes, source_page
     ) VALUES (
-        'enquiry', ?, ?, ?, ?, ?, ?, ?, ?, ?
+        'enquiry', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )");
     
     $stmt->execute([
@@ -49,7 +50,8 @@ try {
         $nights,
         $companion,
         $rooms_config,
-        $notes
+        $notes,
+        $source_page
     ]);
 
     echo json_encode(['success' => true]);

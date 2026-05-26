@@ -64,8 +64,8 @@ include_once 'includes/header.php';
             <!-- Right: Paragraph Content & Action -->
             <div class="destination-intro-right">
                 <p><?php echo htmlspecialchars($dest['desc']); ?></p>
-                <a href="#" class="read-more-btn btn-enquire">
-                    Read More ↗
+                <a href="#" class="read-more-btn btn-enquire" data-destination="<?php echo htmlspecialchars($slug); ?>">
+                    Read More
                 </a>
             </div>
         </div>

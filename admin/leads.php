@@ -149,6 +149,11 @@ try {
                         <tr>
                             <td>
                                 <strong style="color: var(--fg); font-size: 14px;"><?php echo htmlspecialchars($lead['fullname']); ?></strong>
+                                <?php if (!empty($lead['source_page'])): ?>
+                                    <div style="font-size: 11px; color: var(--fg3); margin-top: 4px; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        Src: <a href="<?php echo htmlspecialchars($lead['source_page']); ?>" target="_blank" title="<?php echo htmlspecialchars($lead['source_page']); ?>" style="color: var(--accent); text-decoration: underline;"><?php echo htmlspecialchars($lead['source_page']); ?></a>
+                                    </div>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <div><a href="mailto:<?php echo htmlspecialchars($lead['email']); ?>" style="color: var(--accent);"><?php echo htmlspecialchars($lead['email']); ?></a></div>
@@ -221,6 +226,12 @@ function showLead(lead) {
         <div class="lead-detail-row">
             <span class="lead-detail-label">Date Submitted</span>
             <span class="lead-detail-value">${lead.created_at}</span>
+        </div>
+        <div class="lead-detail-row">
+            <span class="lead-detail-label">Source Page URL</span>
+            <span class="lead-detail-value">
+                ${lead.source_page ? `<a href="${escapeHtml(lead.source_page)}" target="_blank" style="color: var(--accent); text-decoration: underline;">${escapeHtml(lead.source_page)}</a>` : 'N/A'}
+            </span>
         </div>
     `;
     

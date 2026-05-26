@@ -22,8 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errorMsg = 'Please enter a valid phone number (between 7 and 15 digits).';
     } else {
         try {
-            $stmt = $pdo->prepare("INSERT INTO leads (type, fullname, email, phone, subject, message) VALUES ('contact', ?, ?, ?, ?, ?)");
-            $stmt->execute([$fullname, $email, $phone, $subject, $message]);
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+            $source_page = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+            $stmt = $pdo->prepare("INSERT INTO leads (type, fullname, email, phone, subject, message, source_page) VALUES ('contact', ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$fullname, $email, $phone, $subject, $message, $source_page]);
             $successMsg = 'Thank you! Your message has been sent successfully. We will get back to you shortly.';
         } catch (PDOException $e) {
             $errorMsg = 'Error saving lead: ' . $e->getMessage();
