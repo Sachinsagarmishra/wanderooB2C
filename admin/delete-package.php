@@ -66,6 +66,7 @@ try {
     $pdo->prepare("DELETE FROM package_photos WHERE package_id = ?")->execute([$packageId]);
     $pdo->prepare("DELETE FROM package_tags WHERE package_id = ?")->execute([$packageId]);
     $pdo->prepare("DELETE FROM package_days WHERE package_id = ?")->execute([$packageId]);
+    $pdo->prepare("DELETE FROM package_day_images WHERE package_id = ?")->execute([$packageId]);
     $pdo->prepare("DELETE FROM package_highlights WHERE package_id = ?")->execute([$packageId]);
     $pdo->prepare("DELETE FROM package_inclusions WHERE package_id = ?")->execute([$packageId]);
     $pdo->prepare("DELETE FROM tour_packages WHERE id = ?")->execute([$packageId]);

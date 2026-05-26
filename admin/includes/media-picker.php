@@ -230,16 +230,20 @@ function selectMediaItem(button) {
 }
 
 function addSelectedGalleryMedia(path) {
-    const list = document.getElementById('selectedGalleryMedia');
+    const list = mediaPickerPreview || document.getElementById('selectedGalleryMedia');
     if (!list) return;
+    const pathName = list.dataset.pathName || 'existing_gallery_paths[]';
+    const altName = list.dataset.altName || 'existing_gallery_alt[]';
+    const pathFieldAttr = pathName.indexOf('day_existing_image_paths') === 0 ? ' data-field="day-path"' : '';
+    const altFieldAttr = altName.indexOf('day_existing_image_alt') === 0 ? ' data-field="day-alt"' : '';
 
     const row = document.createElement('div');
     row.className = 'selected-media-row';
     row.innerHTML = `
         <img src="${mediaUrl(path)}" alt="Selected gallery media">
         <div>
-            <input type="hidden" name="existing_gallery_paths[]" value="${path}">
-            <input type="text" name="existing_gallery_alt[]" class="form-control" placeholder="Alt tag for this image">
+            <input type="hidden" name="${pathName}" value="${path}"${pathFieldAttr}>
+            <input type="text" name="${altName}" class="form-control" placeholder="Alt tag for this image"${altFieldAttr}>
             <div style="font-size:11px;color:var(--fg3);margin-top:5px;overflow-wrap:anywhere;">${path}</div>
         </div>
         <button type="button" class="btn-remove-item" onclick="this.closest('.selected-media-row').remove()">×</button>

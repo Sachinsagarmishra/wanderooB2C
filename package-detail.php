@@ -13,6 +13,7 @@ $dbHighlights = [];
 $dbInclusions = [];
 $dbExclusions = [];
 $dbPhotos = [];
+$dbDayImages = [];
 
 if (!empty($tourSlug) && !empty($destSlug)) {
     try {
@@ -33,6 +34,12 @@ if (!empty($tourSlug) && !empty($destSlug)) {
             $stmt = $pdo->prepare("SELECT * FROM package_days WHERE package_id = ? ORDER BY day_number");
             $stmt->execute([$pkgId]);
             $dbDays = $stmt->fetchAll();
+
+            $stmt = $pdo->prepare("SELECT * FROM package_day_images WHERE package_id = ? ORDER BY day_number, sort_order");
+            $stmt->execute([$pkgId]);
+            foreach ($stmt->fetchAll() as $dayImage) {
+                $dbDayImages[intval($dayImage['day_number'])][] = $dayImage;
+            }
 
             // Fetch highlights
             $stmt = $pdo->prepare("SELECT highlight_text FROM package_highlights WHERE package_id = ? ORDER BY sort_order");
@@ -227,9 +234,28 @@ include 'includes/header.php';
                                 </div>
                                 <svg class="itinerary-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </div>
-                            <div class="itinerary-body" <?php echo $idx === 0 ? 'style="max-height: 500px;"' : ''; ?>>
+                            <div class="itinerary-body" <?php echo $idx === 0 ? 'style="max-height: 1200px;"' : ''; ?>>
                                 <div class="itinerary-body-content">
                                     <?php echo nl2br(htmlspecialchars($day['day_content'])); ?>
+                                    <?php $dayImages = $dbDayImages[intval($day['day_number'])] ?? []; ?>
+                                    <?php if (!empty($dayImages)): ?>
+                                        <?php
+                                        $imgCount = count($dayImages);
+                                        $gridClass = $imgCount >= 4 ? '4' : (string)$imgCount;
+                                        ?>
+                                        <div class="itinerary-image-grid image-count-<?php echo $gridClass; ?>">
+                                            <?php foreach ($dayImages as $dayImage): ?>
+                                                <?php
+                                                    $dayImgPath = $dayImage['image_path'];
+                                                    $dayImgUrl = (strpos($dayImgPath, 'http://') === 0 || strpos($dayImgPath, 'https://') === 0) ? $dayImgPath : SITE_PATH . '/' . $dayImgPath;
+                                                    $dayImgAlt = !empty($dayImage['alt_text']) ? $dayImage['alt_text'] : $day['day_title'];
+                                                ?>
+                                                <figure class="itinerary-image-item">
+                                                    <img src="<?php echo htmlspecialchars($dayImgUrl); ?>" alt="<?php echo htmlspecialchars($dayImgAlt); ?>">
+                                                </figure>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
                                     <?php if (!empty($day['accommodation']) || !empty($day['meals'])): ?>
                                         <div class="itinerary-details-meta">
                                             <?php if (!empty($day['accommodation'])): ?>

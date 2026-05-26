@@ -39,6 +39,18 @@ try {
         }
     }
 
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `package_day_images` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `package_id` int(11) NOT NULL,
+      `day_number` int(11) NOT NULL,
+      `image_path` varchar(500) NOT NULL,
+      `alt_text` varchar(255) DEFAULT NULL,
+      `sort_order` int(11) DEFAULT 0,
+      PRIMARY KEY (`id`),
+      KEY `package_id` (`package_id`),
+      KEY `day_number` (`day_number`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
     $packageId = intval($_POST['package_id'] ?? 0);
     $isEdit = $packageId > 0;
 
@@ -300,6 +312,69 @@ try {
                     trim($dayAccommodations[$i] ?? ''),
                     trim($dayMeals[$i] ?? '')
                 ]);
+        }
+    }
+
+    // ─── Save Day-wise Images ───
+    $pdo->prepare("DELETE FROM package_day_images WHERE package_id = ?")->execute([$packageId]);
+    $dayExistingPaths = $_POST['day_existing_image_paths'] ?? [];
+    $dayExistingAlt = $_POST['day_existing_image_alt'] ?? [];
+    $daySortOrders = [];
+
+    foreach ($dayExistingPaths as $dayNumber => $paths) {
+        $dayNumber = intval($dayNumber);
+        if (!is_array($paths)) {
+            continue;
+        }
+        foreach ($paths as $idx => $path) {
+            $path = trim($path);
+            if ($path === '') {
+                continue;
+            }
+            $daySortOrders[$dayNumber] = ($daySortOrders[$dayNumber] ?? 0) + 1;
+            $altText = trim($dayExistingAlt[$dayNumber][$idx] ?? '');
+            if ($altText === '') {
+                $altText = pathinfo($path, PATHINFO_FILENAME);
+            }
+            $stmt = $pdo->prepare("INSERT INTO package_day_images (package_id, day_number, image_path, alt_text, sort_order) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$packageId, $dayNumber, $path, $altText, $daySortOrders[$dayNumber]]);
+        }
+    }
+
+    if (isset($_FILES['day_images']) && !empty($_FILES['day_images']['name'])) {
+        $dayUploadDir = __DIR__ . '/../uploads/packages/' . $packageId . '/days/';
+        if (!is_dir($dayUploadDir)) {
+            mkdir($dayUploadDir, 0755, true);
+        }
+        $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+        $dayUploadAlt = $_POST['day_upload_alt'] ?? [];
+
+        foreach ($_FILES['day_images']['name'] as $dayNumber => $fileNames) {
+            $dayNumber = intval($dayNumber);
+            if (!is_array($fileNames)) {
+                continue;
+            }
+            foreach ($fileNames as $idx => $fileName) {
+                if (($_FILES['day_images']['error'][$dayNumber][$idx] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                    continue;
+                }
+                $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                if (!in_array($ext, $allowed, true)) {
+                    continue;
+                }
+                $daySortOrders[$dayNumber] = ($daySortOrders[$dayNumber] ?? 0) + 1;
+                $dayFileName = 'day_' . $dayNumber . '_' . $daySortOrders[$dayNumber] . '_' . time() . '.' . $ext;
+                $fullPath = $dayUploadDir . $dayFileName;
+                if (move_uploaded_file($_FILES['day_images']['tmp_name'][$dayNumber][$idx], $fullPath)) {
+                    $imagePath = 'uploads/packages/' . $packageId . '/days/' . $dayFileName;
+                    $altText = trim($dayUploadAlt[$dayNumber] ?? '');
+                    if ($altText === '') {
+                        $altText = pathinfo($fileName, PATHINFO_FILENAME);
+                    }
+                    $stmt = $pdo->prepare("INSERT INTO package_day_images (package_id, day_number, image_path, alt_text, sort_order) VALUES (?, ?, ?, ?, ?)");
+                    $stmt->execute([$packageId, $dayNumber, $imagePath, $altText, $daySortOrders[$dayNumber]]);
+                }
+            }
         }
     }
 

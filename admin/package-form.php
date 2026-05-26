@@ -12,6 +12,7 @@ $pkgHighlights = [];
 $pkgInclusions = [];
 $pkgExclusions = [];
 $pkgPhotos = [];
+$pkgDayImages = [];
 
 if ($editId > 0) {
     try {
@@ -30,6 +31,12 @@ if ($editId > 0) {
             $stmt = $pdo->prepare("SELECT * FROM package_days WHERE package_id = ? ORDER BY day_number");
             $stmt->execute([$editId]);
             $pkgDays = $stmt->fetchAll();
+
+            $stmt = $pdo->prepare("SELECT * FROM package_day_images WHERE package_id = ? ORDER BY day_number, sort_order");
+            $stmt->execute([$editId]);
+            foreach ($stmt->fetchAll() as $dayImage) {
+                $pkgDayImages[intval($dayImage['day_number'])][] = $dayImage;
+            }
             
             // Fetch highlights
             $stmt = $pdo->prepare("SELECT * FROM package_highlights WHERE package_id = ? ORDER BY sort_order");
@@ -279,6 +286,17 @@ if ($editId > 0) {
         align-items: center;
         justify-content: center;
         line-height: 1;
+    }
+    .day-media-tools {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+    .day-media-list,
+    .day-upload-preview {
+        margin-top: 10px;
     }
 
     /* Form Actions */
@@ -544,6 +562,33 @@ if ($editId > 0) {
                             <textarea name="day_content[]" class="form-control" placeholder="Describe the day's activities..." style="min-height:80px;"><?php echo htmlspecialchars($day['day_content']); ?></textarea>
                         </div>
                         <div class="form-group" style="margin-top:12px;margin-bottom:0">
+                            <label>Day Images</label>
+                            <div class="day-media-tools">
+                                <button type="button" class="btn btn-secondary" onclick="openMediaPicker('dayMediaTarget_<?php echo $day['day_number']; ?>', 'daySelectedMedia_<?php echo $day['day_number']; ?>', 'gallery')">Select Existing Media</button>
+                                <div class="file-upload-area" style="margin:0;padding:10px 14px;min-width:220px;">
+                                    📷 Upload day images
+                                    <input type="file" name="day_images[<?php echo $day['day_number']; ?>][]" accept="image/*" multiple onchange="previewDayUploads(this)">
+                                </div>
+                            </div>
+                            <input type="text" name="day_upload_alt[<?php echo $day['day_number']; ?>]" class="form-control" style="margin-top:10px;" placeholder="Alt tag for newly uploaded day images">
+                            <input type="hidden" id="dayMediaTarget_<?php echo $day['day_number']; ?>" value="">
+                            <div id="daySelectedMedia_<?php echo $day['day_number']; ?>" class="selected-media-list day-media-list" data-path-name="day_existing_image_paths[<?php echo $day['day_number']; ?>][]" data-alt-name="day_existing_image_alt[<?php echo $day['day_number']; ?>][]">
+                                <?php foreach (($pkgDayImages[intval($day['day_number'])] ?? []) as $dayImage): ?>
+                                    <?php $dayImageUrl = (strpos($dayImage['image_path'], 'http://') === 0 || strpos($dayImage['image_path'], 'https://') === 0) ? $dayImage['image_path'] : SITE_PATH . '/' . $dayImage['image_path']; ?>
+                                    <div class="selected-media-row">
+                                        <img src="<?php echo htmlspecialchars($dayImageUrl); ?>" alt="Selected day media">
+                                        <div>
+                                            <input type="hidden" name="day_existing_image_paths[<?php echo $day['day_number']; ?>][]" value="<?php echo htmlspecialchars($dayImage['image_path']); ?>" data-field="day-path">
+                                            <input type="text" name="day_existing_image_alt[<?php echo $day['day_number']; ?>][]" class="form-control" value="<?php echo htmlspecialchars($dayImage['alt_text'] ?? ''); ?>" placeholder="Alt tag for this image" data-field="day-alt">
+                                            <div style="font-size:11px;color:var(--fg3);margin-top:5px;overflow-wrap:anywhere;"><?php echo htmlspecialchars($dayImage['image_path']); ?></div>
+                                        </div>
+                                        <button type="button" class="btn-remove-item" onclick="this.closest('.selected-media-row').remove()">×</button>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <div class="gallery-preview day-upload-preview"></div>
+                        </div>
+                        <div class="form-group" style="margin-top:12px;margin-bottom:0">
                             <label>Meals</label>
                             <input type="text" name="day_meals[]" class="form-control" placeholder="e.g. Breakfast, Lunch, Dinner" value="<?php echo htmlspecialchars($day['meals']); ?>">
                         </div>
@@ -569,6 +614,20 @@ if ($editId > 0) {
                     <div class="form-group" style="margin-top:12px;margin-bottom:0">
                         <label>Day Content</label>
                         <textarea name="day_content[]" class="form-control" placeholder="Describe the day's activities..." style="min-height:80px;"></textarea>
+                    </div>
+                    <div class="form-group" style="margin-top:12px;margin-bottom:0">
+                        <label>Day Images</label>
+                        <div class="day-media-tools">
+                            <button type="button" class="btn btn-secondary" onclick="openMediaPicker('dayMediaTarget_1', 'daySelectedMedia_1', 'gallery')">Select Existing Media</button>
+                            <div class="file-upload-area" style="margin:0;padding:10px 14px;min-width:220px;">
+                                📷 Upload day images
+                                <input type="file" name="day_images[1][]" accept="image/*" multiple onchange="previewDayUploads(this)">
+                            </div>
+                        </div>
+                        <input type="text" name="day_upload_alt[1]" class="form-control" style="margin-top:10px;" placeholder="Alt tag for newly uploaded day images">
+                        <input type="hidden" id="dayMediaTarget_1" value="">
+                        <div id="daySelectedMedia_1" class="selected-media-list day-media-list" data-path-name="day_existing_image_paths[1][]" data-alt-name="day_existing_image_alt[1][]"></div>
+                        <div class="gallery-preview day-upload-preview"></div>
                     </div>
                     <div class="form-group" style="margin-top:12px;margin-bottom:0">
                         <label>Meals</label>
@@ -724,6 +783,20 @@ function addDay() {
             <textarea name="day_content[]" class="form-control" placeholder="Describe the day's activities..." style="min-height:80px;"></textarea>
         </div>
         <div class="form-group" style="margin-top:12px;margin-bottom:0">
+            <label>Day Images</label>
+            <div class="day-media-tools">
+                <button type="button" class="btn btn-secondary" onclick="openMediaPicker('dayMediaTarget_${nextDay}', 'daySelectedMedia_${nextDay}', 'gallery')">Select Existing Media</button>
+                <div class="file-upload-area" style="margin:0;padding:10px 14px;min-width:220px;">
+                    📷 Upload day images
+                    <input type="file" name="day_images[${nextDay}][]" accept="image/*" multiple onchange="previewDayUploads(this)">
+                </div>
+            </div>
+            <input type="text" name="day_upload_alt[${nextDay}]" class="form-control" style="margin-top:10px;" placeholder="Alt tag for newly uploaded day images">
+            <input type="hidden" id="dayMediaTarget_${nextDay}" value="">
+            <div id="daySelectedMedia_${nextDay}" class="selected-media-list day-media-list" data-path-name="day_existing_image_paths[${nextDay}][]" data-alt-name="day_existing_image_alt[${nextDay}][]"></div>
+            <div class="gallery-preview day-upload-preview"></div>
+        </div>
+        <div class="form-group" style="margin-top:12px;margin-bottom:0">
             <label>Meals</label>
             <input type="text" name="day_meals[]" class="form-control" placeholder="e.g. Breakfast, Lunch, Dinner">
         </div>
@@ -740,9 +813,54 @@ function removeDay(btn) {
     const dayCards = document.querySelectorAll('#daysList .day-card');
     dayCards.forEach((c, i) => {
         const num = i + 1;
+        const oldNum = c.getAttribute('data-day');
         c.setAttribute('data-day', num);
         c.querySelector('.day-card-number').textContent = 'Day ' + String(num).padStart(2, '0');
         c.querySelector('input[name="day_number[]"]').value = num;
+        syncDayMediaFields(c, num, oldNum);
+    });
+}
+
+function syncDayMediaFields(card, num, oldNum) {
+    const target = card.querySelector(`#dayMediaTarget_${oldNum}`) || card.querySelector('input[id^="dayMediaTarget_"]');
+    const list = card.querySelector(`#daySelectedMedia_${oldNum}`) || card.querySelector('.day-media-list');
+    if (target) target.id = `dayMediaTarget_${num}`;
+    if (list) {
+        list.id = `daySelectedMedia_${num}`;
+        list.dataset.pathName = `day_existing_image_paths[${num}][]`;
+        list.dataset.altName = `day_existing_image_alt[${num}][]`;
+    }
+    const pickerBtn = card.querySelector('.day-media-tools .btn-secondary');
+    if (pickerBtn) {
+        pickerBtn.setAttribute('onclick', `openMediaPicker('dayMediaTarget_${num}', 'daySelectedMedia_${num}', 'gallery')`);
+    }
+    card.querySelectorAll('input[type="file"][name^="day_images"]').forEach(input => {
+        input.name = `day_images[${num}][]`;
+    });
+    card.querySelectorAll('input[name^="day_upload_alt"]').forEach(input => {
+        input.name = `day_upload_alt[${num}]`;
+    });
+    card.querySelectorAll('[data-field="day-path"]').forEach(input => {
+        input.name = `day_existing_image_paths[${num}][]`;
+    });
+    card.querySelectorAll('[data-field="day-alt"]').forEach(input => {
+        input.name = `day_existing_image_alt[${num}][]`;
+    });
+}
+
+function previewDayUploads(input) {
+    const preview = input.closest('.form-group').querySelector('.day-upload-preview');
+    if (!preview) return;
+    preview.innerHTML = '';
+    Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const div = document.createElement('div');
+            div.className = 'gallery-preview-item';
+            div.innerHTML = `<img src="${e.target.result}" alt="Day image preview">`;
+            preview.appendChild(div);
+        };
+        reader.readAsDataURL(file);
     });
 }
 
