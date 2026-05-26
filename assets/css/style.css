@@ -3011,14 +3011,23 @@ footer {
 
 .nav-dropdown .dropdown-menu a {
     color: #333333 !important;
-    padding: 10px 20px;
+    padding: 12px 20px;
     font-size: 14px;
     font-weight: 600;
-    display: block;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
     border-radius: 0;
     transition: background 0.3s ease, color 0.3s ease;
     font-family: 'Urbanist', sans-serif;
+}
+
+.dropdown-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .nav-dropdown .dropdown-menu a:hover {
@@ -3057,6 +3066,16 @@ footer {
         color: rgba(255, 255, 255, 0.7) !important;
         padding: 8px 0;
         font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .nav-dropdown .dropdown-menu a .dropdown-icon {
+        width: 18px;
+        height: 18px;
+        filter: brightness(0) invert(1);
     }
     
     .nav-dropdown .dropdown-menu a:hover {

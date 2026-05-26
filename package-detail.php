@@ -1,11 +1,33 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-$tourTitle = isset($_GET['tour']) ? rawurldecode($_GET['tour']) : "Luxury Honeymoon";
-$destName = isset($_GET['destination']) ? rawurldecode($_GET['destination']) : "Maldives";
+$tourSlug = isset($_GET['tour']) ? trim($_GET['tour']) : '';
+$destSlug = isset($_GET['destination']) ? trim(strtolower($_GET['destination'])) : '';
 
-$pageTitle = $tourTitle;
-$pageDesc = "Welcome to " . htmlspecialchars($tourTitle) . " – a luxurious escape in " . htmlspecialchars(ucfirst($destName)) . " curated by Wanderoo.";
+$matchedPkg = null;
+if (!empty($destSlug) && isset($destinations[$destSlug])) {
+    foreach ($destinations[$destSlug]['packages'] as $pkg) {
+        if (slugify($pkg['title']) === slugify($tourSlug) || strtolower($pkg['title']) === strtolower($tourSlug)) {
+            $matchedPkg = $pkg;
+            break;
+        }
+    }
+}
+
+// Set package details based on matching or fallback to default
+if ($matchedPkg) {
+    $tourTitle = $matchedPkg['title'];
+    $pageTitle = $tourTitle;
+    $pageDesc = "Welcome to " . htmlspecialchars($tourTitle) . " – a custom package in " . htmlspecialchars(ucfirst($destSlug)) . " curated by Wanderoo.";
+    $mainImg = $matchedPkg['img'];
+} else {
+    // Check if the tour slug matches the default honeymoon one
+    $tourTitle = "Luxury Honeymoon at Adaaran Prestige";
+    $pageTitle = $tourTitle;
+    $pageDesc = "Welcome to " . htmlspecialchars($tourTitle) . " – a luxurious escape in Maldives curated by Wanderoo.";
+    $mainImg = "https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800";
+}
+
 include 'includes/header.php';
 ?>
 
@@ -15,7 +37,7 @@ include 'includes/header.php';
     
     <div class="detail-gallery">
         <div class="detail-gallery-main">
-            <img src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800" alt="Main Honeymoon Image" class="detail-gallery-img">
+            <img src="<?php echo htmlspecialchars($mainImg); ?>" alt="<?php echo htmlspecialchars($tourTitle); ?>" class="detail-gallery-img">
             <button class="btn-view-all-images mobile-btn-view-all">View All Images</button>
         </div>
         <div class="detail-gallery-thumb">
@@ -40,11 +62,18 @@ include 'includes/header.php';
         <div class="detail-main-content">
             <!-- Badges -->
             <div class="detail-badges">
-                <span class="detail-badge">4D/3N</span>
-                <span class="detail-badge">Honeymoon Alone</span>
-                <span class="detail-badge">Floating Breakfast</span>
-                <span class="detail-badge">Dolphin Safari</span>
-                <span class="detail-badge">Sandbank Lunch</span>
+                <?php if ($matchedPkg): ?>
+                    <span class="detail-badge"><?php echo htmlspecialchars($matchedPkg['duration']); ?></span>
+                    <?php foreach ($matchedPkg['tags'] as $tag): ?>
+                        <span class="detail-badge"><?php echo htmlspecialchars($tag); ?></span>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <span class="detail-badge">4D/3N</span>
+                    <span class="detail-badge">Honeymoon Alone</span>
+                    <span class="detail-badge">Floating Breakfast</span>
+                    <span class="detail-badge">Dolphin Safari</span>
+                    <span class="detail-badge">Sandbank Lunch</span>
+                <?php endif; ?>
             </div>
             
             <!-- Title -->
@@ -246,12 +275,12 @@ include 'includes/header.php';
                 <h3 class="sidebar-heading">Select Destination</h3>
                 <div class="enquiry-select-wrapper">
                     <select class="enquiry-select">
-                        <option value="" disabled selected>Choose your dream destination...</option>
-                        <option value="maldives">Maldives</option>
-                        <option value="singapore">Singapore</option>
-                        <option value="bali">Bali</option>
-                        <option value="japan">Japan</option>
-                        <option value="kerala">Kerala, India</option>
+                        <option value="" disabled <?php echo empty($destSlug) ? 'selected' : ''; ?>>Choose your dream destination...</option>
+                        <option value="maldives" <?php echo $destSlug === 'maldives' ? 'selected' : ''; ?>>Maldives</option>
+                        <option value="singapore" <?php echo $destSlug === 'singapore' ? 'selected' : ''; ?>>Singapore</option>
+                        <option value="bali" <?php echo $destSlug === 'bali' ? 'selected' : ''; ?>>Bali</option>
+                        <option value="japan" <?php echo $destSlug === 'japan' ? 'selected' : ''; ?>>Japan</option>
+                        <option value="kerala" <?php echo $destSlug === 'kerala' ? 'selected' : ''; ?>>Kerala, India</option>
                     </select>
                 </div>
                 <button class="btn-enquiry-next">
