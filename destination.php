@@ -428,7 +428,7 @@ include_once 'includes/header.php';
                                     </span>
                                 </div>
                                 <h3>
-                                    <a href="<?php echo SITE_PATH; ?>/package-detail" style="color: inherit; text-decoration: none;">
+                                    <a href="<?php echo SITE_PATH; ?>/<?php echo $slug; ?>/<?php echo rawurlencode($pkg['title']); ?>" style="color: inherit; text-decoration: none;">
                                         <?php echo htmlspecialchars($pkg['title']); ?>
                                     </a>
                                 </h3>

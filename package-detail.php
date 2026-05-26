@@ -1,6 +1,11 @@
 <?php
-$pageTitle = "Luxury Honeymoon";
-$pageDesc = "Welcome to Adaaran Prestige Vadoo – a luxurious adults-only escape in the Maldives.";
+require_once __DIR__ . '/config.php';
+
+$tourTitle = isset($_GET['tour']) ? rawurldecode($_GET['tour']) : "Luxury Honeymoon";
+$destName = isset($_GET['destination']) ? rawurldecode($_GET['destination']) : "Maldives";
+
+$pageTitle = $tourTitle;
+$pageDesc = "Welcome to " . htmlspecialchars($tourTitle) . " – a luxurious escape in " . htmlspecialchars(ucfirst($destName)) . " curated by Wanderoo.";
 include 'includes/header.php';
 ?>
 
@@ -43,7 +48,7 @@ include 'includes/header.php';
             </div>
             
             <!-- Title -->
-            <h1 class="detail-title">Luxury Honeymoon</h1>
+            <h1 class="detail-title"><?php echo htmlspecialchars($tourTitle); ?></h1>
             
             <!-- Subdescription -->
             <p class="detail-desc">
@@ -237,7 +242,7 @@ include 'includes/header.php';
         <!-- Sidebar Column -->
         <div class="detail-sidebar">
             <div class="detail-sidebar-box">
-                <h4 class="sidebar-package-title">Luxury Honeymoon</h4>
+                <h4 class="sidebar-package-title"><?php echo htmlspecialchars($tourTitle); ?></h4>
                 <h3 class="sidebar-heading">Select Destination</h3>
                 <div class="enquiry-select-wrapper">
                     <select class="enquiry-select">

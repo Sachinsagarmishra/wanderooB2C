@@ -3,6 +3,11 @@ RewriteEngine On
 # Clean URLs for Destination Page
 RewriteRule ^destination/([^/]+)/?$ destination.php?name=$1 [QSA,L]
 
+# Clean URLs for Package Detail Page
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/([^/]+)/?$ package-detail.php?destination=$1&tour=$2 [QSA,L]
+
 # Redirect /filename.php to /filename (External Redirect)
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
 RewriteRule ^ %1 [R=301,L]
