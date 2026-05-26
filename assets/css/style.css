@@ -1846,9 +1846,11 @@ footer {
 
 /* Headings & Text */
 .detail-title {
-    font-family: 'Urbanist', sans-serif;
+    font-family: "Playfair Display", serif;
     font-size: 44px;
-    font-weight: 800;
+    font-weight: 600;
+    line-height: 60px;
+    font-style: italic;
     color: var(--text-dark);
     margin-bottom: 20px;
 }
@@ -2318,6 +2320,7 @@ footer {
 
     .detail-title {
         font-size: 32px;
+        line-height: 42px;
     }
 
     .detail-desc,
