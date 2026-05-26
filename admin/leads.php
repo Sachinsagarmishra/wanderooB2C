@@ -20,6 +20,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])
 // Fetch leads with search, filter, and pagination
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $type = isset($_GET['type']) ? trim($_GET['type']) : '';
+$dateFilter = isset($_GET['date_filter']) ? trim($_GET['date_filter']) : 'all';
+$startDate = isset($_GET['start_date']) ? trim($_GET['start_date']) : '';
+$endDate = isset($_GET['end_date']) ? trim($_GET['end_date']) : '';
+
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 if ($page < 1) $page = 1;
 $limit = 10;
@@ -37,6 +41,26 @@ if ($search !== '') {
 if ($type !== '' && $type !== 'all') {
     $whereClauses[] = "type = ?";
     $params[] = $type;
+}
+
+// Date filters
+if ($dateFilter === 'today') {
+    $whereClauses[] = "created_at >= CURDATE()";
+} elseif ($dateFilter === 'yesterday') {
+    $whereClauses[] = "created_at >= DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND created_at < CURDATE()";
+} elseif ($dateFilter === 'this_week') {
+    $whereClauses[] = "created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+} elseif ($dateFilter === 'this_month') {
+    $whereClauses[] = "created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)";
+} elseif ($dateFilter === 'custom') {
+    if ($startDate !== '') {
+        $whereClauses[] = "created_at >= ?";
+        $params[] = $startDate . ' 00:00:00';
+    }
+    if ($endDate !== '') {
+        $whereClauses[] = "created_at <= ?";
+        $params[] = $endDate . ' 23:59:59';
+    }
 }
 
 $whereSql = '';
@@ -230,22 +254,64 @@ try {
 </div>
 
 <div class="search-filter-bar">
-    <form method="GET" style="display: flex; gap: 12px; flex: 1; flex-wrap: wrap; width: 100%; align-items: center;">
-        <div style="flex: 1; min-width: 250px;">
-            <input type="text" name="search" class="form-control" placeholder="Search by name, email, phone, destination..." value="<?php echo htmlspecialchars($search); ?>">
+    <form method="GET" id="filterForm" style="display: flex; flex-direction: column; gap: 12px; width: 100%;">
+        <!-- Row 1: Search, Type, Quick Date Filters -->
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; width: 100%; align-items: center;">
+            <div style="flex: 1; min-width: 250px;">
+                <input type="text" name="search" class="form-control" placeholder="Search by name, email, phone, destination..." value="<?php echo htmlspecialchars($search); ?>">
+            </div>
+            <div style="width: 180px;">
+                <select name="type" class="form-control" onchange="this.form.submit()">
+                    <option value="all" <?php echo $type === 'all' || $type === '' ? 'selected' : ''; ?>>All Lead Types</option>
+                    <option value="enquiry" <?php echo $type === 'enquiry' ? 'selected' : ''; ?>>Popup Enquiry</option>
+                    <option value="contact" <?php echo $type === 'contact' ? 'selected' : ''; ?>>Contact Form</option>
+                </select>
+            </div>
+            <div style="width: 180px;">
+                <select name="date_filter" id="date_filter" class="form-control" onchange="toggleCustomDates(this.value)">
+                    <option value="all" <?php echo $dateFilter === 'all' || $dateFilter === '' ? 'selected' : ''; ?>>All Time</option>
+                    <option value="today" <?php echo $dateFilter === 'today' ? 'selected' : ''; ?>>Today</option>
+                    <option value="yesterday" <?php echo $dateFilter === 'yesterday' ? 'selected' : ''; ?>>Yesterday</option>
+                    <option value="this_week" <?php echo $dateFilter === 'this_week' ? 'selected' : ''; ?>>Last 7 Days (Week)</option>
+                    <option value="this_month" <?php echo $dateFilter === 'this_month' ? 'selected' : ''; ?>>Last 30 Days (Month)</option>
+                    <option value="custom" <?php echo $dateFilter === 'custom' ? 'selected' : ''; ?>>Custom Date Range</option>
+                </select>
+            </div>
         </div>
-        <div style="width: 180px;">
-            <select name="type" class="form-control" onchange="this.form.submit()">
-                <option value="all" <?php echo $type === 'all' || $type === '' ? 'selected' : ''; ?>>All Lead Types</option>
-                <option value="enquiry" <?php echo $type === 'enquiry' ? 'selected' : ''; ?>>Popup Enquiry</option>
-                <option value="contact" <?php echo $type === 'contact' ? 'selected' : ''; ?>>Contact Form</option>
-            </select>
+        
+        <!-- Row 2: Custom Dates -->
+        <div id="custom_date_range_row" style="display: <?php echo $dateFilter === 'custom' ? 'flex' : 'none'; ?>; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 4px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; font-weight:600; color: var(--fg2); text-transform: uppercase;">From:</span>
+                <input type="date" name="start_date" class="form-control" style="width: 150px;" value="<?php echo htmlspecialchars($startDate); ?>">
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; font-weight:600; color: var(--fg2); text-transform: uppercase;">To:</span>
+                <input type="date" name="end_date" class="form-control" style="width: 150px;" value="<?php echo htmlspecialchars($endDate); ?>">
+            </div>
         </div>
-        <div style="display: flex; gap: 8px;">
-            <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">Search</button>
-            <?php if ($search !== '' || ($type !== '' && $type !== 'all')): ?>
-                <a href="leads.php" class="btn" style="background: var(--bg3); border: 1px solid var(--border); color: var(--fg); padding: 10px 16px;">Clear</a>
-            <?php endif; ?>
+
+        <!-- Row 3: Action Actions -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 8px; border-top: 1px solid var(--border); padding-top: 12px;">
+            <div style="display: flex; gap: 8px;">
+                <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">Apply Filters</button>
+                <?php if ($search !== '' || ($type !== '' && $type !== 'all') || ($dateFilter !== '' && $dateFilter !== 'all') || $startDate !== '' || $endDate !== ''): ?>
+                    <a href="leads.php" class="btn" style="background: var(--bg3); border: 1px solid var(--border); color: var(--fg); padding: 10px 16px;">Clear Filters</a>
+                <?php endif; ?>
+            </div>
+            
+            <div>
+                <?php
+                $exportQuery = $_GET;
+                $exportUrl = "export-leads.php?" . http_build_query($exportQuery);
+                ?>
+                <a href="<?php echo $exportUrl; ?>" class="btn" style="background: var(--success); color: #fff; padding: 10px 18px; display: inline-flex; align-items: center; gap: 8px; border: none; border-radius: var(--radius-int); font-weight: 600; font-size:12px;">
+                    <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Export to Excel (CSV)
+                </a>
+            </div>
         </div>
     </form>
 </div>
@@ -495,6 +561,17 @@ document.getElementById('leadModal').addEventListener('click', (e) => {
         closeLeadModal();
     }
 });
+
+function toggleCustomDates(val) {
+    const row = document.getElementById('custom_date_range_row');
+    if (val === 'custom') {
+        row.style.display = 'flex';
+    } else {
+        row.style.display = 'none';
+        row.querySelectorAll('input').forEach(input => input.value = '');
+        document.getElementById('filterForm').submit();
+    }
+}
 </script>
 
 <?php if (isset($_GET['view'])): ?>
