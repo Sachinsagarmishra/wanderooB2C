@@ -46,6 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/admin/assets/css/admin-style.css">
+    <!-- Prevent flash of wrong theme -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('admin_theme');
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
     <style>
         .auth-container {
             display: flex;
@@ -62,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid var(--border);
             border-radius: var(--radius-main);
             padding: 32px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: var(--auth-shadow);
         }
         .auth-logo {
             text-align: center;
@@ -131,6 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
+    <!-- Theme Toggle for Auth Pages -->
+    <button class="auth-theme-toggle" id="authThemeToggle" title="Toggle Light/Dark Mode" onclick="toggleAdminTheme()">
+        <span class="icon-sun">☀️</span>
+        <span class="icon-moon">🌙</span>
+    </button>
+
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-logo">Wanderoo</div>
@@ -159,5 +174,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+
+    <script>
+    function toggleAdminTheme() {
+        var html = document.documentElement;
+        if (html.classList.contains('light-mode')) {
+            html.classList.remove('light-mode');
+            localStorage.setItem('admin_theme', 'dark');
+        } else {
+            html.classList.add('light-mode');
+            localStorage.setItem('admin_theme', 'light');
+        }
+    }
+    </script>
 </body>
 </html>

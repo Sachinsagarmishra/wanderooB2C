@@ -19,15 +19,29 @@ $currentPage = basename($_SERVER['SCRIPT_NAME']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/admin/assets/css/admin-style.css">
+    <!-- Prevent flash of wrong theme -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('admin_theme');
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
 </head>
-<body>
+<body class="">
     <div class="admin-layout">
         <aside class="admin-sidebar">
             <div class="sidebar-logo">
-                Wanderoo Admin
+                <span>Wanderoo Admin</span>
+                <button class="theme-toggle" id="themeToggle" title="Toggle Light/Dark Mode" onclick="toggleAdminTheme()">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </button>
             </div>
             <nav class="admin-nav">
                 <a href="dashboard.php" class="nav-item <?php echo $currentPage === 'dashboard.php' ? 'active' : ''; ?>">Dashboard</a>
+                <a href="manage-packages.php" class="nav-item <?php echo $currentPage === 'manage-packages.php' || $currentPage === 'package-form.php' ? 'active' : ''; ?>">Packages</a>
                 <a href="leads.php" class="nav-item <?php echo $currentPage === 'leads.php' ? 'active' : ''; ?>">Leads</a>
             </nav>
             <nav class="admin-nav nav-spacer">
@@ -38,3 +52,23 @@ $currentPage = basename($_SERVER['SCRIPT_NAME']);
         </aside>
         
         <main class="admin-main">
+
+<script>
+function toggleAdminTheme() {
+    var html = document.documentElement;
+    if (html.classList.contains('light-mode')) {
+        html.classList.remove('light-mode');
+        localStorage.setItem('admin_theme', 'dark');
+    } else {
+        html.classList.add('light-mode');
+        localStorage.setItem('admin_theme', 'light');
+    }
+}
+// Apply saved theme on page load (belt-and-suspenders with inline script above)
+(function() {
+    var theme = localStorage.getItem('admin_theme');
+    if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+    }
+})();
+</script>
