@@ -43,6 +43,7 @@ $currentPage = basename($_SERVER['SCRIPT_NAME']);
                 <a href="dashboard.php" class="nav-item <?php echo $currentPage === 'dashboard.php' ? 'active' : ''; ?>">Dashboard</a>
                 <a href="manage-destinations.php" class="nav-item <?php echo $currentPage === 'manage-destinations.php' || $currentPage === 'destination-form.php' ? 'active' : ''; ?>">Destinations</a>
                 <a href="manage-packages.php" class="nav-item <?php echo $currentPage === 'manage-packages.php' || $currentPage === 'package-form.php' ? 'active' : ''; ?>">Packages</a>
+                <a href="manage-testimonials.php" class="nav-item <?php echo $currentPage === 'manage-testimonials.php' || $currentPage === 'testimonial-form.php' ? 'active' : ''; ?>">Testimonials</a>
                 <a href="leads.php" class="nav-item <?php echo $currentPage === 'leads.php' ? 'active' : ''; ?>">Leads</a>
                 <a href="settings.php" class="nav-item <?php echo $currentPage === 'settings.php' ? 'active' : ''; ?>">Settings</a>
             </nav>

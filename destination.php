@@ -192,7 +192,7 @@ include_once 'includes/header.php';
                         </div>
                     <?php
                     else:
-                        $contactPhone = preg_replace('/\D/', '', get_setting('contact_phone', '919113515462'));
+                        $whatsappNum = preg_replace('/\D/', '', get_setting('contact_whatsapp', '919113515462'));
                     ?>
                         <div class="destination-package-layout">
                             <aside class="destination-filter-sidebar" aria-label="Package filters">
@@ -261,6 +261,11 @@ include_once 'includes/header.php';
                             // Fetch tags
                             $dbTagNames = $packageFilterMeta[$pkgId]['tags'] ?? [];
                             $pkgFilters = $packageFilterMeta[$pkgId]['filters'] ?? ['city' => [], 'occasion' => [], 'duration' => [], 'inclusive' => []];
+                            $packageUrl = SITE_PATH . '/' . $slug . '/' . $dbPkg['slug'];
+                            $requestScheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+                            $packageAbsUrl = $requestScheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . $packageUrl;
+                            $whatsappMessage = "Hi Wanderoo, I came from a destination package card CTA.\nPackage: " . $dbPkg['title'] . "\nDestination: " . $dest['name'] . "\nLink: " . $packageAbsUrl;
+                            $whatsappUrl = 'https://wa.me/' . $whatsappNum . '?text=' . urlencode($whatsappMessage);
                     ?>
                         <div class="package-card" data-card-images="<?php echo htmlspecialchars(json_encode($cardImages)); ?>" data-card-alts="<?php echo htmlspecialchars(json_encode($cardAlts)); ?>" data-filter-city="<?php echo htmlspecialchars(implode(' ', $pkgFilters['city'])); ?>" data-filter-occasion="<?php echo htmlspecialchars(implode(' ', $pkgFilters['occasion'])); ?>" data-filter-duration="<?php echo htmlspecialchars(implode(' ', $pkgFilters['duration'])); ?>" data-filter-inclusive="<?php echo htmlspecialchars(implode(' ', $pkgFilters['inclusive'])); ?>">
                             <div class="card-img">
@@ -308,8 +313,8 @@ include_once 'includes/header.php';
                                     </div>
                                 </div>
                                 <div class="card-actions">
-                                    <a href="tel:+<?php echo htmlspecialchars($contactPhone); ?>" class="btn-phone">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                    <a href="<?php echo htmlspecialchars($whatsappUrl); ?>" class="btn-phone" target="_blank" rel="noopener" title="Ask on WhatsApp">
+                                        <img src="<?php echo SITE_PATH; ?>/assets/img/whatsapp.svg" alt="WhatsApp" style="width:28px;height:28px;display:block;">
                                     </a>
                                     <a href="#" class="btn-request btn-enquire" data-destination="<?php echo htmlspecialchars($slug); ?>">Get a quote</a>
                                 </div>

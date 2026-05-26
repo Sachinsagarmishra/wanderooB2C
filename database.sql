@@ -153,3 +153,17 @@ CREATE TABLE IF NOT EXISTS `settings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `setting_key` (`setting_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `testimonials` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(120) NOT NULL,
+  `image_path` varchar(500) DEFAULT NULL,
+  `image_alt` varchar(255) DEFAULT NULL,
+  `content` text NOT NULL,
+  `rating` tinyint(1) NOT NULL DEFAULT 5,
+  `sort_order` int(11) DEFAULT 0,
+  `status` enum('active','draft') NOT NULL DEFAULT 'active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

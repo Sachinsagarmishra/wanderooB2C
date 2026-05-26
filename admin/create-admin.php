@@ -167,7 +167,22 @@ try {
         }
     }
 
-    // 10. Destinations Table
+    // 10. Testimonials Table
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `testimonials` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `customer_name` varchar(120) NOT NULL,
+      `image_path` varchar(500) DEFAULT NULL,
+      `image_alt` varchar(255) DEFAULT NULL,
+      `content` text NOT NULL,
+      `rating` tinyint(1) NOT NULL DEFAULT 5,
+      `sort_order` int(11) DEFAULT 0,
+      `status` enum('active','draft') NOT NULL DEFAULT 'active',
+      `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+      `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+    // 11. Destinations Table
     $pdo->exec("CREATE TABLE IF NOT EXISTS `destinations` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `slug` varchar(100) NOT NULL,

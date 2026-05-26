@@ -21,6 +21,23 @@ function home_package_card_image_url($path) {
     return SITE_PATH . '/' . ltrim($path, '/');
 }
 
+function home_media_image_url($path) {
+    if (empty($path)) {
+        return '';
+    }
+
+    if (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) {
+        return $path;
+    }
+
+    $localFile = __DIR__ . '/' . ltrim($path, '/');
+    if (!file_exists($localFile)) {
+        return '';
+    }
+
+    return SITE_PATH . '/' . ltrim($path, '/');
+}
+
 function home_fetch_package_tags($pdo, $packageId) {
     $stmtTags = $pdo->prepare("SELECT tag_name FROM package_tags WHERE package_id = ? ORDER BY id");
     $stmtTags->execute([$packageId]);
@@ -51,13 +68,17 @@ function home_fetch_package_images($pdo, $pkg) {
     return [$images, $alts];
 }
 
-function home_render_package_card($pdo, $pkg, $contactPhone, $extraClass = '') {
+function home_render_package_card($pdo, $pkg, $whatsappNum, $extraClass = '') {
     $tags = home_fetch_package_tags($pdo, intval($pkg['id']));
     [$cardImages, $cardAlts] = home_fetch_package_images($pdo, $pkg);
     $cardImg = $cardImages[0] ?? '';
     $cardAlt = $cardAlts[0] ?? $pkg['title'];
     $destinationSlug = $pkg['destination'];
     $packageUrl = SITE_PATH . '/' . htmlspecialchars($destinationSlug) . '/' . htmlspecialchars($pkg['slug']);
+    $requestScheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $packageAbsUrl = $requestScheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . SITE_PATH . '/' . $destinationSlug . '/' . $pkg['slug'];
+    $whatsappMessage = "Hi Wanderoo, I came from a package card CTA.\nPackage: " . $pkg['title'] . "\nLink: " . $packageAbsUrl;
+    $whatsappUrl = 'https://wa.me/' . preg_replace('/\D/', '', $whatsappNum) . '?text=' . urlencode($whatsappMessage);
     $className = trim('package-card ' . $extraClass);
     ?>
     <div class="<?php echo htmlspecialchars($className); ?>" data-card-images="<?php echo htmlspecialchars(json_encode($cardImages)); ?>" data-card-alts="<?php echo htmlspecialchars(json_encode($cardAlts)); ?>">
@@ -99,8 +120,8 @@ function home_render_package_card($pdo, $pkg, $contactPhone, $extraClass = '') {
                 </div>
             </div>
             <div class="card-actions">
-                <a href="tel:+<?php echo htmlspecialchars($contactPhone); ?>" class="btn-phone">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <a href="<?php echo htmlspecialchars($whatsappUrl); ?>" class="btn-phone" target="_blank" rel="noopener" title="Ask on WhatsApp">
+                    <img src="<?php echo SITE_PATH; ?>/assets/img/whatsapp.svg" alt="WhatsApp" style="width:28px;height:28px;display:block;">
                 </a>
                 <a href="#" class="btn-request btn-enquire" data-destination="<?php echo htmlspecialchars($destinationSlug); ?>">Get a quote</a>
             </div>
@@ -109,7 +130,7 @@ function home_render_package_card($pdo, $pkg, $contactPhone, $extraClass = '') {
     <?php
 }
 
-$homeContactPhone = preg_replace('/\\D/', '', get_setting('contact_phone', '919113515462'));
+$homeWhatsappNum = preg_replace('/\\D/', '', get_setting('contact_whatsapp', '919113515462'));
 
 try {
     $stmtHomeHoneymoon = $pdo->query("SELECT DISTINCT p.* FROM tour_packages p LEFT JOIN package_tags t ON t.package_id = p.id WHERE p.status = 'active' AND (p.title LIKE '%honeymoon%' OR p.title LIKE '%couple%' OR p.title LIKE '%romantic%' OR t.tag_name LIKE '%honeymoon%' OR t.tag_name LIKE '%couple%' OR t.tag_name LIKE '%romantic%') ORDER BY p.created_at DESC LIMIT 10");
@@ -127,6 +148,13 @@ try {
     $homeDestinations = $stmtHomeDests->fetchAll();
 } catch (PDOException $e) {
     $homeDestinations = [];
+}
+
+try {
+    $stmtHomeTestimonials = $pdo->query("SELECT * FROM testimonials WHERE status = 'active' ORDER BY sort_order, created_at DESC");
+    $homeTestimonials = $stmtHomeTestimonials->fetchAll();
+} catch (PDOException $e) {
+    $homeTestimonials = [];
 }
 ?>
 
@@ -179,7 +207,7 @@ try {
 
             <div class="packages-grid">
                 <?php foreach ($homeHoneymoonPackages as $homeIndex => $homePkg): ?>
-                    <?php home_render_package_card($pdo, $homePkg, $homeContactPhone, $homeIndex >= 3 ? 'hidden-mobile' : ''); ?>
+                    <?php home_render_package_card($pdo, $homePkg, $homeWhatsappNum, $homeIndex >= 3 ? 'hidden-mobile' : ''); ?>
                 <?php endforeach; ?>
             </div>
             
@@ -215,7 +243,7 @@ try {
                         </div>
                         <div class="packages-grid">
                             <?php foreach ($homeDestinationPackages as $homePkg): ?>
-                                <?php home_render_package_card($pdo, $homePkg, $homeContactPhone); ?>
+                                <?php home_render_package_card($pdo, $homePkg, $homeWhatsappNum); ?>
                             <?php endforeach; ?>
                         </div>
                         <div class="slider-arrow slider-arrow-next">
@@ -433,6 +461,7 @@ try {
         </div>
     </section>
     
+    <?php if (!empty($homeTestimonials)): ?>
     <section class="testimonials-section">
         <div class="testimonials-container">
             <div class="testimonials-header">
@@ -448,69 +477,27 @@ try {
                 
                 <div class="testimonials-grid-viewport">
                     <div class="testimonials-grid">
-                        <!-- Card 1 -->
-                        <div class="testimonial-card">
-                            <div class="testimonial-user">
-                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200" alt="Ruby" class="user-avatar">
-                                <span class="user-name">Ruby</span>
+                        <?php foreach ($homeTestimonials as $testimonial): ?>
+                            <?php
+                            $testimonialImage = home_media_image_url($testimonial['image_path'] ?? '');
+                            $testimonialAlt = !empty($testimonial['image_alt']) ? $testimonial['image_alt'] : $testimonial['customer_name'];
+                            $testimonialRating = max(1, min(5, intval($testimonial['rating'])));
+                            ?>
+                            <div class="testimonial-card">
+                                <div class="testimonial-user">
+                                    <?php if (!empty($testimonialImage)): ?>
+                                        <img src="<?php echo htmlspecialchars($testimonialImage); ?>" alt="<?php echo htmlspecialchars($testimonialAlt); ?>" class="user-avatar">
+                                    <?php endif; ?>
+                                    <span class="user-name"><?php echo htmlspecialchars($testimonial['customer_name']); ?></span>
+                                </div>
+                                <div class="testimonial-rating">
+                                    <?php for ($starIndex = 0; $starIndex < $testimonialRating; $starIndex++): ?>
+                                        <span class="star">★</span>
+                                    <?php endfor; ?>
+                                </div>
+                                <p class="testimonial-text"><?php echo htmlspecialchars($testimonial['content']); ?></p>
                             </div>
-                            <div class="testimonial-rating">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                            </div>
-                            <p class="testimonial-text">Choosing Wanderoo was our best decision. Their detailed restaurant recommendations enhanced our trip. With attentive service and seamless organization, it was truly magical. Highly recommended for couples seeking romance in Bali!</p>
-                        </div>
-                        
-                        <!-- Card 2 -->
-                        <div class="testimonial-card">
-                            <div class="testimonial-user">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" alt="Ashutosh Sharma" class="user-avatar">
-                                <span class="user-name">Ashutosh Sharma</span>
-                            </div>
-                            <div class="testimonial-rating">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                            </div>
-                            <p class="testimonial-text">Every trip has small hiccups. What we loved about Wanderoo was that they respond to every request within minutes. When I travel with Wanderoo, I know they have our back always :)</p>
-                        </div>
-                        
-                        <!-- Card 3 -->
-                        <div class="testimonial-card">
-                            <div class="testimonial-user">
-                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200" alt="Akshit Chaudhary" class="user-avatar">
-                                <span class="user-name">Akshit Chaudhary</span>
-                            </div>
-                            <div class="testimonial-rating">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                            </div>
-                            <p class="testimonial-text">Our Bali trip with Wanderoo was exceptional. They don't do standard packages; they truly spend a lot of time with their customers to understand our requirements and personalize every detail. Thank you, Wanderoo, for making our dream honeymoon a reality!</p>
-                        </div>
-
-                        <!-- Card 4 (for sliding demonstration) -->
-                        <div class="testimonial-card">
-                            <div class="testimonial-user">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Priya Patel" class="user-avatar">
-                                <span class="user-name">Priya Patel</span>
-                            </div>
-                            <div class="testimonial-rating">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                            </div>
-                            <p class="testimonial-text">Absolutely incredible experience. Wanderoo made our honeymoon planning completely stress-free. Every single detail from pickup to resort check-in was flawless. Will definitely book again!</p>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
                 
@@ -521,11 +508,10 @@ try {
             </div>
             
             <div class="slider-dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
             </div>
         </div>
     </section>
+    <?php endif; ?>
     
     <section class="faq-section">
         <div class="faq-container">
