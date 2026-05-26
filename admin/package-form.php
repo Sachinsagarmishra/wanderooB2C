@@ -407,9 +407,16 @@ if ($editId > 0) {
         </div>
         <?php if ($isEdit && !empty($pkgPhotos)): ?>
             <div class="gallery-preview" id="existingGallery">
-                <?php foreach ($pkgPhotos as $photo): ?>
+                <?php foreach ($pkgPhotos as $photo): 
+                    $isExternal = (strpos($photo['image_path'], 'http://') === 0 || strpos($photo['image_path'], 'https://') === 0);
+                    $imgUrl = $isExternal ? $photo['image_path'] : SITE_PATH . '/' . $photo['image_path'];
+                    $localFile = __DIR__ . '/../' . $photo['image_path'];
+                    if (!$isExternal && !file_exists($localFile)) {
+                        continue; // Skip non-existent local files
+                    }
+                ?>
                     <div class="gallery-preview-item" id="photo-<?php echo $photo['id']; ?>">
-                        <img src="<?php echo SITE_PATH; ?>/<?php echo htmlspecialchars($photo['image_path']); ?>" alt="<?php echo htmlspecialchars($photo['alt_text']); ?>">
+                        <img src="<?php echo htmlspecialchars($imgUrl); ?>" alt="<?php echo htmlspecialchars($photo['alt_text']); ?>">
                         <button type="button" class="remove-photo" onclick="markPhotoForDeletion(<?php echo $photo['id']; ?>)">×</button>
                     </div>
                 <?php endforeach; ?>

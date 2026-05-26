@@ -99,10 +99,24 @@ if (empty($tourSaveText) && !empty($tourOldPrice) && !empty($tourPrice)) {
 // Generate array of gallery images for JS lightbox
 $galleryImagesJs = [];
 $galleryImagesJs[] = $mainImg;
+$validDbPhotos = [];
+
 foreach ($dbPhotos as $photo) {
-    $fullPath = SITE_PATH . '/' . $photo['image_path'];
-    if ($fullPath !== $mainImg && $photo['image_path'] !== $mainImg) {
-        $galleryImagesJs[] = $fullPath;
+    $isExternal = (strpos($photo['image_path'], 'http://') === 0 || strpos($photo['image_path'], 'https://') === 0);
+    if ($isExternal) {
+        $validDbPhotos[] = $photo;
+        if ($photo['image_path'] !== $mainImg) {
+            $galleryImagesJs[] = $photo['image_path'];
+        }
+    } else {
+        $localFile = __DIR__ . '/' . $photo['image_path'];
+        if (file_exists($localFile)) {
+            $validDbPhotos[] = $photo;
+            $fullPath = SITE_PATH . '/' . $photo['image_path'];
+            if ($fullPath !== $mainImg && $photo['image_path'] !== $mainImg) {
+                $galleryImagesJs[] = $fullPath;
+            }
+        }
     }
 }
 
@@ -123,7 +137,7 @@ include 'includes/header.php';
         </div>
         <?php
         // Pad thumbnail photos up to 4 if needed
-        $thumbPhotos = array_slice($dbPhotos, 0, 4);
+        $thumbPhotos = array_slice($validDbPhotos, 0, 4);
         $defaultPhotos = [
             'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=600',
             'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=600',
