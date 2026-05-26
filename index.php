@@ -184,7 +184,7 @@ try {
             <p style="font-size: 18px; color: #4a4a4a; font-family: 'Urbanist', sans-serif; letter-spacing: 0.4px; margin-bottom: 15px; font-weight: 500; line-height: 1.4;">
                 We're not just another booking site — we're your travel partner. At Wanderoo, you'll have your own dedicated destination expert to plan every step of your trip with care, clarity, and a genuine local touch.
             </p>
-            <a href="#" class="read-more" style="font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 16px; border-bottom: 2px solid var(--primary); width: max-content; padding-bottom: 2px;">
+            <a href="<?php echo SITE_PATH; ?>/about-us" class="read-more" style="font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 16px; width: max-content;">
                 Read More <img src="<?php echo SITE_PATH; ?>/assets/img/arrow.svg" alt="Arrow" style="height: 14px; width: auto;">
             </a>
         </div>
