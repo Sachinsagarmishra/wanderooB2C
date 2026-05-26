@@ -30,3 +30,22 @@ CREATE TABLE IF NOT EXISTS `pages` (
 -- Note: Use password_hash() in PHP to generate real passwords
 INSERT INTO `users` (`username`, `password`, `email`) VALUES
 ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@example.com');
+
+-- Leads table for Contact & Inquiry Forms
+CREATE TABLE IF NOT EXISTS `leads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` enum('contact', 'enquiry') NOT NULL DEFAULT 'contact',
+  `fullname` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(50) NOT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `message` text DEFAULT NULL,
+  `destination` varchar(100) DEFAULT NULL,
+  `departure_date` date DEFAULT NULL,
+  `nights` varchar(50) DEFAULT NULL,
+  `companion` varchar(50) DEFAULT NULL,
+  `rooms_config` text DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

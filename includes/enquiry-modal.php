@@ -1071,26 +1071,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function submitEnquiry() {
-        // Collect form data
         const formData = new FormData(form);
-        const data = {};
-        formData.forEach((value, key) => {
-            // For array/dynamic rooms, let JSON configure
-            if (!key.startsWith('room_')) {
-                data[key] = value;
-            }
-        });
         
-        // Append structured rooms config
-        if (hasRoomsStep()) {
-            data['rooms_config'] = JSON.parse(document.getElementById('enquiryRoomsConfig').value);
-        }
+        // Show submission state on Next button
+        const originalText = nextBtn.textContent;
+        nextBtn.textContent = 'Submitting...';
+        nextBtn.disabled = true;
 
-        console.log('Enquiry data submitted:', data);
-
-        // Simple UX success notification
-        alert('Thank you! Your travel request has been submitted successfully. A destination expert will get back to you shortly.');
-        closeModal();
+        fetch('<?php echo SITE_PATH; ?>/submit-enquiry.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(res => {
+            nextBtn.textContent = originalText;
+            nextBtn.disabled = false;
+            
+            if (res.success) {
+                alert('Thank you! Your travel request has been submitted successfully. A destination expert will get back to you shortly.');
+                closeModal();
+            } else {
+                showError(res.error || 'Failed to submit enquiry. Please try again.');
+            }
+        })
+        .catch(err => {
+            nextBtn.textContent = originalText;
+            nextBtn.disabled = false;
+            console.error('Error:', err);
+            showError('An error occurred. Please try again.');
+        });
     }
 
     // Rooms Configuration logic functions

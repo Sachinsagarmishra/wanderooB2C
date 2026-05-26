@@ -1,4 +1,29 @@
 <?php
+require_once __DIR__ . '/includes/db.php';
+
+$successMsg = '';
+$errorMsg = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $fullname = trim($_POST['fullname'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $phone = '+91 ' . trim($_POST['phone'] ?? '');
+    $subject = trim($_POST['subject'] ?? '');
+    $message = trim($_POST['message'] ?? '');
+
+    if (empty($fullname) || empty($email) || empty($_POST['phone']) || empty($subject) || empty($message)) {
+        $errorMsg = 'All fields marked with an asterisk are required.';
+    } else {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO leads (type, fullname, email, phone, subject, message) VALUES ('contact', ?, ?, ?, ?, ?)");
+            $stmt->execute([$fullname, $email, $phone, $subject, $message]);
+            $successMsg = 'Thank you! Your message has been sent successfully. We will get back to you shortly.';
+        } catch (PDOException $e) {
+            $errorMsg = 'Error saving lead: ' . $e->getMessage();
+        }
+    }
+}
+
 $pageTitle = "Contact Us";
 $pageDesc = "Get in touch with Wanderoo for bespoke itinerary design, luxury honeymoons, and premium travel planning support.";
 include_once 'includes/header.php';
@@ -28,7 +53,18 @@ include_once 'includes/header.php';
             <!-- Contact Form Column -->
             <div class="contact-form-col">
                 <h3 class="form-title">Lets Get In Touch With Us!</h3>
-                <form action="#" method="POST" class="contact-form">
+
+                <?php if (!empty($successMsg)): ?>
+                    <div class="alert alert-success" style="margin-bottom: 20px; padding: 15px; background: rgba(34, 197, 94, 0.1); border: 1.5px solid #22c55e; color: #15803d; border-radius: 12px; font-family: 'Urbanist', sans-serif; font-weight: 600;">
+                        <?php echo htmlspecialchars($successMsg); ?>
+                    </div>
+                <?php elseif (!empty($errorMsg)): ?>
+                    <div class="alert alert-danger" style="margin-bottom: 20px; padding: 15px; background: rgba(239, 68, 68, 0.1); border: 1.5px solid #ef4444; color: #b91c1c; border-radius: 12px; font-family: 'Urbanist', sans-serif; font-weight: 600;">
+                        <?php echo htmlspecialchars($errorMsg); ?>
+                    </div>
+                <?php endif; ?>
+
+                <form action="" method="POST" class="contact-form">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="fullname">Full Name</label>
