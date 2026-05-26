@@ -39,5 +39,6 @@
         </div>
     </footer>
     <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.7"></script>
+    <?php include_once __DIR__ . '/enquiry-modal.php'; ?>
 </body>
 </html>
