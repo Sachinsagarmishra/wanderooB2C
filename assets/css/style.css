@@ -3718,6 +3718,14 @@ footer {
     gap: 30px;
 }
 
+@media (min-width: 993px) {
+    .destination-filter-results {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+}
+
 .destination-no-filter-results {
     grid-column: 1 / -1;
     padding: 40px 20px;
