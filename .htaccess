@@ -1,5 +1,11 @@
 RewriteEngine On
 
+# Dynamic XML Sitemap
+RewriteRule ^sitemap\.xml$ sitemap.php [QSA,L]
+
+# Dynamic Robots File
+RewriteRule ^robots\.txt$ robots.php [QSA,L]
+
 # Clean URLs for Destination Page
 RewriteRule ^destination/([^/]+)/?$ destination.php?name=$1 [QSA,L]
 

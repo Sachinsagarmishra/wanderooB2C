@@ -1,0 +1,18 @@
+# Wanderoo
+
+Wanderoo is a travel planning website for curated destination packages, honeymoon trips, group travel, and custom enquiries.
+
+## Important URLs
+- Home: /
+- About: /about-us
+- Contact: /contact
+- Dynamic sitemap: /sitemap.xml
+
+## Dynamic Content
+- Destination pages are available at /destination/{destination-slug}
+- Package detail pages are available at /{destination-slug}/{package-slug}
+- Package and destination content is managed from the admin panel.
+
+## Crawling Guidance
+- Use /sitemap.xml for the current list of public destination and package URLs.
+- Do not use /admin/ pages as public content.
