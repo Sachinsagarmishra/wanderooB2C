@@ -10,7 +10,7 @@
                 <ul>
                     <li><a href="<?php echo SITE_PATH; ?>/">Home</a></li>
                     <li><a href="#">About Us</a></li>
-                    <li><a href="<?php echo SITE_PATH; ?>/contact.php">Contact Us</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/contact">Contact Us</a></li>
                 </ul>
             </div>
             <div class="footer-col">

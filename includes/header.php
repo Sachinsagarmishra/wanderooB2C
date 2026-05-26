@@ -30,7 +30,7 @@ $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with cus
                 <a href="<?php echo SITE_PATH; ?>/"<?php echo basename($_SERVER['SCRIPT_NAME']) == 'index.php' || basename($_SERVER['SCRIPT_NAME']) == '' ? ' class="active"' : ''; ?>>Home</a>
                 <a href="#">About Us</a>
                 <a href="#">Destinations <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-                <a href="<?php echo SITE_PATH; ?>/contact.php"<?php echo basename($_SERVER['SCRIPT_NAME']) == 'contact.php' ? ' class="active"' : ''; ?>>Contact Us</a>
+                <a href="<?php echo SITE_PATH; ?>/contact"<?php echo basename($_SERVER['SCRIPT_NAME']) == 'contact.php' ? ' class="active"' : ''; ?>>Contact Us</a>
             </nav>
 
             <div class="header-actions">
