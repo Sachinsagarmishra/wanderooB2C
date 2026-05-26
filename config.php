@@ -19,17 +19,10 @@ if (strpos($script_name, '/admin/') !== false) {
 define('SITE_PATH', $base_dir);
 
 // Database Credentials
-if (isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1' || strpos($_SERVER['HTTP_HOST'], '192.168.') !== false)) {
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'wanderoo_db');
-    define('DB_USER', 'root');
-    define('DB_PASS', '');
-} else {
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'u829703776_world');
-    define('DB_USER', 'u829703776_world');
-    define('DB_PASS', 'Wanderoo@001');
-}
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'u829703776_world');
+define('DB_USER', 'u829703776_world');
+define('DB_PASS', 'Wanderoo@001');
 
 // Error Reporting (Set to 0 in production)
 error_reporting(E_ALL);
