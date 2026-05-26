@@ -335,4 +335,9 @@ include_once 'includes/header.php';
     </div>
 </main>
 
+<!-- Mobile Sticky CTA Bar -->
+<div class="mobile-sticky-cta">
+    <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($slug); ?>">Craft your trip</a>
+</div>
+
 <?php include_once 'includes/footer.php'; ?>

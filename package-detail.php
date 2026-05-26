@@ -381,7 +381,7 @@ include 'includes/header.php';
 
 <!-- Mobile Sticky CTA Bar -->
 <div class="mobile-sticky-cta">
-    <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>">Send Enquiry</a>
+    <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>">Craft your trip</a>
 </div>
 
 <?php include 'includes/footer.php'; ?>
