@@ -159,7 +159,7 @@
                         <div class="enquiry-input-group">
                             <label for="enquiryPhone" class="enquiry-input-label">Phone Number (with country code) *</label>
                             <div class="enquiry-phone-input-wrapper">
-                                <select id="enquiryCountryCode" name="country_code" required style="width: auto; padding: 0 10px 0 15px; font-family: inherit; font-size: 15px; font-weight: 700; color: #475569; background-color: #f1f5f9; border: none; border-right: 1.5px solid var(--enquiry-border); height: 52px; outline: none; cursor: pointer; border-radius: 0; flex-shrink: 0;">
+                                <select id="enquiryCountryCode" name="country_code" required style="width: auto; padding: 0 10px 0 15px; font-family: inherit; font-size: 15px; font-weight: 700; color: #475569; background-color: #f1f5f9; border: none; border-right: 1.5px solid var(--enquiry-border); height: 52px; outline: none; cursor: pointer; border-radius: 0; flex-shrink: 0; -webkit-appearance: none; appearance: none;">
                                     <option value="+91" selected>🇮🇳 +91</option>
                                     <option value="+1">🇺🇸 +1</option>
                                     <option value="+44">🇬🇧 +44</option>
@@ -487,6 +487,19 @@
     color: #0f172a;
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+}
+
+/* Custom dropdown arrow for select fields (replaces native Safari arrow) */
+.enquiry-select-field {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 12px;
+    padding-right: 40px;
 }
 
 .enquiry-select-field:focus,
@@ -506,6 +519,10 @@
     outline: none;
     resize: none;
     transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
 }
 
 /* Date Input custom styling */
