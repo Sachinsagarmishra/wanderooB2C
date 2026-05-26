@@ -264,50 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Staggered card image slideshow auto-cycle
     const cardsList = document.querySelectorAll('.package-card');
-    const categoryImages = {
-        singapore: [
-            'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1563212879-1bf482d8c368?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1506970113724-bc41ee661c5c?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1540202404-a2f29036bb52?auto=format&fit=crop&q=80&w=800'
-        ],
-        maldives: [
-            'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&q=80&w=800'
-        ],
-        bali: [
-            'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1538964173425-93884d6680c0?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1552083375-1447ce886485?auto=format&fit=crop&q=80&w=800'
-        ],
-        japan: [
-            'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1490761668535-35497054764d?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1542931287-023b922fa89b?auto=format&fit=crop&q=80&w=800'
-        ],
-        kerala: [
-            'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1593693411515-c202e974eb8f?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1589982441164-325cfccb9557?auto=format&fit=crop&q=80&w=800'
-        ],
-        honeymoon: [
-            'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800',
-            'https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=800'
-        ]
-    };
     
     cardsList.forEach((card, cardIndex) => {
         const imgContainer = card.querySelector('.card-img');
@@ -315,13 +271,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const originalImg = imgContainer.querySelector('img');
         const dots = imgContainer.querySelectorAll('.img-dot');
         if (!originalImg || dots.length === 0) return;
-        
-        // Find category: check parent categories, otherwise default to honeymoon
-        const catPackage = card.closest('.category-packages');
-        const category = catPackage ? catPackage.id : 'honeymoon';
-        const images = categoryImages[category] || categoryImages['honeymoon'];
+
+        let images = [];
+        let alts = [];
+        try {
+            images = JSON.parse(card.dataset.cardImages || '[]');
+            alts = JSON.parse(card.dataset.cardAlts || '[]');
+        } catch (e) {
+            images = [];
+            alts = [];
+        }
+
+        if (images.length === 0) {
+            images = [originalImg.src];
+            alts = [originalImg.alt || 'Package image'];
+        }
         
         const imgElements = [];
+        originalImg.src = images[0];
+        originalImg.alt = alts[0] || originalImg.alt || 'Package image';
         originalImg.classList.add('active');
         imgElements.push(originalImg);
         
@@ -329,9 +297,20 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i < images.length; i++) {
             const newImg = document.createElement('img');
             newImg.src = images[i];
-            newImg.alt = originalImg.alt || 'Destination Image';
+            newImg.alt = alts[i] || originalImg.alt || 'Package image';
             imgContainer.insertBefore(newImg, imgContainer.querySelector('.card-img-dots'));
             imgElements.push(newImg);
+        }
+
+        dots.forEach((dot, idx) => {
+            if (idx >= images.length) {
+                dot.remove();
+            }
+        });
+
+        if (images.length <= 1) {
+            const dotsWrap = imgContainer.querySelector('.card-img-dots');
+            if (dotsWrap) dotsWrap.style.display = 'none';
         }
         
         let activeImgIndex = 0;

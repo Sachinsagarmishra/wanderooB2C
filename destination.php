@@ -3,6 +3,23 @@
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/includes/db.php';
 
+function package_card_image_url($path) {
+    if (empty($path) || strpos($path, 'images.unsplash.com') !== false) {
+        return '';
+    }
+
+    if (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) {
+        return $path;
+    }
+
+    $localFile = __DIR__ . '/' . ltrim($path, '/');
+    if (!file_exists($localFile)) {
+        return '';
+    }
+
+    return SITE_PATH . '/' . ltrim($path, '/');
+}
+
 
 
 // Get destination from URL parameter, default to maldives
@@ -100,30 +117,47 @@ include_once 'includes/header.php';
                     else:
                         $contactPhone = preg_replace('/\D/', '', get_setting('contact_phone', '919113515462'));
                         foreach ($dbPkgs as $dbPkg) {
-                            // Fetch first photo as card image
-                            $stmtPhoto = $pdo->prepare("SELECT image_path, alt_text FROM package_photos WHERE package_id = ? ORDER BY sort_order LIMIT 1");
+                            $cardImages = [];
+                            $cardAlts = [];
+
+                            $heroCardUrl = package_card_image_url($dbPkg['hero_image'] ?? '');
+                            if (!empty($heroCardUrl)) {
+                                $cardImages[] = $heroCardUrl;
+                                $cardAlts[] = !empty($dbPkg['hero_image_alt']) ? $dbPkg['hero_image_alt'] : $dbPkg['title'];
+                            }
+
+                            $stmtPhoto = $pdo->prepare("SELECT image_path, alt_text FROM package_photos WHERE package_id = ? ORDER BY sort_order");
                             $stmtPhoto->execute([$dbPkg['id']]);
-                            $firstPhoto = $stmtPhoto->fetch();
-                            $firstPhotoPath = is_array($firstPhoto) ? ($firstPhoto['image_path'] ?? '') : '';
-                            $firstPhotoAlt = is_array($firstPhoto) ? ($firstPhoto['alt_text'] ?? '') : '';
-                            $cardImg = !empty($dbPkg['hero_image']) ? SITE_PATH . '/' . $dbPkg['hero_image'] : (!empty($firstPhotoPath) ? SITE_PATH . '/' . $firstPhotoPath : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800');
-                            $cardAlt = !empty($dbPkg['hero_image_alt']) ? $dbPkg['hero_image_alt'] : (!empty($firstPhotoAlt) ? $firstPhotoAlt : $dbPkg['title']);
+                            $pkgPhotos = $stmtPhoto->fetchAll();
+                            foreach ($pkgPhotos as $photo) {
+                                $photoUrl = package_card_image_url($photo['image_path'] ?? '');
+                                if (empty($photoUrl) || in_array($photoUrl, $cardImages, true)) {
+                                    continue;
+                                }
+                                $cardImages[] = $photoUrl;
+                                $cardAlts[] = !empty($photo['alt_text']) ? $photo['alt_text'] : $dbPkg['title'];
+                            }
+
+                            $cardImg = $cardImages[0] ?? '';
+                            $cardAlt = $cardAlts[0] ?? $dbPkg['title'];
 
                             // Fetch tags
                             $stmtTags = $pdo->prepare("SELECT tag_name FROM package_tags WHERE package_id = ? ORDER BY id");
                             $stmtTags->execute([$dbPkg['id']]);
                             $dbTagNames = $stmtTags->fetchAll(PDO::FETCH_COLUMN);
                     ?>
-                        <div class="package-card">
+                        <div class="package-card" data-card-images="<?php echo htmlspecialchars(json_encode($cardImages)); ?>" data-card-alts="<?php echo htmlspecialchars(json_encode($cardAlts)); ?>">
                             <div class="card-img">
-                                <img src="<?php echo htmlspecialchars($cardImg); ?>" alt="<?php echo htmlspecialchars($cardAlt); ?>">
-                                <div class="card-img-dots">
-                                    <span class="img-dot active"></span>
-                                    <span class="img-dot"></span>
-                                    <span class="img-dot"></span>
-                                    <span class="img-dot"></span>
-                                    <span class="img-dot"></span>
-                                </div>
+                                <?php if (!empty($cardImg)): ?>
+                                    <img src="<?php echo htmlspecialchars($cardImg); ?>" alt="<?php echo htmlspecialchars($cardAlt); ?>">
+                                    <div class="card-img-dots">
+                                        <?php for ($dotIdx = 0; $dotIdx < count($cardImages); $dotIdx++): ?>
+                                            <span class="img-dot <?php echo $dotIdx === 0 ? 'active' : ''; ?>"></span>
+                                        <?php endfor; ?>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="package-card-no-image">No image uploaded</div>
+                                <?php endif; ?>
                             </div>
                             <div class="card-body">
                                 <div class="card-meta">
