@@ -6,6 +6,8 @@ Wanderoo is a travel planning website for curated destination packages, honeymoo
 - Home: /
 - About: /about-us
 - Contact: /contact
+- Privacy Policy: /privacy-policy
+- Terms of Service: /terms-of-service
 - Dynamic sitemap: /sitemap.xml
 
 ## Dynamic Content

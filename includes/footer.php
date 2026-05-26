@@ -33,9 +33,9 @@
             <div class="footer-col">
                 <h3>Policies:</h3>
                 <ul>
-                    <li><a href="#">Terms & Condition</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Sitemap</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/terms-of-service">Terms of Service</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/privacy-policy">Privacy Policy</a></li>
+                    <li><a href="<?php echo SITE_PATH; ?>/sitemap.xml">Sitemap</a></li>
                 </ul>
             </div>
         </div>

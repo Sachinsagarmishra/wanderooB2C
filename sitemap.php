@@ -35,6 +35,8 @@ $urls = [];
 $urls[] = [$baseUrl . '/', $today, 'weekly', '1.0'];
 $urls[] = [$baseUrl . '/about-us', $today, 'monthly', '0.7'];
 $urls[] = [$baseUrl . '/contact', $today, 'monthly', '0.7'];
+$urls[] = [$baseUrl . '/privacy-policy', $today, 'yearly', '0.4'];
+$urls[] = [$baseUrl . '/terms-of-service', $today, 'yearly', '0.4'];
 
 try {
     $stmtDestinations = $pdo->query("SELECT slug, updated_at FROM destinations ORDER BY sort_order, name");
