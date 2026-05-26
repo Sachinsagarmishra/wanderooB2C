@@ -1,6 +1,7 @@
 <?php
 $pageTitle = "Wanderoo - Premium Handpicked Getaways & Luxury Honeymoons";
 $pageDesc = "Discover handpicked luxury getaways, romantic honeymoon packages, and custom travel itineraries to Singapore, Maldives, Bali, Japan, and Kerala with Wanderoo.";
+$bodyClass = "home-page";
 include_once 'includes/header.php';
 ?>
 
@@ -1619,7 +1620,7 @@ include_once 'includes/header.php';
                                 <span class="star">★</span>
                                 <span class="star">★</span>
                             </div>
-                            <p class="testimonial-text">Choosing 30 Sundays was our best decision. Their detailed restaurant recommendations enhanced our trip. With attentive service and seamless organization, it was truly magical. Highly recommended for couples seeking romance in Bali!</p>
+                            <p class="testimonial-text">Choosing Wanderoo was our best decision. Their detailed restaurant recommendations enhanced our trip. With attentive service and seamless organization, it was truly magical. Highly recommended for couples seeking romance in Bali!</p>
                         </div>
                         
                         <!-- Card 2 -->
@@ -1635,7 +1636,7 @@ include_once 'includes/header.php';
                                 <span class="star">★</span>
                                 <span class="star">★</span>
                             </div>
-                            <p class="testimonial-text">Every trip has small hiccups. What we loved about 30 Sundays was that they respond to every request within minutes. When I travel with 30 Sundays, I know they have our back always :)</p>
+                            <p class="testimonial-text">Every trip has small hiccups. What we loved about Wanderoo was that they respond to every request within minutes. When I travel with Wanderoo, I know they have our back always :)</p>
                         </div>
                         
                         <!-- Card 3 -->
@@ -1651,7 +1652,7 @@ include_once 'includes/header.php';
                                 <span class="star">★</span>
                                 <span class="star">★</span>
                             </div>
-                            <p class="testimonial-text">Our Bali trip with 30 Sundays was exceptional. They don't do standard packages; they truly spend a lot of time with their customers to understand our requirements and personalize every detail. Thank you, 30 Sundays, for making our dream honeymoon a reality!</p>
+                            <p class="testimonial-text">Our Bali trip with Wanderoo was exceptional. They don't do standard packages; they truly spend a lot of time with their customers to understand our requirements and personalize every detail. Thank you, Wanderoo, for making our dream honeymoon a reality!</p>
                         </div>
 
                         <!-- Card 4 (for sliding demonstration) -->

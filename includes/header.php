@@ -19,7 +19,7 @@ $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with cus
     <!-- Google Fonts & Styles -->
     <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=4.4">
 </head>
-<body>
+<body class="<?php echo isset($bodyClass) ? htmlspecialchars($bodyClass) : ''; ?>">
     <header>
         <div class="header-container">
             <a href="<?php echo SITE_PATH; ?>/" class="logo">
