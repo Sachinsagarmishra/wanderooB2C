@@ -6,6 +6,7 @@ RewriteRule ^destination/([^/]+)/?$ destination.php?name=$1 [QSA,L]
 # Clean URLs for Package Detail Page
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !/admin/
 RewriteRule ^([^/]+)/([^/]+)/?$ package-detail.php?destination=$1&tour=$2 [QSA,L]
 
 # Redirect /filename.php to /filename (External Redirect)
