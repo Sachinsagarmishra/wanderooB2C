@@ -59,64 +59,28 @@ if (!empty($tourSlug) && !empty($destSlug)) {
     }
 }
 
-// ─── Static fallback from config.php ───
-$matchedPkg = null;
-if (!$dbPackage && !empty($destSlug) && isset($destinations[$destSlug])) {
-    foreach ($destinations[$destSlug]['packages'] as $pkg) {
-        if (slugify($pkg['title']) === slugify($tourSlug) || strtolower($pkg['title']) === strtolower($tourSlug)) {
-            $matchedPkg = $pkg;
-            break;
-        }
+if (!$dbPackage) {
+    $redirectUrl = SITE_PATH . '/';
+    if (!empty($destSlug)) {
+        $redirectUrl = SITE_PATH . '/' . $destSlug;
     }
+    header("Location: " . $redirectUrl);
+    exit;
 }
 
-// ─── Determine what to render ───
-$isDynamic = $dbPackage !== null;
-
-if ($isDynamic) {
-    $tourTitle = $dbPackage['title'];
-    $pageTitle = $tourTitle;
-    $pageDesc = !empty($dbPackage['description']) ? $dbPackage['description'] : "Welcome to " . htmlspecialchars($tourTitle) . " – a custom package in " . htmlspecialchars(ucfirst($destSlug)) . " curated by Wanderoo.";
-    $mainImg = !empty($dbPackage['hero_image']) ? SITE_PATH . '/' . $dbPackage['hero_image'] : SITE_PATH . '/assets/img/hero-bg.webp';
-    $heroForBanner = $mainImg;
-    $tourDuration = $dbPackage['duration'];
-    $tourDescription = $dbPackage['description'];
-    $tourOverview = $dbPackage['overview'];
-    $tourPrice = $dbPackage['price'];
-    $tourOldPrice = $dbPackage['old_price'];
-    $tourSaveText = $dbPackage['save_text'];
-    $tourRating = $dbPackage['rating'];
-    $tourRatingCount = $dbPackage['rating_count'];
-} elseif ($matchedPkg) {
-    $tourTitle = $matchedPkg['title'];
-    $pageTitle = $tourTitle;
-    $pageDesc = "Welcome to " . htmlspecialchars($tourTitle) . " – a custom package in " . htmlspecialchars(ucfirst($destSlug)) . " curated by Wanderoo.";
-    $mainImg = $matchedPkg['img'];
-    $heroForBanner = SITE_PATH . '/assets/img/hero-bg.webp';
-    $tourDuration = $matchedPkg['duration'] ?? '';
-    $tourDescription = '';
-    $tourOverview = '';
-    $tourPrice = $matchedPkg['price'];
-    $tourOldPrice = $matchedPkg['old_price'] ?? '';
-    $tourSaveText = $matchedPkg['save'] ?? '';
-    $tourRating = $matchedPkg['rating'] ?? '4.5';
-    $tourRatingCount = $matchedPkg['rating_count'] ?? '0';
-} else {
-    // Default fallback
-    $tourTitle = "Luxury Honeymoon at Adaaran Prestige";
-    $pageTitle = $tourTitle;
-    $pageDesc = "Welcome to " . htmlspecialchars($tourTitle) . " – a luxurious escape in Maldives curated by Wanderoo.";
-    $mainImg = "https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800";
-    $heroForBanner = SITE_PATH . '/assets/img/hero-bg.webp';
-    $tourDuration = '4D/3N';
-    $tourDescription = '';
-    $tourOverview = '';
-    $tourPrice = 'INR 80,000';
-    $tourOldPrice = 'INR 95,000';
-    $tourSaveText = 'SAVE INR 15,000';
-    $tourRating = '4.7';
-    $tourRatingCount = '28';
-}
+$tourTitle = $dbPackage['title'];
+$pageTitle = $tourTitle;
+$pageDesc = !empty($dbPackage['description']) ? $dbPackage['description'] : "Welcome to " . htmlspecialchars($tourTitle) . " – a custom package in " . htmlspecialchars(ucfirst($destSlug)) . " curated by Wanderoo.";
+$mainImg = !empty($dbPackage['hero_image']) ? SITE_PATH . '/' . $dbPackage['hero_image'] : SITE_PATH . '/assets/img/hero-bg.webp';
+$heroForBanner = $mainImg;
+$tourDuration = $dbPackage['duration'];
+$tourDescription = $dbPackage['description'];
+$tourOverview = $dbPackage['overview'];
+$tourPrice = $dbPackage['price'];
+$tourOldPrice = $dbPackage['old_price'];
+$tourSaveText = $dbPackage['save_text'];
+$tourRating = $dbPackage['rating'];
+$tourRatingCount = $dbPackage['rating_count'];
 
 // Auto calculate save text if empty
 if (empty($tourSaveText) && !empty($tourOldPrice) && !empty($tourPrice)) {
@@ -132,8 +96,21 @@ if (empty($tourSaveText) && !empty($tourOldPrice) && !empty($tourPrice)) {
     }
 }
 
+// Generate array of gallery images for JS lightbox
+$galleryImagesJs = [];
+$galleryImagesJs[] = $mainImg;
+foreach ($dbPhotos as $photo) {
+    $fullPath = SITE_PATH . '/' . $photo['image_path'];
+    if ($fullPath !== $mainImg && $photo['image_path'] !== $mainImg) {
+        $galleryImagesJs[] = $fullPath;
+    }
+}
+
 include 'includes/header.php';
 ?>
+<script>
+    window.packageGalleryImages = <?php echo json_encode($galleryImagesJs); ?>;
+</script>
 
     <div class="detail-hero-banner">
     <img src="<?php echo htmlspecialchars($heroForBanner); ?>" alt="Travel Destination" class="detail-hero-bg">
@@ -144,31 +121,32 @@ include 'includes/header.php';
             <img src="<?php echo htmlspecialchars($mainImg); ?>" alt="<?php echo htmlspecialchars($tourTitle); ?>" class="detail-gallery-img">
             <button class="btn-view-all-images mobile-btn-view-all">View All Images</button>
         </div>
-        <?php if ($isDynamic && !empty($dbPhotos)): ?>
-            <?php $thumbPhotos = array_slice($dbPhotos, 0, 4); ?>
-            <?php foreach ($thumbPhotos as $idx => $photo): ?>
-                <div class="detail-gallery-thumb">
-                    <img src="<?php echo SITE_PATH; ?>/<?php echo htmlspecialchars($photo['image_path']); ?>" alt="<?php echo htmlspecialchars($photo['alt_text']); ?>" class="detail-gallery-img">
-                    <?php if ($idx === count($thumbPhotos) - 1): ?>
-                        <button class="btn-view-all-images">View All Images</button>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
+        <?php
+        // Pad thumbnail photos up to 4 if needed
+        $thumbPhotos = array_slice($dbPhotos, 0, 4);
+        $defaultPhotos = [
+            'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=600',
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=600',
+            'https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=600',
+            'https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=600'
+        ];
+        while (count($thumbPhotos) < 4) {
+            $thumbPhotos[] = [
+                'image_path' => $defaultPhotos[count($thumbPhotos)],
+                'alt_text' => 'Scenic view',
+                'is_external' => true
+            ];
+        }
+        foreach ($thumbPhotos as $idx => $photo):
+            $imgUrl = (isset($photo['is_external']) && $photo['is_external']) ? $photo['image_path'] : SITE_PATH . '/' . $photo['image_path'];
+        ?>
             <div class="detail-gallery-thumb">
-                <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=600" alt="Honeymoon hammock" class="detail-gallery-img">
+                <img src="<?php echo htmlspecialchars($imgUrl); ?>" alt="<?php echo htmlspecialchars($photo['alt_text'] ?? 'Travel Photo'); ?>" class="detail-gallery-img">
+                <?php if ($idx === count($thumbPhotos) - 1): ?>
+                    <button class="btn-view-all-images">View All Images</button>
+                <?php endif; ?>
             </div>
-            <div class="detail-gallery-thumb">
-                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=600" alt="Maldives Beach" class="detail-gallery-img">
-            </div>
-            <div class="detail-gallery-thumb">
-                <img src="https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=600" alt="Couple in Sea" class="detail-gallery-img">
-            </div>
-            <div class="detail-gallery-thumb">
-                <img src="https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=600" alt="Water villas" class="detail-gallery-img">
-                <button class="btn-view-all-images">View All Images</button>
-            </div>
-        <?php endif; ?>
+        <?php endforeach; ?>
     </div>
 </div>
 
@@ -178,52 +156,30 @@ include 'includes/header.php';
         <div class="detail-main-content">
             <!-- Badges -->
             <div class="detail-badges">
-                <?php if ($isDynamic): ?>
-                    <?php if (!empty($tourDuration)): ?>
-                        <span class="detail-badge"><?php echo htmlspecialchars($tourDuration); ?></span>
-                    <?php endif; ?>
-                    <?php foreach ($dbTags as $tag): ?>
-                        <span class="detail-badge"><?php echo htmlspecialchars($tag); ?></span>
-                    <?php endforeach; ?>
-                <?php elseif ($matchedPkg): ?>
-                    <span class="detail-badge"><?php echo htmlspecialchars($matchedPkg['duration']); ?></span>
-                    <?php foreach ($matchedPkg['tags'] as $tag): ?>
-                        <span class="detail-badge"><?php echo htmlspecialchars($tag); ?></span>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <span class="detail-badge">4D/3N</span>
-                    <span class="detail-badge">Honeymoon Alone</span>
-                    <span class="detail-badge">Floating Breakfast</span>
-                    <span class="detail-badge">Dolphin Safari</span>
-                    <span class="detail-badge">Sandbank Lunch</span>
+                <?php if (!empty($tourDuration)): ?>
+                    <span class="detail-badge"><?php echo htmlspecialchars($tourDuration); ?></span>
                 <?php endif; ?>
+                <?php foreach ($dbTags as $tag): ?>
+                    <span class="detail-badge"><?php echo htmlspecialchars($tag); ?></span>
+                <?php endforeach; ?>
             </div>
             
             <!-- Title -->
             <h1 class="detail-title"><?php echo htmlspecialchars($tourTitle); ?></h1>
             
             <!-- Subdescription -->
-            <?php if ($isDynamic && !empty($tourDescription)): ?>
+            <?php if (!empty($tourDescription)): ?>
                 <p class="detail-desc"><?php echo nl2br(htmlspecialchars($tourDescription)); ?></p>
-            <?php elseif (!$isDynamic): ?>
-                <p class="detail-desc">
-                    Welcome to Adaaran Prestige Vadoo – a luxurious adults-only escape in the Maldives, where romance meets all-inclusive indulgence.
-                </p>
             <?php endif; ?>
             
             <!-- Overview -->
-            <?php if ($isDynamic && !empty($tourOverview)): ?>
+            <?php if (!empty($tourOverview)): ?>
                 <h3>Overview:</h3>
                 <p class="detail-desc"><?php echo nl2br(htmlspecialchars($tourOverview)); ?></p>
-            <?php elseif (!$isDynamic): ?>
-                <h3>Overview:</h3>
-                <p class="detail-desc">
-                    Set in the heart of the Indian Ocean, Adaaran Prestige Vadoo offers the ultimate private island experience for couples seeking luxury and serenity. With direct lagoon access from your villa, floating breakfasts, candlelit beach dinners, and a personal butler to anticipate your every need, every detail is designed for intimate relaxation. Enjoy curated excursions like sunset cruises and dolphin safaris, and unwind with unlimited gourmet dining, drinks, and water activities. This award-winning all-inclusive resort promises a tailored Maldivian escape unlike any other.
-                </p>
             <?php endif; ?>
             
             <!-- Highlights -->
-            <?php if ($isDynamic && !empty($dbHighlights)): ?>
+            <?php if (!empty($dbHighlights)): ?>
                 <h3>Highlights</h3>
                 <ul class="detail-highlights">
                     <?php foreach ($dbHighlights as $hl): ?>
@@ -233,34 +189,10 @@ include 'includes/header.php';
                         </li>
                     <?php endforeach; ?>
                 </ul>
-            <?php elseif (!$isDynamic): ?>
-                <h3>Highlights</h3>
-                <ul class="detail-highlights">
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        All-inclusive dining: breakfast, lunch, and dinner
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Complimentary speedboat transfers from Male
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Floating breakfast and romantic beach dinner (once per stay)
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Excursions: sunset photo flip &amp; dolphin safari (once per stay)
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Complimentary snorkelling gear &amp; non-motorized watersports (canoe, SUP, catamaran)
-                    </li>
-                </ul>
             <?php endif; ?>
             
             <!-- Day-wise Itinerary -->
-            <?php if ($isDynamic && !empty($dbDays)): ?>
+            <?php if (!empty($dbDays)): ?>
                 <h3>Day-wise:</h3>
                 <div class="itinerary-tabs">
                     <?php foreach ($dbDays as $idx => $day): ?>
@@ -296,93 +228,10 @@ include 'includes/header.php';
                         </div>
                     <?php endforeach; ?>
                 </div>
-            <?php elseif (!$isDynamic): ?>
-                <h3>Day-wise:</h3>
-                <div class="itinerary-tabs">
-                    <button class="itinerary-tab-btn active" data-day="1">Day 01</button>
-                    <button class="itinerary-tab-btn" data-day="2">Day 02</button>
-                    <button class="itinerary-tab-btn" data-day="3">Day 03</button>
-                    <button class="itinerary-tab-btn" data-day="4">Day 04</button>
-                </div>
-                
-                <div class="itinerary-accordion">
-                    <div class="itinerary-item active" id="day-1">
-                        <div class="itinerary-header">
-                            <div class="itinerary-title-area">
-                                <span class="itinerary-day-badge">Day 01</span>
-                                <span class="itinerary-title-text">Arrival</span>
-                            </div>
-                            <svg class="itinerary-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </div>
-                        <div class="itinerary-body" style="max-height: 500px;">
-                            <div class="itinerary-body-content">
-                                Welcome to Maldives. Resort check-in. Welcome to Adaaran Prestige Vadoo, an adults-only sanctuary in the Maldives.
-                                <div class="itinerary-details-meta">
-                                    <span><strong>Accommodation:</strong> Adaaran Prestige Vadoo</span>
-                                    <span><strong>Meals:</strong> Breakfast, Lunch, Dinner</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="itinerary-item" id="day-2">
-                        <div class="itinerary-header">
-                            <div class="itinerary-title-area">
-                                <span class="itinerary-day-badge">Day 02</span>
-                                <span class="itinerary-title-text">Adaaran Prestige Vadoo</span>
-                            </div>
-                            <svg class="itinerary-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </div>
-                        <div class="itinerary-body">
-                            <div class="itinerary-body-content">
-                                Enjoy a relaxing day at the resort. Opt for a romantic spa session, lounge on the sun deck, or explore the colorful house reef.
-                                <div class="itinerary-details-meta">
-                                    <span><strong>Accommodation:</strong> Adaaran Prestige Vadoo</span>
-                                    <span><strong>Meals:</strong> Breakfast, Lunch, Dinner</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="itinerary-item" id="day-3">
-                        <div class="itinerary-header">
-                            <div class="itinerary-title-area">
-                                <span class="itinerary-day-badge">Day 03</span>
-                                <span class="itinerary-title-text">Adaaran Prestige Vadoo</span>
-                            </div>
-                            <svg class="itinerary-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </div>
-                        <div class="itinerary-body">
-                            <div class="itinerary-body-content">
-                                Experience a floating breakfast in your private pool, followed by a guided dolphin safari in the afternoon.
-                                <div class="itinerary-details-meta">
-                                    <span><strong>Accommodation:</strong> Adaaran Prestige Vadoo</span>
-                                    <span><strong>Meals:</strong> Breakfast, Lunch, Dinner</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="itinerary-item" id="day-4">
-                        <div class="itinerary-header">
-                            <div class="itinerary-title-area">
-                                <span class="itinerary-day-badge">Day 04</span>
-                                <span class="itinerary-title-text">Departure</span>
-                            </div>
-                            <svg class="itinerary-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </div>
-                        <div class="itinerary-body">
-                            <div class="itinerary-body-content">
-                                Check out of the resort. Board your speedboat back to Male International Airport.
-                                <div class="itinerary-details-meta">
-                                    <span><strong>Accommodation:</strong> None</span>
-                                    <span><strong>Meals:</strong> Breakfast</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             <?php endif; ?>
             
             <!-- Inclusions & Exclusions Box -->
-            <?php if ($isDynamic && (!empty($dbInclusions) || !empty($dbExclusions))): ?>
+            <?php if (!empty($dbInclusions) || !empty($dbExclusions)): ?>
                 <div class="detail-inclusions-box">
                     <h3>What's inside the package?:</h3>
                     <div class="detail-inclusions-columns">
@@ -412,33 +261,6 @@ include 'includes/header.php';
                                 </ul>
                             </div>
                         <?php endif; ?>
-                    </div>
-                </div>
-            <?php elseif (!$isDynamic): ?>
-                <div class="detail-inclusions-box">
-                    <h3>What's inside the package?:</h3>
-                    <div class="detail-inclusions-columns">
-                        <div class="detail-inclusions-col inclusions">
-                            <h4>Inclusions</h4>
-                            <ul>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Accommodation</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> All Meals</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Airport transfers</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Airport Assistance</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Government Taxes</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Water Sports</li>
-                            </ul>
-                        </div>
-                        <div class="detail-inclusions-col exclusions">
-                            <h4>Exclusions</h4>
-                            <ul>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Cooking Class</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Sunset Cruise</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Beach Swing</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Snorkeling</li>
-                                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Water Sports</li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             <?php endif; ?>
@@ -516,7 +338,7 @@ include 'includes/header.php';
 
 <!-- Mobile Sticky CTA Bar -->
 <div class="mobile-sticky-cta">
-    <a href="#" class="btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>">Craft Your Trip</a>
+    <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>">Send Enquiry</a>
 </div>
 
 <?php include 'includes/footer.php'; ?>

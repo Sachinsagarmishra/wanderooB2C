@@ -61,72 +61,28 @@ include_once 'includes/header.php';
             <!-- Wrap in category-packages to initialize the main.js automatic image carousel -->
             <div class="category-packages active" id="<?php echo $slug; ?>">
                 <div class="destination-packages-grid">
-                    <?php foreach ($dest['packages'] as $pkg): ?>
-                        <div class="package-card">
-                            <div class="card-img">
-                                <img src="<?php echo $pkg['img']; ?>" alt="<?php echo htmlspecialchars($pkg['alt']); ?>">
-                                <div class="card-img-dots">
-                                    <span class="img-dot active"></span>
-                                    <span class="img-dot"></span>
-                                    <span class="img-dot"></span>
-                                    <span class="img-dot"></span>
-                                    <span class="img-dot"></span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="card-meta">
-                                    <span class="duration"><?php echo htmlspecialchars($pkg['duration']); ?></span>
-                                    <span class="rating">
-                                        <span class="star">★</span> <?php echo htmlspecialchars($pkg['rating']); ?> 
-                                        <span class="count">(<?php echo htmlspecialchars($pkg['rating_count']); ?>)</span>
-                                    </span>
-                                </div>
-                                <h3>
-                                    <a href="<?php echo SITE_PATH; ?>/<?php echo $slug; ?>/<?php echo slugify($pkg['title']); ?>" style="color: inherit; text-decoration: none;">
-                                        <?php echo htmlspecialchars($pkg['title']); ?>
-                                    </a>
-                                </h3>
-                                <div class="card-tags">
-                                    <?php foreach ($pkg['tags'] as $tag): ?>
-                                        <span class="tag"><?php echo htmlspecialchars($tag); ?></span>
-                                    <?php endforeach; ?>
-                                </div>
-                                <div class="price-section">
-                                    <div class="old-price-row">
-                                        <span class="old-price"><?php echo htmlspecialchars($pkg['old_price']); ?></span>
-                                        <span class="save-badge"><?php echo htmlspecialchars($pkg['save']); ?></span>
-                                    </div>
-                                    <div class="new-price-row">
-                                        <span class="current-price"><?php echo htmlspecialchars($pkg['price']); ?></span>
-                                        <span class="per-adult">/Adult</span>
-                                    </div>
-                                </div>
-                                <div class="card-actions">
-                                    <a href="tel:+919113515462" class="btn-phone">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                                    </a>
-                                    <a href="#" class="btn-request btn-enquire">Get a quote</a>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
                     <?php
                     // ─── Fetch dynamic packages from DB ───
+                    $dbPkgs = [];
                     try {
                         $stmtDb = $pdo->prepare("SELECT * FROM tour_packages WHERE destination = ? AND status = 'active' ORDER BY created_at DESC");
                         $stmtDb->execute([$slug]);
                         $dbPkgs = $stmtDb->fetchAll();
-                        foreach ($dbPkgs as $dbPkg) {
-                            // Check if slug already exists in static array to avoid duplicates
-                            $isDuplicate = false;
-                            foreach ($dest['packages'] as $staticPkg) {
-                                if (slugify($staticPkg['title']) === $dbPkg['slug']) {
-                                    $isDuplicate = true;
-                                    break;
-                                }
-                            }
-                            if ($isDuplicate) continue;
+                    } catch (PDOException $e) {
+                        // DB error
+                    }
 
+                    if (empty($dbPkgs)):
+                    ?>
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #666; font-family: 'Urbanist', sans-serif;">
+                            <h3 style="font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px;">No Packages Available</h3>
+                            <p style="font-size: 14px; color: #666;">We are currently updating our offerings. Please check back later or contact us to customize a bespoke trip.</p>
+                            <a href="<?php echo SITE_PATH; ?>/contact" class="btn-enquire" style="display: inline-block; margin-top: 20px; text-decoration: none; padding: 12px 28px; border-radius: 30px; font-weight: 750;">Contact Us</a>
+                        </div>
+                    <?php
+                    else:
+                        $contactPhone = preg_replace('/\D/', '', get_setting('contact_phone', '919113515462'));
+                        foreach ($dbPkgs as $dbPkg) {
                             // Fetch first photo as card image
                             $stmtPhoto = $pdo->prepare("SELECT image_path FROM package_photos WHERE package_id = ? ORDER BY sort_order LIMIT 1");
                             $stmtPhoto->execute([$dbPkg['id']]);
@@ -143,6 +99,8 @@ include_once 'includes/header.php';
                                 <img src="<?php echo htmlspecialchars($cardImg); ?>" alt="<?php echo htmlspecialchars($dbPkg['title']); ?>">
                                 <div class="card-img-dots">
                                     <span class="img-dot active"></span>
+                                    <span class="img-dot"></span>
+                                    <span class="img-dot"></span>
                                     <span class="img-dot"></span>
                                     <span class="img-dot"></span>
                                 </div>
@@ -180,18 +138,16 @@ include_once 'includes/header.php';
                                     </div>
                                 </div>
                                 <div class="card-actions">
-                                    <a href="tel:+919113515462" class="btn-phone">
+                                    <a href="tel:+<?php echo htmlspecialchars($contactPhone); ?>" class="btn-phone">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                                     </a>
-                                    <a href="#" class="btn-request btn-enquire">Get a quote</a>
+                                    <a href="#" class="btn-request btn-enquire" data-destination="<?php echo htmlspecialchars($slug); ?>">Get a quote</a>
                                 </div>
                             </div>
                         </div>
                     <?php
                         }
-                    } catch (PDOException $e) {
-                        // Silently skip DB packages on error
-                    }
+                    endif;
                     ?>
                 </div>
             </div>
