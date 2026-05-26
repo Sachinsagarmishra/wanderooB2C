@@ -43,7 +43,7 @@ include_once 'includes/header.php';
 <main>
     <!-- Destination Hero Banner -->
     <div class="destination-hero-banner">
-        <img src="<?php echo htmlspecialchars($heroBg); ?>" alt="<?php echo htmlspecialchars($dest['name']); ?>" class="destination-hero-bg">
+        <img src="<?php echo htmlspecialchars($heroBg); ?>" alt="<?php echo htmlspecialchars(!empty($dest['hero_bg_alt']) ? $dest['hero_bg_alt'] : $dest['name']); ?>" class="destination-hero-bg">
         <div class="destination-hero-overlay"></div>
         <div class="destination-hero-content">
             <span class="destination-breadcrumb-text"><a href="<?php echo SITE_PATH; ?>/">Home</a> &raquo; <a href="#">Destination</a> &raquo; <?php echo htmlspecialchars($dest['breadcrumb']); ?></span>
@@ -101,10 +101,13 @@ include_once 'includes/header.php';
                         $contactPhone = preg_replace('/\D/', '', get_setting('contact_phone', '919113515462'));
                         foreach ($dbPkgs as $dbPkg) {
                             // Fetch first photo as card image
-                            $stmtPhoto = $pdo->prepare("SELECT image_path FROM package_photos WHERE package_id = ? ORDER BY sort_order LIMIT 1");
+                            $stmtPhoto = $pdo->prepare("SELECT image_path, alt_text FROM package_photos WHERE package_id = ? ORDER BY sort_order LIMIT 1");
                             $stmtPhoto->execute([$dbPkg['id']]);
-                            $firstPhoto = $stmtPhoto->fetchColumn();
-                            $cardImg = !empty($dbPkg['hero_image']) ? SITE_PATH . '/' . $dbPkg['hero_image'] : (!empty($firstPhoto) ? SITE_PATH . '/' . $firstPhoto : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800');
+                            $firstPhoto = $stmtPhoto->fetch();
+                            $firstPhotoPath = is_array($firstPhoto) ? ($firstPhoto['image_path'] ?? '') : '';
+                            $firstPhotoAlt = is_array($firstPhoto) ? ($firstPhoto['alt_text'] ?? '') : '';
+                            $cardImg = !empty($dbPkg['hero_image']) ? SITE_PATH . '/' . $dbPkg['hero_image'] : (!empty($firstPhotoPath) ? SITE_PATH . '/' . $firstPhotoPath : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800');
+                            $cardAlt = !empty($dbPkg['hero_image_alt']) ? $dbPkg['hero_image_alt'] : (!empty($firstPhotoAlt) ? $firstPhotoAlt : $dbPkg['title']);
 
                             // Fetch tags
                             $stmtTags = $pdo->prepare("SELECT tag_name FROM package_tags WHERE package_id = ? ORDER BY id");
@@ -113,7 +116,7 @@ include_once 'includes/header.php';
                     ?>
                         <div class="package-card">
                             <div class="card-img">
-                                <img src="<?php echo htmlspecialchars($cardImg); ?>" alt="<?php echo htmlspecialchars($dbPkg['title']); ?>">
+                                <img src="<?php echo htmlspecialchars($cardImg); ?>" alt="<?php echo htmlspecialchars($cardAlt); ?>">
                                 <div class="card-img-dots">
                                     <span class="img-dot active"></span>
                                     <span class="img-dot"></span>

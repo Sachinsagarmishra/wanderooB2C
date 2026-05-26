@@ -19,7 +19,9 @@ try {
     foreach ([
         "ALTER TABLE `destinations` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",
         "ALTER TABLE `destinations` ADD COLUMN `meta_description` text DEFAULT NULL AFTER `meta_title`",
-        "ALTER TABLE `destinations` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`"
+        "ALTER TABLE `destinations` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`",
+        "ALTER TABLE `destinations` ADD COLUMN `hero_bg_alt` varchar(255) DEFAULT NULL AFTER `hero_bg`",
+        "ALTER TABLE `destinations` ADD COLUMN `dropdown_icon_alt` varchar(255) DEFAULT NULL AFTER `dropdown_icon`"
     ] as $alterSql) {
         try {
             $pdo->exec($alterSql);
@@ -40,6 +42,10 @@ try {
     $breadcrumb = trim($_POST['breadcrumb'] ?? '');
     $sort_order = intval($_POST['sort_order'] ?? 0);
     $description = trim($_POST['description'] ?? '');
+    $heroBgAlt = trim($_POST['hero_bg_alt'] ?? '');
+    $dropdownIconAlt = trim($_POST['dropdown_icon_alt'] ?? '');
+    $selectedHeroBg = trim($_POST['selected_hero_bg'] ?? '');
+    $selectedDropdownIcon = trim($_POST['selected_dropdown_icon'] ?? '');
 
     if (empty($name) || empty($slug) || empty($title) || empty($breadcrumb)) {
         header("Location: manage-destinations.php?error=" . urlencode("Name, Slug, Title, and Breadcrumb are required."));
@@ -71,6 +77,10 @@ try {
         $heroBgPath = $stmt->fetchColumn() ?: '';
     }
 
+    if (!empty($selectedHeroBg)) {
+        $heroBgPath = $selectedHeroBg;
+    }
+
     if (isset($_FILES['hero_bg']) && $_FILES['hero_bg']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['hero_bg']['name'], PATHINFO_EXTENSION));
         $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
@@ -78,14 +88,6 @@ try {
             $filename = 'bg_' . $slug . '_' . time() . '.' . $ext;
             $fullPath = $uploadDir . $filename;
             
-            // Delete old local file if any
-            if (!empty($heroBgPath) && strpos($heroBgPath, 'http://') !== 0 && strpos($heroBgPath, 'https://') !== 0) {
-                $oldFile = __DIR__ . '/../' . $heroBgPath;
-                if (file_exists($oldFile)) {
-                    @unlink($oldFile);
-                }
-            }
-
             if (move_uploaded_file($_FILES['hero_bg']['tmp_name'], $fullPath)) {
                 $heroBgPath = 'uploads/destinations/' . $filename;
             }
@@ -100,6 +102,10 @@ try {
         $iconPath = $stmt->fetchColumn() ?: '';
     }
 
+    if (!empty($selectedDropdownIcon)) {
+        $iconPath = $selectedDropdownIcon;
+    }
+
     if (isset($_FILES['dropdown_icon']) && $_FILES['dropdown_icon']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['dropdown_icon']['name'], PATHINFO_EXTENSION));
         $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
@@ -107,14 +113,6 @@ try {
             $filename = 'icon_' . $slug . '_' . time() . '.' . $ext;
             $fullPath = $uploadDir . $filename;
             
-            // Delete old local icon if any
-            if (!empty($iconPath) && strpos($iconPath, 'http://') !== 0 && strpos($iconPath, 'https://') !== 0) {
-                $oldFile = __DIR__ . '/../' . $iconPath;
-                if (file_exists($oldFile)) {
-                    @unlink($oldFile);
-                }
-            }
-
             if (move_uploaded_file($_FILES['dropdown_icon']['tmp_name'], $fullPath)) {
                 $iconPath = 'uploads/destinations/' . $filename;
             }
@@ -124,18 +122,18 @@ try {
     // ─── Insert or Update in Database ───
     if ($isEdit) {
         $stmt = $pdo->prepare("UPDATE destinations SET 
-            slug = ?, name = ?, title = ?, meta_title = ?, meta_description = ?, focus_keywords = ?, breadcrumb = ?, hero_bg = ?, dropdown_icon = ?, description = ?, sort_order = ? 
+            slug = ?, name = ?, title = ?, meta_title = ?, meta_description = ?, focus_keywords = ?, breadcrumb = ?, hero_bg = ?, hero_bg_alt = ?, dropdown_icon = ?, dropdown_icon_alt = ?, description = ?, sort_order = ? 
             WHERE id = ?");
         $stmt->execute([
-            $slug, $name, $title, $metaTitle, $metaDescription, $focusKeywords, $breadcrumb, $heroBgPath, $iconPath, $description, $sort_order, $destinationId
+            $slug, $name, $title, $metaTitle, $metaDescription, $focusKeywords, $breadcrumb, $heroBgPath, $heroBgAlt, $iconPath, $dropdownIconAlt, $description, $sort_order, $destinationId
         ]);
         $msg = "Destination successfully updated!";
     } else {
         $stmt = $pdo->prepare("INSERT INTO destinations 
-            (slug, name, title, meta_title, meta_description, focus_keywords, breadcrumb, hero_bg, dropdown_icon, description, sort_order) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (slug, name, title, meta_title, meta_description, focus_keywords, breadcrumb, hero_bg, hero_bg_alt, dropdown_icon, dropdown_icon_alt, description, sort_order) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
-            $slug, $name, $title, $metaTitle, $metaDescription, $focusKeywords, $breadcrumb, $heroBgPath, $iconPath, $description, $sort_order
+            $slug, $name, $title, $metaTitle, $metaDescription, $focusKeywords, $breadcrumb, $heroBgPath, $heroBgAlt, $iconPath, $dropdownIconAlt, $description, $sort_order
         ]);
         $msg = "Destination successfully created!";
     }

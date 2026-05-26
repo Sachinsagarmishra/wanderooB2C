@@ -46,8 +46,9 @@ $pageKeywords = isset($pageKeywords) ? $pageKeywords : "";
                                 $headerDestIcon = !empty($destRow['dropdown_icon']) ? htmlspecialchars($destRow['dropdown_icon']) : 'assets/img/Singapur.svg';
                                 $headerIconUrl = (strpos($headerDestIcon, 'http://') === 0 || strpos($headerDestIcon, 'https://') === 0) ? $headerDestIcon : SITE_PATH . '/' . $headerDestIcon;
                                 ?>
+                                <?php $headerDestIconAlt = !empty($destRow['dropdown_icon_alt']) ? htmlspecialchars($destRow['dropdown_icon_alt']) : $headerDestName; ?>
                                 <a href="<?php echo SITE_PATH; ?>/destination/<?php echo $headerDestSlug; ?>">
-                                    <img src="<?php echo $headerIconUrl; ?>" alt="<?php echo $headerDestName; ?>" class="dropdown-icon">
+                                    <img src="<?php echo $headerIconUrl; ?>" alt="<?php echo $headerDestIconAlt; ?>" class="dropdown-icon">
                                     <?php echo $headerDestName; ?>
                                 </a>
                                 <?php

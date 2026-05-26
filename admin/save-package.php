@@ -29,7 +29,8 @@ try {
     foreach ([
         "ALTER TABLE `tour_packages` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",
         "ALTER TABLE `tour_packages` ADD COLUMN `meta_description` text DEFAULT NULL AFTER `meta_title`",
-        "ALTER TABLE `tour_packages` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`"
+        "ALTER TABLE `tour_packages` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`",
+        "ALTER TABLE `tour_packages` ADD COLUMN `hero_image_alt` varchar(255) DEFAULT NULL AFTER `hero_image`"
     ] as $alterSql) {
         try {
             $pdo->exec($alterSql);
@@ -57,6 +58,8 @@ try {
     $rating = floatval($_POST['rating'] ?? 4.5);
     $rating_count = intval($_POST['rating_count'] ?? 0);
     $status = trim($_POST['status'] ?? 'active');
+    $heroImageAlt = trim($_POST['hero_image_alt'] ?? '');
+    $selectedHeroImage = trim($_POST['selected_hero_image'] ?? '');
 
     if (empty($title) || empty($destination) || empty($price)) {
         header("Location: manage-packages.php?error=" . urlencode("Title, Destination, and Price are required."));
@@ -103,6 +106,10 @@ try {
         $heroImagePath = $stmt->fetchColumn() ?: '';
     }
 
+    if (!empty($selectedHeroImage)) {
+        $heroImagePath = $selectedHeroImage;
+    }
+
     if (isset($_FILES['hero_image']) && $_FILES['hero_image']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = __DIR__ . '/../uploads/packages/';
         
@@ -118,14 +125,6 @@ try {
         if (in_array($ext, $allowed)) {
             $heroFilename = 'hero.' . $ext;
             $heroFullPath = $pkgUploadDir . $heroFilename;
-            
-            // Delete old hero image if exists
-            if (!empty($heroImagePath)) {
-                $oldHeroFull = __DIR__ . '/../' . $heroImagePath;
-                if (file_exists($oldHeroFull)) {
-                    @unlink($oldHeroFull);
-                }
-            }
             
             move_uploaded_file($_FILES['hero_image']['tmp_name'], $heroFullPath);
             $heroImagePath = 'uploads/packages/' . $tempId . '/' . $heroFilename;
@@ -145,14 +144,15 @@ try {
             $rating, $rating_count, $heroImagePath, $status,
             $packageId
         ]);
+        $pdo->prepare("UPDATE tour_packages SET hero_image_alt = ? WHERE id = ?")->execute([$heroImageAlt, $packageId]);
     } else {
         $stmt = $pdo->prepare("INSERT INTO tour_packages 
-            (destination, title, slug, meta_title, meta_description, focus_keywords, description, overview, duration, old_price, price, save_text, rating, rating_count, hero_image, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (destination, title, slug, meta_title, meta_description, focus_keywords, description, overview, duration, old_price, price, save_text, rating, rating_count, hero_image, hero_image_alt, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $destination, $title, $slug, $metaTitle, $metaDescription, $focusKeywords, $description, $overview,
             $duration, $old_price, $price, $save_text,
-            $rating, $rating_count, $heroImagePath, $status
+            $rating, $rating_count, $heroImagePath, $heroImageAlt, $status
         ]);
         $packageId = $pdo->lastInsertId();
 
@@ -182,11 +182,40 @@ try {
             $photoPath = $stmt->fetchColumn();
             if ($photoPath) {
                 $fullPath = __DIR__ . '/../' . $photoPath;
-                if (file_exists($fullPath)) {
+                $ownedPrefix = 'uploads/packages/' . $packageId . '/';
+                if (strpos($photoPath, $ownedPrefix) === 0 && file_exists($fullPath)) {
                     @unlink($fullPath);
                 }
             }
             $pdo->prepare("DELETE FROM package_photos WHERE id = ? AND package_id = ?")->execute([$delId, $packageId]);
+        }
+    }
+
+    $existingPhotoAlt = $_POST['existing_photo_alt'] ?? [];
+    foreach ($existingPhotoAlt as $photoId => $altText) {
+        $pdo->prepare("UPDATE package_photos SET alt_text = ? WHERE id = ? AND package_id = ?")
+            ->execute([trim($altText), intval($photoId), $packageId]);
+    }
+
+    $existingGalleryPaths = $_POST['existing_gallery_paths'] ?? [];
+    $existingGalleryAlt = $_POST['existing_gallery_alt'] ?? [];
+    if (!empty($existingGalleryPaths)) {
+        $stmt = $pdo->prepare("SELECT MAX(sort_order) FROM package_photos WHERE package_id = ?");
+        $stmt->execute([$packageId]);
+        $maxSort = intval($stmt->fetchColumn());
+
+        foreach ($existingGalleryPaths as $idx => $mediaPath) {
+            $mediaPath = trim($mediaPath);
+            if (empty($mediaPath)) {
+                continue;
+            }
+            $maxSort++;
+            $altText = trim($existingGalleryAlt[$idx] ?? '');
+            if (empty($altText)) {
+                $altText = pathinfo($mediaPath, PATHINFO_FILENAME);
+            }
+            $stmt = $pdo->prepare("INSERT INTO package_photos (package_id, image_path, alt_text, sort_order) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$packageId, $mediaPath, $altText, $maxSort]);
         }
     }
 
@@ -215,7 +244,10 @@ try {
                     
                     move_uploaded_file($_FILES['gallery_photos']['tmp_name'][$i], $galleryFullPath);
                     
-                    $altText = pathinfo($_FILES['gallery_photos']['name'][$i], PATHINFO_FILENAME);
+                    $altText = trim($_POST['gallery_upload_alt'] ?? '');
+                    if (empty($altText)) {
+                        $altText = pathinfo($_FILES['gallery_photos']['name'][$i], PATHINFO_FILENAME);
+                    }
                     $imagePath = 'uploads/packages/' . $packageId . '/' . $galleryFilename;
                     
                     $stmt = $pdo->prepare("INSERT INTO package_photos (package_id, image_path, alt_text, sort_order) VALUES (?, ?, ?, ?)");

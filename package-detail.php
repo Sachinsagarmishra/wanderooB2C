@@ -82,6 +82,7 @@ $tourOldPrice = $dbPackage['old_price'];
 $tourSaveText = $dbPackage['save_text'];
 $tourRating = $dbPackage['rating'];
 $tourRatingCount = $dbPackage['rating_count'];
+$tourHeroAlt = !empty($dbPackage['hero_image_alt']) ? $dbPackage['hero_image_alt'] : $tourTitle;
 
 // Auto calculate save text if empty
 if (empty($tourSaveText) && !empty($tourOldPrice) && !empty($tourPrice)) {
@@ -128,7 +129,7 @@ include 'includes/header.php';
 </script>
 
     <div class="detail-hero-banner">
-    <img src="<?php echo htmlspecialchars($heroForBanner); ?>" alt="Travel Destination" class="detail-hero-bg">
+    <img src="<?php echo htmlspecialchars($heroForBanner); ?>" alt="<?php echo htmlspecialchars($tourHeroAlt); ?>" class="detail-hero-bg">
     <div class="detail-hero-overlay"></div>
     
     <?php
@@ -146,7 +147,7 @@ include 'includes/header.php';
     ?>
     <div class="detail-gallery gallery-count-<?php echo $totalCountClass; ?>">
         <div class="detail-gallery-main">
-            <img src="<?php echo htmlspecialchars($mainImg); ?>" alt="<?php echo htmlspecialchars($tourTitle); ?>" class="detail-gallery-img">
+            <img src="<?php echo htmlspecialchars($mainImg); ?>" alt="<?php echo htmlspecialchars($tourHeroAlt); ?>" class="detail-gallery-img">
             <?php if (count($thumbPhotos) > 0): ?>
                 <button class="btn-view-all-images mobile-btn-view-all">View All Images</button>
             <?php endif; ?>

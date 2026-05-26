@@ -25,7 +25,7 @@ try {
 
     if ($dest) {
         // Delete hero bg banner file if local
-        if (!empty($dest['hero_bg']) && strpos($dest['hero_bg'], 'http://') !== 0 && strpos($dest['hero_bg'], 'https://') !== 0) {
+        if (!empty($dest['hero_bg']) && strpos($dest['hero_bg'], 'uploads/destinations/') === 0) {
             $heroFile = __DIR__ . '/../' . $dest['hero_bg'];
             if (file_exists($heroFile)) {
                 @unlink($heroFile);
@@ -33,7 +33,7 @@ try {
         }
 
         // Delete icon file if local
-        if (!empty($dest['dropdown_icon']) && strpos($dest['dropdown_icon'], 'http://') !== 0 && strpos($dest['dropdown_icon'], 'https://') !== 0) {
+        if (!empty($dest['dropdown_icon']) && strpos($dest['dropdown_icon'], 'uploads/destinations/') === 0) {
             $iconFile = __DIR__ . '/../' . $dest['dropdown_icon'];
             if (file_exists($iconFile)) {
                 @unlink($iconFile);

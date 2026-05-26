@@ -36,13 +36,13 @@ try {
     // Delete files
     foreach ($photos as $photo) {
         $fullPath = __DIR__ . '/../' . $photo['image_path'];
-        if (file_exists($fullPath)) {
+        if (strpos($photo['image_path'], 'uploads/packages/' . $packageId . '/') === 0 && file_exists($fullPath)) {
             @unlink($fullPath);
         }
     }
 
     // Delete hero image
-    if (!empty($pkg['hero_image'])) {
+    if (!empty($pkg['hero_image']) && strpos($pkg['hero_image'], 'uploads/packages/' . $packageId . '/') === 0) {
         $heroFullPath = __DIR__ . '/../' . $pkg['hero_image'];
         if (file_exists($heroFullPath)) {
             @unlink($heroFullPath);

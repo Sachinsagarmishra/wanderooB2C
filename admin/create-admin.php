@@ -66,6 +66,7 @@ try {
       `rating` decimal(2,1) DEFAULT 4.5,
       `rating_count` int(11) DEFAULT 0,
       `hero_image` varchar(500) DEFAULT NULL,
+      `hero_image_alt` varchar(255) DEFAULT NULL,
       `status` enum('active','draft') NOT NULL DEFAULT 'active',
       `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
       `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -76,7 +77,8 @@ try {
     foreach ([
         "ALTER TABLE `tour_packages` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",
         "ALTER TABLE `tour_packages` ADD COLUMN `meta_description` text DEFAULT NULL AFTER `meta_title`",
-        "ALTER TABLE `tour_packages` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`"
+        "ALTER TABLE `tour_packages` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`",
+        "ALTER TABLE `tour_packages` ADD COLUMN `hero_image_alt` varchar(255) DEFAULT NULL AFTER `hero_image`"
     ] as $alterSql) {
         try {
             $pdo->exec($alterSql);
@@ -176,7 +178,9 @@ try {
       `focus_keywords` text DEFAULT NULL,
       `breadcrumb` varchar(100) NOT NULL,
       `hero_bg` varchar(500) DEFAULT NULL,
+      `hero_bg_alt` varchar(255) DEFAULT NULL,
       `dropdown_icon` varchar(500) DEFAULT NULL,
+      `dropdown_icon_alt` varchar(255) DEFAULT NULL,
       `description` text DEFAULT NULL,
       `sort_order` int(11) DEFAULT 0,
       `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -188,7 +192,9 @@ try {
     foreach ([
         "ALTER TABLE `destinations` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",
         "ALTER TABLE `destinations` ADD COLUMN `meta_description` text DEFAULT NULL AFTER `meta_title`",
-        "ALTER TABLE `destinations` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`"
+        "ALTER TABLE `destinations` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`",
+        "ALTER TABLE `destinations` ADD COLUMN `hero_bg_alt` varchar(255) DEFAULT NULL AFTER `hero_bg`",
+        "ALTER TABLE `destinations` ADD COLUMN `dropdown_icon_alt` varchar(255) DEFAULT NULL AFTER `dropdown_icon`"
     ] as $alterSql) {
         try {
             $pdo->exec($alterSql);

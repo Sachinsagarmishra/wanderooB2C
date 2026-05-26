@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
 include_once 'includes/header.php';
+include_once 'includes/media-picker.php';
 
 $editId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $isEdit = false;
@@ -214,9 +215,17 @@ if ($editId > 0) {
     <!-- Section 2: Banner Image -->
     <div class="form-section">
         <div class="form-section-title">Hero Banner Image *</div>
+        <input type="hidden" name="selected_hero_bg" id="selectedHeroBg" value="">
+        <div class="media-picker-actions">
+            <button type="button" class="btn btn-secondary" onclick="openMediaPicker('selectedHeroBg', 'heroBgPreview')">Select Existing Media</button>
+        </div>
         <div class="file-upload-area">
             📁 Click or drag to upload hero background banner (Recommended 1600x600 px)
-            <input type="file" name="hero_bg" accept="image/*" id="heroBgInput" <?php echo !$isEdit ? 'required' : ''; ?>>
+            <input type="file" name="hero_bg" accept="image/*" id="heroBgInput">
+        </div>
+        <div class="form-group">
+            <label for="hero_bg_alt">Hero Banner Alt Tag</label>
+            <input type="text" id="hero_bg_alt" name="hero_bg_alt" class="form-control" placeholder="e.g. Maldives luxury beach holiday banner" value="<?php echo $isEdit ? htmlspecialchars($dest['hero_bg_alt'] ?? '') : ''; ?>">
         </div>
         
         <div class="image-preview" id="heroBgPreview">
@@ -233,9 +242,17 @@ if ($editId > 0) {
     <!-- Section 3: Dropdown Icon -->
     <div class="form-section">
         <div class="form-section-title">Dropdown Navigation Icon</div>
+        <input type="hidden" name="selected_dropdown_icon" id="selectedDropdownIcon" value="">
+        <div class="media-picker-actions">
+            <button type="button" class="btn btn-secondary" onclick="openMediaPicker('selectedDropdownIcon', 'dropdownIconPreview')">Select Existing Media</button>
+        </div>
         <div class="file-upload-area">
             📁 Click or drag to upload dropdown icon (Preferred format: SVG or PNG, max 48x48 px)
             <input type="file" name="dropdown_icon" accept="image/*,image/svg+xml" id="dropdownIconInput">
+        </div>
+        <div class="form-group">
+            <label for="dropdown_icon_alt">Dropdown Icon Alt Tag</label>
+            <input type="text" id="dropdown_icon_alt" name="dropdown_icon_alt" class="form-control" placeholder="e.g. Maldives destination icon" value="<?php echo $isEdit ? htmlspecialchars($dest['dropdown_icon_alt'] ?? '') : ''; ?>">
         </div>
         
         <div class="icon-preview" id="dropdownIconPreview">

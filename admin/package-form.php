@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
 include_once 'includes/header.php';
+include_once 'includes/media-picker.php';
 
 $editId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $isEdit = false;
@@ -414,13 +415,21 @@ if ($editId > 0) {
     <!-- Section 2: Hero Image -->
     <div class="form-section">
         <div class="form-section-title">Hero / Background Image</div>
+        <input type="hidden" name="selected_hero_image" id="selectedHeroImage" value="">
+        <div class="media-picker-actions">
+            <button type="button" class="btn btn-secondary" onclick="openMediaPicker('selectedHeroImage', 'heroPreview')">Select Existing Media</button>
+        </div>
         <div class="file-upload-area">
             📁 Click or drag to upload hero image (JPG, PNG, WEBP)
             <input type="file" name="hero_image" accept="image/*" id="heroImageInput">
         </div>
+        <div class="form-group">
+            <label for="hero_image_alt">Hero Image Alt Tag</label>
+            <input type="text" id="hero_image_alt" name="hero_image_alt" class="form-control" placeholder="e.g. Maldives water villa honeymoon package" value="<?php echo $isEdit ? htmlspecialchars($pkg['hero_image_alt'] ?? '') : ''; ?>">
+        </div>
         <?php if ($isEdit && !empty($pkg['hero_image'])): ?>
             <div class="hero-preview" id="heroPreview">
-                <img src="<?php echo SITE_PATH; ?>/<?php echo htmlspecialchars($pkg['hero_image']); ?>" alt="Hero image">
+                <img src="<?php echo SITE_PATH; ?>/<?php echo htmlspecialchars($pkg['hero_image']); ?>" alt="<?php echo htmlspecialchars($pkg['hero_image_alt'] ?? 'Hero image'); ?>">
                 <div style="margin-top:6px;font-size:11px;color:var(--fg3);">Current hero image — upload a new one to replace it.</div>
             </div>
         <?php else: ?>
@@ -431,9 +440,18 @@ if ($editId > 0) {
     <!-- Section 3: Gallery Photos -->
     <div class="form-section">
         <div class="form-section-title">Gallery Photos (Multiple)</div>
+        <div class="media-picker-actions">
+            <button type="button" class="btn btn-secondary" onclick="openMediaPicker('selectedGalleryInput', 'selectedGalleryMedia', 'gallery')">Select Existing Media</button>
+        </div>
+        <input type="hidden" id="selectedGalleryInput" value="">
+        <div class="selected-media-list" id="selectedGalleryMedia"></div>
         <div class="file-upload-area">
             📷 Click or drag to upload gallery photos (multiple allowed)
             <input type="file" name="gallery_photos[]" accept="image/*" multiple id="galleryInput">
+        </div>
+        <div class="form-group">
+            <label for="gallery_upload_alt">Alt Tag For Newly Uploaded Photos</label>
+            <input type="text" id="gallery_upload_alt" name="gallery_upload_alt" class="form-control" placeholder="Used for newly uploaded gallery photos. Existing selected media has per-image alt below.">
         </div>
         <?php if ($isEdit && !empty($pkgPhotos)): ?>
             <div class="gallery-preview" id="existingGallery">
@@ -448,6 +466,7 @@ if ($editId > 0) {
                     <div class="gallery-preview-item" id="photo-<?php echo $photo['id']; ?>">
                         <img src="<?php echo htmlspecialchars($imgUrl); ?>" alt="<?php echo htmlspecialchars($photo['alt_text']); ?>">
                         <button type="button" class="remove-photo" onclick="markPhotoForDeletion(<?php echo $photo['id']; ?>)">×</button>
+                        <input type="text" name="existing_photo_alt[<?php echo $photo['id']; ?>]" class="form-control" value="<?php echo htmlspecialchars($photo['alt_text']); ?>" placeholder="Alt tag" style="margin-top:8px;font-size:11px;padding:7px;">
                     </div>
                 <?php endforeach; ?>
             </div>
