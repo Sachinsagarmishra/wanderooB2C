@@ -130,29 +130,30 @@ include 'includes/header.php';
     <img src="<?php echo htmlspecialchars($heroForBanner); ?>" alt="Travel Destination" class="detail-hero-bg">
     <div class="detail-hero-overlay"></div>
     
-    <div class="detail-gallery">
+    <?php
+    // Filter out main hero image from the thumbnails so it doesn't display twice
+    $galleryThumbs = [];
+    foreach ($validDbPhotos as $photo) {
+        $isExternal = (strpos($photo['image_path'], 'http://') === 0 || strpos($photo['image_path'], 'https://') === 0);
+        $fullPath = $isExternal ? $photo['image_path'] : SITE_PATH . '/' . $photo['image_path'];
+        if ($fullPath !== $mainImg && $photo['image_path'] !== $mainImg && $photo['image_path'] !== $dbPackage['hero_image']) {
+            $galleryThumbs[] = $photo;
+        }
+    }
+    $thumbPhotos = array_slice($galleryThumbs, 0, 4);
+    $totalCountClass = count($thumbPhotos) + 1;
+    ?>
+    <div class="detail-gallery gallery-count-<?php echo $totalCountClass; ?>">
         <div class="detail-gallery-main">
             <img src="<?php echo htmlspecialchars($mainImg); ?>" alt="<?php echo htmlspecialchars($tourTitle); ?>" class="detail-gallery-img">
-            <button class="btn-view-all-images mobile-btn-view-all">View All Images</button>
+            <?php if (count($thumbPhotos) > 0): ?>
+                <button class="btn-view-all-images mobile-btn-view-all">View All Images</button>
+            <?php endif; ?>
         </div>
         <?php
-        // Pad thumbnail photos up to 4 if needed
-        $thumbPhotos = array_slice($validDbPhotos, 0, 4);
-        $defaultPhotos = [
-            'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=600',
-            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=600',
-            'https://images.unsplash.com/photo-1573843225804-bbad83002646?auto=format&fit=crop&q=80&w=600',
-            'https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=600'
-        ];
-        while (count($thumbPhotos) < 4) {
-            $thumbPhotos[] = [
-                'image_path' => $defaultPhotos[count($thumbPhotos)],
-                'alt_text' => 'Scenic view',
-                'is_external' => true
-            ];
-        }
         foreach ($thumbPhotos as $idx => $photo):
-            $imgUrl = (isset($photo['is_external']) && $photo['is_external']) ? $photo['image_path'] : SITE_PATH . '/' . $photo['image_path'];
+            $isExternal = (strpos($photo['image_path'], 'http://') === 0 || strpos($photo['image_path'], 'https://') === 0);
+            $imgUrl = $isExternal ? $photo['image_path'] : SITE_PATH . '/' . $photo['image_path'];
         ?>
             <div class="detail-gallery-thumb">
                 <img src="<?php echo htmlspecialchars($imgUrl); ?>" alt="<?php echo htmlspecialchars($photo['alt_text'] ?? 'Travel Photo'); ?>" class="detail-gallery-img">

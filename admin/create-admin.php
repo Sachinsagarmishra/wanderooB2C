@@ -142,6 +142,89 @@ try {
         }
     }
 
+    // 10. Destinations Table
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `destinations` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `slug` varchar(100) NOT NULL,
+      `name` varchar(100) NOT NULL,
+      `title` varchar(255) NOT NULL,
+      `breadcrumb` varchar(100) NOT NULL,
+      `hero_bg` varchar(500) DEFAULT NULL,
+      `dropdown_icon` varchar(500) DEFAULT NULL,
+      `description` text DEFAULT NULL,
+      `sort_order` int(11) DEFAULT 0,
+      `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+      `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `slug` (`slug`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+    // Seed default destinations if they do not exist
+    $defaultDestinations = [
+        [
+            'slug' => 'singapore',
+            'name' => 'Singapore',
+            'title' => 'Singapore Packages',
+            'breadcrumb' => 'Singapore',
+            'hero_bg' => 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&q=80&w=1600',
+            'dropdown_icon' => 'assets/img/Singapur.svg',
+            'description' => 'Experience the vibrant garden city of Singapore with our premium travel itineraries. From the futuristic Gardens by the Bay and shopping on Orchard Road to family fun at Universal Studios and cultural walks in Chinatown, Singapore offers a perfect mix of modern luxury and rich heritage.'
+        ],
+        [
+            'slug' => 'maldives',
+            'name' => 'Maldives',
+            'title' => 'Maldives Packages',
+            'breadcrumb' => 'Maldives',
+            'hero_bg' => 'https://images.unsplash.com/photo-1506929197414-435728669527?auto=format&fit=crop&q=80&w=1600',
+            'dropdown_icon' => 'assets/img/Maldives.svg',
+            'description' => 'Discover the tropical paradise of the Maldives with our thoughtfully curated travel packages. Whether you\'re dreaming of a luxurious overwater escape, a romantic honeymoon, or a serene family getaway, our Maldives packages offer the perfect blend of relaxation, adventure, and unforgettable island memories.'
+        ],
+        [
+            'slug' => 'bali',
+            'name' => 'Bali',
+            'title' => 'Bali Packages',
+            'breadcrumb' => 'Bali',
+            'hero_bg' => 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=1600',
+            'dropdown_icon' => 'assets/img/bali.svg',
+            'description' => 'Immerse yourself in the spiritual warmth and scenic beauty of Bali. Explore ancient cliffside temples, pristine beaches, vibrant cultural dances, and lush green rice terraces in Ubud. Our Bali packages are tailored for romantic escapes and adventurous spirits alike.'
+        ],
+        [
+            'slug' => 'japan',
+            'name' => 'Japan',
+            'title' => 'Japan Packages',
+            'breadcrumb' => 'Japan',
+            'hero_bg' => 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=1600',
+            'dropdown_icon' => 'assets/img/japan.svg',
+            'description' => 'Discover the perfect harmony of ancient traditions and futuristic innovation in Japan. Journey through the bustling streets of Tokyo, the historic temples of Kyoto, and the scenic beauty of Mount Fuji. Our custom Japan itineraries bring you the best of cherry blossoms, culinary wonders, and rich culture.'
+        ],
+        [
+            'slug' => 'kerala',
+            'name' => 'Kerala',
+            'title' => 'Kerala Packages',
+            'breadcrumb' => 'Kerala',
+            'hero_bg' => 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&q=80&w=1600',
+            'dropdown_icon' => 'assets/img/Kerala.svg',
+            'description' => 'Unwind in \'God\'s Own Country\' with our curated Kerala tour packages. Cruise along the serene backwaters of Alappuzha on a traditional houseboat, explore the misty tea gardens of Munnar, and relax on the pristine beaches of Kovalam. Kerala is the ultimate destination for slow travel and rejuvenation.'
+        ]
+    ];
+
+    foreach ($defaultDestinations as $d) {
+        $stmtCheckDest = $pdo->prepare("SELECT COUNT(*) FROM destinations WHERE slug = ?");
+        $stmtCheckDest->execute([$d['slug']]);
+        if ($stmtCheckDest->fetchColumn() == 0) {
+            $stmtInsertDest = $pdo->prepare("INSERT INTO destinations (slug, name, title, breadcrumb, hero_bg, dropdown_icon, description) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmtInsertDest->execute([
+                $d['slug'],
+                $d['name'],
+                $d['title'],
+                $d['breadcrumb'],
+                $d['hero_bg'],
+                $d['dropdown_icon'],
+                $d['description']
+            ]);
+        }
+    }
+
 } catch (PDOException $e) {
     $message = "Database initialization failed: " . $e->getMessage();
     $messageType = "danger";

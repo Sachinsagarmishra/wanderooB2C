@@ -328,11 +328,21 @@ if ($editId > 0) {
                 <label for="destination">Destination *</label>
                 <select id="destination" name="destination" class="form-control" required>
                     <option value="" disabled <?php echo !$isEdit ? 'selected' : ''; ?>>Select destination</option>
-                    <option value="singapore" <?php echo ($isEdit && $pkg['destination'] === 'singapore') ? 'selected' : ''; ?>>Singapore</option>
-                    <option value="maldives" <?php echo ($isEdit && $pkg['destination'] === 'maldives') ? 'selected' : ''; ?>>Maldives</option>
-                    <option value="bali" <?php echo ($isEdit && $pkg['destination'] === 'bali') ? 'selected' : ''; ?>>Bali</option>
-                    <option value="japan" <?php echo ($isEdit && $pkg['destination'] === 'japan') ? 'selected' : ''; ?>>Japan</option>
-                    <option value="kerala" <?php echo ($isEdit && $pkg['destination'] === 'kerala') ? 'selected' : ''; ?>>Kerala</option>
+                    <?php
+                    try {
+                        $stmtDests = $pdo->query("SELECT slug, name FROM destinations ORDER BY sort_order, name");
+                        while ($destRow = $stmtDests->fetch()) {
+                            $selected = ($isEdit && $pkg['destination'] === $destRow['slug']) ? 'selected' : '';
+                            echo '<option value="' . htmlspecialchars($destRow['slug']) . '" ' . $selected . '>' . htmlspecialchars($destRow['name']) . '</option>';
+                        }
+                    } catch (Exception $e) {
+                        echo '<option value="singapore" ' . ($isEdit && $pkg['destination'] === 'singapore' ? 'selected' : '') . '>Singapore</option>';
+                        echo '<option value="maldives" ' . ($isEdit && $pkg['destination'] === 'maldives' ? 'selected' : '') . '>Maldives</option>';
+                        echo '<option value="bali" ' . ($isEdit && $pkg['destination'] === 'bali' ? 'selected' : '') . '>Bali</option>';
+                        echo '<option value="japan" ' . ($isEdit && $pkg['destination'] === 'japan' ? 'selected' : '') . '>Japan</option>';
+                        echo '<option value="kerala" ' . ($isEdit && $pkg['destination'] === 'kerala' ? 'selected' : '') . '>Kerala</option>';
+                    }
+                    ?>
                 </select>
             </div>
         </div>

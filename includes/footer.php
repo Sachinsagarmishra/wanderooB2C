@@ -16,9 +16,18 @@
             <div class="footer-col">
                 <h3>Top Destinations:</h3>
                 <ul>
-                    <li><a href="<?php echo SITE_PATH; ?>/destination/maldives">Maldives</a></li>
-                    <li><a href="<?php echo SITE_PATH; ?>/destination/singapore">Singapore</a></li>
-                    <li><a href="<?php echo SITE_PATH; ?>/destination/bali">Bali</a></li>
+                    <?php
+                    try {
+                        $stmtFootDests = $pdo->query("SELECT slug, name FROM destinations ORDER BY sort_order, name LIMIT 4");
+                        while ($footRow = $stmtFootDests->fetch()) {
+                            echo '<li><a href="' . SITE_PATH . '/destination/' . htmlspecialchars($footRow['slug']) . '">' . htmlspecialchars($footRow['name']) . '</a></li>';
+                        }
+                    } catch (Exception $e) {
+                        echo '<li><a href="' . SITE_PATH . '/destination/maldives">Maldives</a></li>';
+                        echo '<li><a href="' . SITE_PATH . '/destination/singapore">Singapore</a></li>';
+                        echo '<li><a href="' . SITE_PATH . '/destination/bali">Bali</a></li>';
+                    }
+                    ?>
                 </ul>
             </div>
             <div class="footer-col">

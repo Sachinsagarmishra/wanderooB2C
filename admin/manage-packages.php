@@ -122,11 +122,21 @@ try {
         <form method="GET" style="display: flex; gap: 8px; align-items: center;">
             <select name="destination" class="filter-select" onchange="this.form.submit()">
                 <option value="">All Destinations</option>
-                <option value="singapore" <?php echo $filterDest === 'singapore' ? 'selected' : ''; ?>>Singapore</option>
-                <option value="maldives" <?php echo $filterDest === 'maldives' ? 'selected' : ''; ?>>Maldives</option>
-                <option value="bali" <?php echo $filterDest === 'bali' ? 'selected' : ''; ?>>Bali</option>
-                <option value="japan" <?php echo $filterDest === 'japan' ? 'selected' : ''; ?>>Japan</option>
-                <option value="kerala" <?php echo $filterDest === 'kerala' ? 'selected' : ''; ?>>Kerala</option>
+                <?php
+                try {
+                    $stmtDests = $pdo->query("SELECT slug, name FROM destinations ORDER BY sort_order, name");
+                    while ($destRow = $stmtDests->fetch()) {
+                        $selected = ($filterDest === $destRow['slug']) ? 'selected' : '';
+                        echo '<option value="' . htmlspecialchars($destRow['slug']) . '" ' . $selected . '>' . htmlspecialchars($destRow['name']) . '</option>';
+                    }
+                } catch (Exception $e) {
+                    echo '<option value="singapore" ' . ($filterDest === 'singapore' ? 'selected' : '') . '>Singapore</option>';
+                    echo '<option value="maldives" ' . ($filterDest === 'maldives' ? 'selected' : '') . '>Maldives</option>';
+                    echo '<option value="bali" ' . ($filterDest === 'bali' ? 'selected' : '') . '>Bali</option>';
+                    echo '<option value="japan" ' . ($filterDest === 'japan' ? 'selected' : '') . '>Japan</option>';
+                    echo '<option value="kerala" ' . ($filterDest === 'kerala' ? 'selected' : '') . '>Kerala</option>';
+                }
+                ?>
             </select>
         </form>
         <a href="package-form.php" class="btn btn-primary" style="padding: 8px 16px; font-size: 12px;">+ Add New Package</a>

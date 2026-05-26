@@ -8,17 +8,33 @@ require_once __DIR__ . '/includes/db.php';
 // Get destination from URL parameter, default to maldives
 $slug = isset($_GET['name']) ? trim(strtolower($_GET['name'])) : 'maldives';
 
+// Fetch destination from Database
+$dest = null;
+try {
+    $stmtDest = $pdo->prepare("SELECT * FROM destinations WHERE slug = ?");
+    $stmtDest->execute([$slug]);
+    $dest = $stmtDest->fetch();
+} catch (PDOException $e) {
+    // Fail through
+}
+
 // Redirect if invalid destination
-if (!array_key_exists($slug, $destinations)) {
+if (!$dest) {
     header("Location: " . SITE_PATH . "/");
     exit;
 }
 
-$dest = $destinations[$slug];
+// Map db column to matching config structure keys
+$dest['desc'] = $dest['description'];
+
+$heroBg = $dest['hero_bg'];
+if (!empty($heroBg) && strpos($heroBg, 'http://') !== 0 && strpos($heroBg, 'https://') !== 0) {
+    $heroBg = SITE_PATH . '/' . $heroBg;
+}
 
 $pageTitle = $dest['title'];
 $pageDesc = $dest['desc'];
-$bodyClass = "destination-page " . $slug . "-page";
+$bodyClass = "destination-page " . htmlspecialchars($slug) . "-page";
 
 include_once 'includes/header.php';
 ?>
@@ -26,7 +42,7 @@ include_once 'includes/header.php';
 <main>
     <!-- Destination Hero Banner -->
     <div class="destination-hero-banner">
-        <img src="<?php echo $dest['hero_bg']; ?>" alt="<?php echo htmlspecialchars($dest['name']); ?>" class="destination-hero-bg">
+        <img src="<?php echo htmlspecialchars($heroBg); ?>" alt="<?php echo htmlspecialchars($dest['name']); ?>" class="destination-hero-bg">
         <div class="destination-hero-overlay"></div>
         <div class="destination-hero-content">
             <span class="destination-breadcrumb-text"><a href="<?php echo SITE_PATH; ?>/">Home</a> &raquo; <a href="#">Destination</a> &raquo; <?php echo htmlspecialchars($dest['breadcrumb']); ?></span>
