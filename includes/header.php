@@ -22,7 +22,7 @@ $pageKeywords = isset($pageKeywords) ? $pageKeywords : "";
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo SITE_PATH; ?>/assets/img/favicon.png">
     
     <!-- Google Fonts & Styles -->
-    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=5.2">
+    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=5.3">
 </head>
 <body class="<?php echo isset($bodyClass) ? htmlspecialchars($bodyClass) : ''; ?>">
     <header>

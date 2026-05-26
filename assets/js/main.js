@@ -12,17 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileToggle) {
         mobileToggle.addEventListener('click', () => {
             navGlass.classList.toggle('active');
-            // Basic toggle for demonstration
-            if (navGlass.style.display === 'flex') {
-                navGlass.style.display = 'none';
-            } else {
-                navGlass.style.display = 'flex';
-                navGlass.style.flexDirection = 'column';
-                navGlass.style.position = 'absolute';
-                navGlass.style.top = '80px';
-                navGlass.style.left = '20px';
-                navGlass.style.right = '20px';
-                navGlass.style.borderRadius = '20px';
+            mobileToggle.classList.toggle('active');
+        });
+    }
+
+    const navDropdownTrigger = document.querySelector('.nav-dropdown-trigger');
+    const navDropdown = document.querySelector('.nav-dropdown');
+    if (navDropdownTrigger && navDropdown) {
+        navDropdownTrigger.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024) {
+                e.preventDefault();
+                navDropdown.classList.toggle('active');
             }
         });
     }

@@ -52,7 +52,7 @@
         <img src="<?php echo SITE_PATH; ?>/assets/img/whatsapp.svg" alt="WhatsApp" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;">
     </a>
 
-    <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.7"></script>
+    <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.8"></script>
     <?php include_once __DIR__ . '/enquiry-modal.php'; ?>
 </body>
 </html>
