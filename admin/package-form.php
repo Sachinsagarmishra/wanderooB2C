@@ -718,6 +718,38 @@ document.getElementById('galleryInput').addEventListener('change', function(e) {
         });
     }
 });
+
+// ─── Auto-calculate Savings ───
+const priceInput = document.getElementById('price');
+const oldPriceInput = document.getElementById('old_price');
+const saveTextInput = document.getElementById('save_text');
+
+function autoCalculateSavings() {
+    const priceStr = priceInput.value || '';
+    const oldPriceStr = oldPriceInput.value || '';
+    
+    // Extract only digits
+    const priceNum = parseInt(priceStr.replace(/\D/g, '')) || 0;
+    const oldPriceNum = parseInt(oldPriceStr.replace(/\D/g, '')) || 0;
+    
+    if (oldPriceNum > priceNum) {
+        const diff = oldPriceNum - priceNum;
+        
+        // Format the difference with commas
+        const formattedDiff = new Intl.NumberFormat('en-IN').format(diff);
+        
+        // Determine currency prefix
+        let prefix = 'SAVE INR ';
+        if (priceStr.includes('₹') || oldPriceStr.includes('₹')) {
+            prefix = 'SAVE ₹';
+        }
+        
+        saveTextInput.value = prefix + formattedDiff;
+    }
+}
+
+priceInput.addEventListener('input', autoCalculateSavings);
+oldPriceInput.addEventListener('input', autoCalculateSavings);
 </script>
 
 <?php include_once 'includes/footer.php'; ?>

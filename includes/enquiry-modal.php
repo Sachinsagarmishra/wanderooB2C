@@ -854,16 +854,21 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            openModal();
+            const dest = btn.getAttribute('data-destination');
+            openModal(dest);
         });
     });
 
-    function openModal() {
+    function openModal(dest) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         setTimeout(() => {
             modal.classList.add('show');
             resetModal();
+            if (dest) {
+                const destSelect = document.getElementById('enquiryDestination');
+                destSelect.value = dest;
+            }
         }, 10);
     }
 

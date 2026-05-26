@@ -82,6 +82,11 @@ if ($isDynamic) {
     $tourDuration = $dbPackage['duration'];
     $tourDescription = $dbPackage['description'];
     $tourOverview = $dbPackage['overview'];
+    $tourPrice = $dbPackage['price'];
+    $tourOldPrice = $dbPackage['old_price'];
+    $tourSaveText = $dbPackage['save_text'];
+    $tourRating = $dbPackage['rating'];
+    $tourRatingCount = $dbPackage['rating_count'];
 } elseif ($matchedPkg) {
     $tourTitle = $matchedPkg['title'];
     $pageTitle = $tourTitle;
@@ -91,6 +96,11 @@ if ($isDynamic) {
     $tourDuration = $matchedPkg['duration'] ?? '';
     $tourDescription = '';
     $tourOverview = '';
+    $tourPrice = $matchedPkg['price'];
+    $tourOldPrice = $matchedPkg['old_price'] ?? '';
+    $tourSaveText = $matchedPkg['save'] ?? '';
+    $tourRating = $matchedPkg['rating'] ?? '4.5';
+    $tourRatingCount = $matchedPkg['rating_count'] ?? '0';
 } else {
     // Default fallback
     $tourTitle = "Luxury Honeymoon at Adaaran Prestige";
@@ -101,6 +111,25 @@ if ($isDynamic) {
     $tourDuration = '4D/3N';
     $tourDescription = '';
     $tourOverview = '';
+    $tourPrice = 'INR 80,000';
+    $tourOldPrice = 'INR 95,000';
+    $tourSaveText = 'SAVE INR 15,000';
+    $tourRating = '4.7';
+    $tourRatingCount = '28';
+}
+
+// Auto calculate save text if empty
+if (empty($tourSaveText) && !empty($tourOldPrice) && !empty($tourPrice)) {
+    $oldNum = intval(preg_replace('/[^\d]/', '', $tourOldPrice));
+    $priceNum = intval(preg_replace('/[^\d]/', '', $tourPrice));
+    if ($oldNum > $priceNum) {
+        $diff = $oldNum - $priceNum;
+        if (strpos($tourPrice, '₹') !== false || strpos($tourOldPrice, '₹') !== false) {
+            $tourSaveText = "SAVE ₹" . number_format($diff);
+        } else {
+            $tourSaveText = "SAVE INR " . number_format($diff);
+        }
+    }
 }
 
 include 'includes/header.php';
@@ -419,19 +448,41 @@ include 'includes/header.php';
         <div class="detail-sidebar">
             <div class="detail-sidebar-box">
                 <h4 class="sidebar-package-title"><?php echo htmlspecialchars($tourTitle); ?></h4>
-                <h3 class="sidebar-heading">Select Destination</h3>
-                <div class="enquiry-select-wrapper">
-                    <select class="enquiry-select">
-                        <option value="" disabled <?php echo empty($destSlug) ? 'selected' : ''; ?>>Choose your dream destination...</option>
-                        <option value="maldives" <?php echo $destSlug === 'maldives' ? 'selected' : ''; ?>>Maldives</option>
-                        <option value="singapore" <?php echo $destSlug === 'singapore' ? 'selected' : ''; ?>>Singapore</option>
-                        <option value="bali" <?php echo $destSlug === 'bali' ? 'selected' : ''; ?>>Bali</option>
-                        <option value="japan" <?php echo $destSlug === 'japan' ? 'selected' : ''; ?>>Japan</option>
-                        <option value="kerala" <?php echo $destSlug === 'kerala' ? 'selected' : ''; ?>>Kerala, India</option>
-                    </select>
+                
+                <!-- Premium Pricing Box -->
+                <div class="sidebar-pricing-container">
+                    <div class="price-row">
+                        <div class="price-col">
+                            <span class="starting-from">Starting From</span>
+                            <span class="price-val"><?php echo htmlspecialchars($tourPrice); ?><span class="per-person">/Person</span></span>
+                        </div>
+                        <?php if (!empty($tourRating) && $tourRating > 0): ?>
+                            <div class="rating-col">
+                                <span class="star-icon">★</span>
+                                <span class="rating-num"><?php echo htmlspecialchars($tourRating); ?></span>
+                                <span class="rating-count">(<?php echo htmlspecialchars($tourRatingCount); ?>)</span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <?php if (!empty($tourOldPrice) || !empty($tourSaveText)): ?>
+                        <div class="discount-row">
+                            <?php if (!empty($tourOldPrice)): ?>
+                                <span class="old-price"><?php echo htmlspecialchars($tourOldPrice); ?></span>
+                            <?php endif; ?>
+                            <?php if (!empty($tourSaveText)): ?>
+                                <span class="save-badge <?php echo (strpos(strtolower($tourSaveText), 'save') !== false) ? 'green-badge' : 'gold-badge'; ?>">
+                                    <?php echo htmlspecialchars($tourSaveText); ?>
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
-                <button class="btn-enquiry-next">
-                    Next &rarr;
+
+                <div class="sidebar-divider"></div>
+
+                <button class="btn-quote btn-enquire sidebar-cta-btn" data-destination="<?php echo htmlspecialchars($destSlug); ?>">
+                    Send Enquiry
                 </button>
             </div>
         </div>
@@ -465,7 +516,7 @@ include 'includes/header.php';
 
 <!-- Mobile Sticky CTA Bar -->
 <div class="mobile-sticky-cta">
-    <a href="#" class="btn-craft-trip">Craft Your Trip</a>
+    <a href="#" class="btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>">Craft Your Trip</a>
 </div>
 
 <?php include 'includes/footer.php'; ?>

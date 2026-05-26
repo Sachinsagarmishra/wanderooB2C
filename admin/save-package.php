@@ -47,6 +47,21 @@ try {
         exit;
     }
 
+    // Auto-calculate save_text if not set
+    if (empty($save_text) && !empty($old_price) && !empty($price)) {
+        $oldNum = intval(preg_replace('/[^\d]/', '', $old_price));
+        $priceNum = intval(preg_replace('/[^\d]/', '', $price));
+        if ($oldNum > $priceNum) {
+            $diff = $oldNum - $priceNum;
+            $formattedDiff = number_format($diff);
+            $prefix = 'SAVE INR ';
+            if (strpos($price, '₹') !== false || strpos($old_price, '₹') !== false) {
+                $prefix = 'SAVE ₹';
+            }
+            $save_text = $prefix . $formattedDiff;
+        }
+    }
+
     // Generate slug from title
     $slug = slugify($title);
 
