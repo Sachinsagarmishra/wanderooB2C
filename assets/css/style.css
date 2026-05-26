@@ -2971,7 +2971,6 @@ footer {
 }
 
 .nav-dropdown .dropdown-menu {
-    display: none;
     position: absolute;
     top: 100%;
     left: 50%;
@@ -2988,7 +2987,8 @@ footer {
     margin-top: 15px;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    pointer-events: none;
+    transition: opacity 0.3s ease, margin-top 0.3s ease, visibility 0.3s ease;
 }
 
 .nav-dropdown .dropdown-menu::before {
@@ -3003,9 +3003,9 @@ footer {
 }
 
 .nav-dropdown:hover .dropdown-menu {
-    display: block;
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     margin-top: 10px;
 }
 
