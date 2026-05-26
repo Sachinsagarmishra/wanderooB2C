@@ -125,8 +125,21 @@
                     <input type="hidden" id="enquiryCompanion" name="companion" value="">
                 </div>
 
-                <!-- Step 5: Personal Details -->
+                <!-- Step 5: How To Configure Your Rooms? (Conditional Step for Family / Friends) -->
                 <div class="enquiry-form-step" data-step="5">
+                    <h3 class="enquiry-step-title">How To Configure Your Rooms?</h3>
+                    <div class="enquiry-rooms-outer-wrapper">
+                        <div class="enquiry-rooms-container" id="enquiryRoomsContainer">
+                            <!-- Dynamic Rooms List gets setup by JS -->
+                        </div>
+                        <!-- Add Room Button -->
+                        <button type="button" class="btn-add-room-outline" id="enquiryAddRoomBtn">+ Add New Room</button>
+                    </div>
+                    <input type="hidden" id="enquiryRoomsConfig" name="rooms_config" value="">
+                </div>
+
+                <!-- Step 6: Personal Details (Always Final Step) -->
+                <div class="enquiry-form-step" data-step="6">
                     <h3 class="enquiry-step-title">Personal Details</h3>
                     <div class="enquiry-personal-details-fields">
                         <div class="enquiry-input-group">
@@ -169,6 +182,8 @@
     --enquiry-text-dark: #1e293b;
     --enquiry-border: #cbd5e1;
     --enquiry-bg: #f8fafc;
+    --enquiry-teal: #50bfa5;
+    --enquiry-teal-hover: #3bbaa0;
 }
 
 /* Backdrop */
@@ -320,7 +335,7 @@
 /* Right Form Section */
 .enquiry-modal-right {
     width: 58%;
-    padding: 45px;
+    padding: 40px 45px;
     background-color: var(--enquiry-bg);
     display: flex;
     flex-direction: column;
@@ -408,7 +423,7 @@
     font-size: 26px !important;
     font-weight: 700 !important;
     color: var(--enquiry-text-dark);
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     letter-spacing: -0.3px;
 }
 
@@ -546,6 +561,168 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 52px;
 }
 
+/* Rooms step outer container styling */
+.enquiry-rooms-outer-wrapper {
+    max-height: 290px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.enquiry-rooms-outer-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.enquiry-rooms-outer-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.enquiry-rooms-outer-wrapper::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* Rooms Card Styles */
+.enquiry-room-card {
+    background-color: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    margin-bottom: 20px;
+}
+
+.enquiry-room-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 8px;
+}
+
+.enquiry-room-title {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e3a8a;
+}
+
+.btn-remove-room {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.btn-remove-room:hover {
+    background-color: #fef2f2;
+}
+
+.btn-remove-room svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Counter controls style */
+.enquiry-counter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.counter-label {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.counter-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-counter-minus,
+.btn-counter-plus {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--enquiry-teal);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(80, 191, 165, 0.2);
+    transition: all 0.2s;
+    outline: none;
+}
+
+.btn-counter-minus:hover,
+.btn-counter-plus:hover {
+    background-color: var(--enquiry-teal-hover);
+    transform: scale(1.05);
+}
+
+.counter-value {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    width: 48px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* Child Ages Dropdown box styling */
+.enquiry-child-ages-list {
+    background-color: #fdfaf2;
+    border: 1.5px solid #fef08a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Add Room button outline style */
+.btn-add-room-outline {
+    border: 2px solid var(--enquiry-primary);
+    background-color: transparent;
+    color: #000000;
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px;
+    width: 100%;
+    text-align: center;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.btn-add-room-outline:hover {
+    background-color: rgba(255, 222, 89, 0.1);
+    transform: translateY(-1px);
+}
+
 .enquiry-personal-details-fields {
     max-height: 290px;
     overflow-y: auto;
@@ -651,9 +828,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorBanner = document.getElementById('enquiryErrorBanner');
     const errorText = document.getElementById('enquiryErrorText');
     const form = document.getElementById('enquiryForm');
+    
+    // Rooms Configuration variables
+    const roomsContainer = document.getElementById('enquiryRoomsContainer');
+    const addRoomBtn = document.getElementById('enquiryAddRoomBtn');
+    let roomCount = 1;
 
-    let currentStep = 1;
-    const totalSteps = 5;
+    let currentStep = 1; // Visual step index: ranges 1 to 5 (without Rooms) or 1 to 6 (with Rooms)
 
     // Open modal on click of any enquiry/quote buttons
     const triggerButtons = document.querySelectorAll('.btn-enquire, .btn-quote, .btn-request, .btn-craft-trip, .btn-group-plan');
@@ -721,10 +902,25 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(id).addEventListener('input', hideError);
     });
 
+    // Helper functions for dynamic steps
+    function getCompanionValue() {
+        return document.getElementById('enquiryCompanion').value;
+    }
+
+    function hasRoomsStep() {
+        const val = getCompanionValue();
+        return val === 'Family' || val === 'Friends';
+    }
+
+    function getTotalVisualSteps() {
+        return hasRoomsStep() ? 6 : 5;
+    }
+
     // Navigation triggers
     nextBtn.addEventListener('click', () => {
+        const totalVisualSteps = getTotalVisualSteps();
         if (validateStep(currentStep)) {
-            if (currentStep < totalSteps) {
+            if (currentStep < totalVisualSteps) {
                 goToStep(currentStep + 1);
             } else {
                 submitEnquiry();
@@ -741,10 +937,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function goToStep(stepNum) {
         hideError();
         
+        let targetStepInMarkup = stepNum;
+        
+        // Dynamic step mapping
+        // Step 1 to 4 are mapped 1-to-1.
+        // If we don't have the Rooms step (visual total is 5):
+        // Visual Step 5 = Personal Details (which is data-step="6" in HTML).
+        // If we have the Rooms step (visual total is 6):
+        // Visual Step 5 = Rooms Configuration (data-step="5" in HTML).
+        // Visual Step 6 = Personal Details (data-step="6" in HTML).
+        if (!hasRoomsStep()) {
+            if (stepNum === 5) {
+                targetStepInMarkup = 6;
+            }
+        }
+        
         // Hide current step, show target step
         steps.forEach(step => {
             step.classList.remove('active');
-            if (parseInt(step.getAttribute('data-step')) === stepNum) {
+            if (parseInt(step.getAttribute('data-step')) === targetStepInMarkup) {
                 step.classList.add('active');
             }
         });
@@ -752,9 +963,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentStep = stepNum;
         
         // Update progress bar & indicators
-        const progressPercentage = (currentStep / totalSteps) * 100;
+        const totalVisualSteps = getTotalVisualSteps();
+        const progressPercentage = (currentStep / totalVisualSteps) * 100;
         progressBar.style.width = `${progressPercentage}%`;
-        stepIndicator.textContent = `Step ${currentStep} of ${totalSteps}`;
+        stepIndicator.textContent = `Step ${currentStep} of ${totalVisualSteps}`;
 
         // Show/hide Previous Button
         if (currentStep === 1) {
@@ -764,7 +976,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Change Next Button text on the final step
-        if (currentStep === totalSteps) {
+        if (currentStep === totalVisualSteps) {
             nextBtn.textContent = 'Submit Request';
         } else {
             nextBtn.textContent = 'Next →';
@@ -796,7 +1008,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 showError('Please select who you are travelling with.');
                 return false;
             }
-        } else if (stepNum === 5) {
+        } else if (stepNum === 5 && hasRoomsStep()) {
+            // Validate child age dropdown selects inside Room cards
+            const childSelects = roomsContainer.querySelectorAll('.child-age-select');
+            let allSelected = true;
+            childSelects.forEach(select => {
+                if (!select.value) allSelected = false;
+            });
+            
+            if (!allSelected) {
+                showError('Please select the age of all children.');
+                return false;
+            }
+        } else if (stepNum === getTotalVisualSteps()) {
             const name = document.getElementById('enquiryName').value.trim();
             const phone = document.getElementById('enquiryPhone').value.trim();
             const email = document.getElementById('enquiryEmail').value.trim();
@@ -840,6 +1064,9 @@ document.addEventListener('DOMContentLoaded', () => {
         optionCards.forEach(c => c.classList.remove('active'));
         document.getElementById('enquiryNights').value = '';
         document.getElementById('enquiryCompanion').value = '';
+        
+        // Reset dynamic rooms
+        resetRooms();
         goToStep(1);
     }
 
@@ -848,14 +1075,310 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(form);
         const data = {};
         formData.forEach((value, key) => {
-            data[key] = value;
+            // For array/dynamic rooms, let JSON configure
+            if (!key.startsWith('room_')) {
+                data[key] = value;
+            }
         });
+        
+        // Append structured rooms config
+        if (hasRoomsStep()) {
+            data['rooms_config'] = JSON.parse(document.getElementById('enquiryRoomsConfig').value);
+        }
 
         console.log('Enquiry data submitted:', data);
 
         // Simple UX success notification
         alert('Thank you! Your travel request has been submitted successfully. A destination expert will get back to you shortly.');
         closeModal();
+    }
+
+    // Rooms Configuration logic functions
+    function setupRoomCardEvents(roomCard) {
+        const minusBtns = roomCard.querySelectorAll('.btn-counter-minus');
+        const plusBtns = roomCard.querySelectorAll('.btn-counter-plus');
+        const roomNum = roomCard.getAttribute('data-room');
+        
+        minusBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hideError();
+                const type = btn.getAttribute('data-type');
+                const valSpan = roomCard.querySelector(`#room-${roomNum}-${type}-val`);
+                let val = parseInt(valSpan.textContent);
+                
+                if (type === 'adults') {
+                    if (val > 1) {
+                        val--;
+                        valSpan.textContent = val;
+                    }
+                } else if (type === 'children') {
+                    if (val > 0) {
+                        val--;
+                        valSpan.textContent = val;
+                        updateChildAgeSelects(roomCard, val);
+                    }
+                }
+                updateRoomsConfigJSON();
+            });
+        });
+        
+        plusBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hideError();
+                const type = btn.getAttribute('data-type');
+                const valSpan = roomCard.querySelector(`#room-${roomNum}-${type}-val`);
+                let val = parseInt(valSpan.textContent);
+                
+                if (type === 'adults') {
+                    if (val < 10) {
+                        val++;
+                        valSpan.textContent = val;
+                    }
+                } else if (type === 'children') {
+                    if (val < 10) {
+                        val++;
+                        valSpan.textContent = val;
+                        updateChildAgeSelects(roomCard, val);
+                    }
+                }
+                updateRoomsConfigJSON();
+            });
+        });
+    }
+
+    function updateChildAgeSelects(roomCard, childCount) {
+        const roomNum = roomCard.getAttribute('data-room');
+        const agesList = roomCard.querySelector(`#room-${roomNum}-child-ages`);
+        
+        if (childCount === 0) {
+            agesList.style.display = 'none';
+            agesList.innerHTML = '';
+            return;
+        }
+        
+        agesList.style.display = 'flex';
+        agesList.style.flexDirection = 'column';
+        agesList.style.gap = '12px';
+        
+        // Preserve values if already exists
+        const existingSelects = agesList.querySelectorAll('.child-age-select');
+        const existingValues = Array.from(existingSelects).map(select => select.value);
+        
+        agesList.innerHTML = '';
+        
+        for (let i = 1; i <= childCount; i++) {
+            const row = document.createElement('div');
+            row.className = 'enquiry-child-age-row';
+            row.style.display = 'flex';
+            row.style.alignItems = 'center';
+            row.style.justifyContent = 'space-between';
+            row.style.gap = '15px';
+            
+            const label = document.createElement('span');
+            label.className = 'child-num-label';
+            label.style.fontFamily = "'Urbanist', sans-serif";
+            label.style.fontSize = '14px';
+            label.style.fontWeight = '700';
+            label.style.color = '#475569';
+            label.textContent = `Child ${i}:`;
+            
+            const select = document.createElement('select');
+            select.className = 'enquiry-select-field child-age-select';
+            select.name = `room_${roomNum}_child_${i}_age`;
+            select.style.padding = '10px 15px';
+            select.style.borderRadius = '8px';
+            select.style.fontSize = '14px';
+            select.style.width = '70%';
+            select.style.height = '42px';
+            
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.disabled = true;
+            defaultOpt.selected = true;
+            defaultOpt.textContent = 'Select age';
+            select.appendChild(defaultOpt);
+            
+            // Generate ages 0 to 15
+            for (let age = 0; age <= 15; age++) {
+                const opt = document.createElement('option');
+                opt.value = age;
+                opt.textContent = age === 0 ? '< 1 year' : `${age} ${age === 1 ? 'year' : 'years'}`;
+                select.appendChild(opt);
+            }
+            
+            // Restore selection if previously selected
+            if (existingValues[i - 1] !== undefined && existingValues[i - 1] !== '') {
+                select.value = existingValues[i - 1];
+            }
+            
+            select.addEventListener('change', () => {
+                hideError();
+                updateRoomsConfigJSON();
+            });
+            
+            row.appendChild(label);
+            row.appendChild(select);
+            agesList.appendChild(row);
+        }
+    }
+
+    addRoomBtn.addEventListener('click', () => {
+        hideError();
+        if (roomCount >= 4) {
+            showError('You can add a maximum of 4 rooms.');
+            return;
+        }
+        roomCount++;
+        
+        const newRoom = document.createElement('div');
+        newRoom.className = 'enquiry-room-card';
+        newRoom.setAttribute('data-room', roomCount);
+        
+        newRoom.innerHTML = `
+            <div class="enquiry-room-card-header">
+                <h4 class="enquiry-room-title">ROOM ${roomCount}</h4>
+                <button type="button" class="btn-remove-room">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Adults Counter -->
+            <div class="enquiry-counter-row">
+                <span class="counter-label">Adults</span>
+                <div class="counter-controls">
+                    <button type="button" class="btn-counter-minus" data-type="adults">&minus;</button>
+                    <span class="counter-value" id="room-${roomCount}-adults-val">2</span>
+                    <button type="button" class="btn-counter-plus" data-type="adults">+</button>
+                </div>
+            </div>
+            
+            <!-- Children Counter -->
+            <div class="enquiry-counter-row">
+                <span class="counter-label">Children (0 to 15 yrs)</span>
+                <div class="counter-controls">
+                    <button type="button" class="btn-counter-minus" data-type="children">&minus;</button>
+                    <span class="counter-value" id="room-${roomCount}-children-val">0</span>
+                    <button type="button" class="btn-counter-plus" data-type="children">+</button>
+                </div>
+            </div>
+
+            <!-- Child Age Dropdowns Container -->
+            <div class="enquiry-child-ages-list" id="room-${roomCount}-child-ages" style="display: none;"></div>
+        `;
+        
+        roomsContainer.appendChild(newRoom);
+        setupRoomCardEvents(newRoom);
+        
+        // Bind remove event
+        const removeBtn = newRoom.querySelector('.btn-remove-room');
+        removeBtn.addEventListener('click', () => {
+            hideError();
+            newRoom.remove();
+            roomCount--;
+            reindexRooms();
+            updateRoomsConfigJSON();
+        });
+        
+        updateRoomsConfigJSON();
+    });
+
+    function reindexRooms() {
+        const roomCards = roomsContainer.querySelectorAll('.enquiry-room-card');
+        roomCount = roomCards.length;
+        
+        roomCards.forEach((card, idx) => {
+            const newRoomNum = idx + 1;
+            card.setAttribute('data-room', newRoomNum);
+            
+            const title = card.querySelector('.enquiry-room-title');
+            title.textContent = `ROOM ${newRoomNum}`;
+            
+            const adultsVal = card.querySelector('.counter-controls span[id$="-adults-val"]');
+            adultsVal.id = `room-${newRoomNum}-adults-val`;
+            
+            const childrenVal = card.querySelector('.counter-controls span[id$="-children-val"]');
+            childrenVal.id = `room-${newRoomNum}-children-val`;
+            
+            const childAges = card.querySelector('.enquiry-child-ages-list');
+            childAges.id = `room-${newRoomNum}-child-ages`;
+            
+            const selects = childAges.querySelectorAll('select');
+            selects.forEach((select, sIdx) => {
+                select.name = `room_${newRoomNum}_child_${sIdx + 1}_age`;
+            });
+            
+            const removeBtn = card.querySelector('.btn-remove-room');
+            if (newRoomNum === 1) {
+                removeBtn.style.display = 'none';
+            } else {
+                removeBtn.style.display = 'flex';
+            }
+        });
+    }
+
+    function updateRoomsConfigJSON() {
+        const config = [];
+        const roomCards = roomsContainer.querySelectorAll('.enquiry-room-card');
+        
+        roomCards.forEach(card => {
+            const roomNum = card.getAttribute('data-room');
+            const adults = parseInt(card.querySelector(`#room-${roomNum}-adults-val`).textContent);
+            const childSelects = card.querySelectorAll('.child-age-select');
+            const childrenAges = Array.from(childSelects).map(select => parseInt(select.value) || 0);
+            
+            config.push({
+                room: parseInt(roomNum),
+                adults: adults,
+                children: childrenAges
+            });
+        });
+        
+        document.getElementById('enquiryRoomsConfig').value = JSON.stringify(config);
+    }
+
+    function resetRooms() {
+        roomsContainer.innerHTML = `
+            <div class="enquiry-room-card" data-room="1">
+                <div class="enquiry-room-card-header">
+                    <h4 class="enquiry-room-title">ROOM 1</h4>
+                    <button type="button" class="btn-remove-room" style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Adults Counter -->
+                <div class="enquiry-counter-row">
+                    <span class="counter-label">Adults</span>
+                    <div class="counter-controls">
+                        <button type="button" class="btn-counter-minus" data-type="adults">&minus;</button>
+                        <span class="counter-value" id="room-1-adults-val">2</span>
+                        <button type="button" class="btn-counter-plus" data-type="adults">+</button>
+                    </div>
+                </div>
+                
+                <!-- Children Counter -->
+                <div class="enquiry-counter-row">
+                    <span class="counter-label">Children (0 to 15 yrs)</span>
+                    <div class="counter-controls">
+                        <button type="button" class="btn-counter-minus" data-type="children">&minus;</button>
+                        <span class="counter-value" id="room-1-children-val">0</span>
+                        <button type="button" class="btn-counter-plus" data-type="children">+</button>
+                    </div>
+                </div>
+
+                <!-- Child Age Dropdowns Container -->
+                <div class="enquiry-child-ages-list" id="room-1-child-ages" style="display: none;"></div>
+            </div>
+        `;
+        roomCount = 1;
+        setupRoomCardEvents(roomsContainer.querySelector('.enquiry-room-card'));
+        updateRoomsConfigJSON();
     }
 });
 </script>
