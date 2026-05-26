@@ -30,13 +30,17 @@ if (!function_exists('get_admin_media_items')) {
                 $relative = str_replace('\\', '/', $relative);
                 $items[] = [
                     'path' => $relative,
-                    'name' => $file->getBasename()
+                    'name' => $file->getBasename(),
+                    'modified_at' => $file->getMTime()
                 ];
             }
         }
 
         usort($items, function ($a, $b) {
-            return strcmp($a['path'], $b['path']);
+            if ($a['modified_at'] === $b['modified_at']) {
+                return strcmp($a['path'], $b['path']);
+            }
+            return $b['modified_at'] <=> $a['modified_at'];
         });
 
         return $items;
