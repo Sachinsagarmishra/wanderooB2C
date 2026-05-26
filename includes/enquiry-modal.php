@@ -525,10 +525,57 @@
     box-sizing: border-box;
 }
 
-/* Date Input custom styling */
+/* Date Input custom styling — Safari + Chrome cross-browser */
+.enquiry-input-field[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    min-height: 52px;
+    line-height: 1.4;
+    color: #0f172a;
+    /* Remove Safari native date segments styling */
+    -webkit-text-fill-color: #0f172a;
+}
+
+/* Fix Safari thick blue focus ring */
+.enquiry-input-field[type="date"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    -webkit-box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* Style the date text inside Safari */
+.enquiry-input-field[type="date"]::-webkit-datetime-edit {
+    padding: 0;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 16px;
+    color: #0f172a;
+}
+
+.enquiry-input-field[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+}
+
+.enquiry-input-field[type="date"]::-webkit-datetime-edit-text {
+    color: #94a3b8;
+    padding: 0 3px;
+}
+
+.enquiry-input-field[type="date"]::-webkit-datetime-edit-month-field,
+.enquiry-input-field[type="date"]::-webkit-datetime-edit-day-field,
+.enquiry-input-field[type="date"]::-webkit-datetime-edit-year-field {
+    color: #0f172a;
+    font-weight: 500;
+}
+
+/* Calendar picker icon */
 input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     filter: invert(0.3);
+    opacity: 0.7;
+    padding: 4px;
 }
 
 /* Options Grid for nights & companion */
