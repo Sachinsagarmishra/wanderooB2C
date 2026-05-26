@@ -16,12 +16,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
+    foreach ([
+        "ALTER TABLE `destinations` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",
+        "ALTER TABLE `destinations` ADD COLUMN `meta_description` text DEFAULT NULL AFTER `meta_title`",
+        "ALTER TABLE `destinations` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`"
+    ] as $alterSql) {
+        try {
+            $pdo->exec($alterSql);
+        } catch (PDOException $e) {
+            // Column already exists on updated installations.
+        }
+    }
+
     $destinationId = intval($_POST['destination_id'] ?? 0);
     $isEdit = $destinationId > 0;
 
     $name = trim($_POST['name'] ?? '');
     $slug = trim($_POST['slug'] ?? '');
     $title = trim($_POST['title'] ?? '');
+    $metaTitle = trim($_POST['meta_title'] ?? '');
+    $metaDescription = trim($_POST['meta_description'] ?? '');
+    $focusKeywords = trim($_POST['focus_keywords'] ?? '');
     $breadcrumb = trim($_POST['breadcrumb'] ?? '');
     $sort_order = intval($_POST['sort_order'] ?? 0);
     $description = trim($_POST['description'] ?? '');
@@ -109,18 +124,18 @@ try {
     // ─── Insert or Update in Database ───
     if ($isEdit) {
         $stmt = $pdo->prepare("UPDATE destinations SET 
-            slug = ?, name = ?, title = ?, breadcrumb = ?, hero_bg = ?, dropdown_icon = ?, description = ?, sort_order = ? 
+            slug = ?, name = ?, title = ?, meta_title = ?, meta_description = ?, focus_keywords = ?, breadcrumb = ?, hero_bg = ?, dropdown_icon = ?, description = ?, sort_order = ? 
             WHERE id = ?");
         $stmt->execute([
-            $slug, $name, $title, $breadcrumb, $heroBgPath, $iconPath, $description, $sort_order, $destinationId
+            $slug, $name, $title, $metaTitle, $metaDescription, $focusKeywords, $breadcrumb, $heroBgPath, $iconPath, $description, $sort_order, $destinationId
         ]);
         $msg = "Destination successfully updated!";
     } else {
         $stmt = $pdo->prepare("INSERT INTO destinations 
-            (slug, name, title, breadcrumb, hero_bg, dropdown_icon, description, sort_order) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            (slug, name, title, meta_title, meta_description, focus_keywords, breadcrumb, hero_bg, dropdown_icon, description, sort_order) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
-            $slug, $name, $title, $breadcrumb, $heroBgPath, $iconPath, $description, $sort_order
+            $slug, $name, $title, $metaTitle, $metaDescription, $focusKeywords, $breadcrumb, $heroBgPath, $iconPath, $description, $sort_order
         ]);
         $msg = "Destination successfully created!";
     }

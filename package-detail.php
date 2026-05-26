@@ -69,8 +69,9 @@ if (!$dbPackage) {
 }
 
 $tourTitle = $dbPackage['title'];
-$pageTitle = $tourTitle;
-$pageDesc = !empty($dbPackage['description']) ? $dbPackage['description'] : "Welcome to " . htmlspecialchars($tourTitle) . " – a custom package in " . htmlspecialchars(ucfirst($destSlug)) . " curated by Wanderoo.";
+$pageTitle = !empty($dbPackage['meta_title']) ? $dbPackage['meta_title'] : $tourTitle;
+$pageDesc = !empty($dbPackage['meta_description']) ? $dbPackage['meta_description'] : (!empty($dbPackage['description']) ? $dbPackage['description'] : "Welcome to " . htmlspecialchars($tourTitle) . " – a custom package in " . htmlspecialchars(ucfirst($destSlug)) . " curated by Wanderoo.");
+$pageKeywords = !empty($dbPackage['focus_keywords']) ? $dbPackage['focus_keywords'] : '';
 $mainImg = !empty($dbPackage['hero_image']) ? SITE_PATH . '/' . $dbPackage['hero_image'] : SITE_PATH . '/assets/img/hero-bg.webp';
 $heroForBanner = $mainImg;
 $tourDuration = $dbPackage['duration'];

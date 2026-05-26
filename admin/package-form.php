@@ -346,6 +346,10 @@ if ($editId > 0) {
                 </select>
             </div>
         </div>
+        <div class="form-group">
+            <label for="slug">SEO URL Slug</label>
+            <input type="text" id="slug" name="slug" class="form-control" placeholder="e.g. luxury-maldives-honeymoon-package" value="<?php echo $isEdit ? htmlspecialchars($pkg['slug']) : ''; ?>">
+        </div>
         <div class="form-row-3">
             <div class="form-group">
                 <label for="duration">Duration</label>
@@ -388,6 +392,22 @@ if ($editId > 0) {
                 <option value="active" <?php echo ($isEdit && $pkg['status'] === 'active') ? 'selected' : ''; ?>>Active (Published)</option>
                 <option value="draft" <?php echo ($isEdit && $pkg['status'] === 'draft') ? 'selected' : ''; ?>>Draft</option>
             </select>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <div class="form-section-title">SEO Settings</div>
+        <div class="form-group">
+            <label for="meta_title">Meta Title</label>
+            <input type="text" id="meta_title" name="meta_title" class="form-control" maxlength="255" placeholder="e.g. Maldives Honeymoon Package with Water Villa" value="<?php echo $isEdit ? htmlspecialchars($pkg['meta_title'] ?? '') : ''; ?>">
+        </div>
+        <div class="form-group">
+            <label for="meta_description">Meta Description</label>
+            <textarea id="meta_description" name="meta_description" class="form-control" maxlength="320" placeholder="Write a Google-friendly 150-160 character description..."><?php echo $isEdit ? htmlspecialchars($pkg['meta_description'] ?? '') : ''; ?></textarea>
+        </div>
+        <div class="form-group">
+            <label for="focus_keywords">Focus Keywords</label>
+            <input type="text" id="focus_keywords" name="focus_keywords" class="form-control" placeholder="e.g. Maldives honeymoon package, water villa Maldives, luxury Maldives trip" value="<?php echo $isEdit ? htmlspecialchars($pkg['focus_keywords'] ?? '') : ''; ?>">
         </div>
     </div>
 
@@ -592,6 +612,20 @@ if ($editId > 0) {
 
 <script>
 // ─── Dynamic Add Functions ───
+const packageTitleInput = document.getElementById('title');
+const packageSlugInput = document.getElementById('slug');
+
+function makeSeoSlug(value) {
+    return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+if (packageTitleInput && packageSlugInput) {
+    packageTitleInput.addEventListener('input', function() {
+        <?php if (!$isEdit): ?>
+        packageSlugInput.value = makeSeoSlug(packageTitleInput.value);
+        <?php endif; ?>
+    });
+}
 
 function addTag() {
     const list = document.getElementById('tagsList');

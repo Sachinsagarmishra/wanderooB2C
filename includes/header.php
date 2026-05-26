@@ -3,14 +3,18 @@ require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/db.php';
 $pageTitle = isset($pageTitle) ? $pageTitle . " | " . SITE_NAME : SITE_NAME;
 $pageDesc = isset($pageDesc) ? $pageDesc : "A premium PHP-based website with custom admin panel.";
+$pageKeywords = isset($pageKeywords) ? $pageKeywords : "";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $pageTitle; ?></title>
-    <meta name="description" content="<?php echo $pageDesc; ?>">
+    <title><?php echo htmlspecialchars($pageTitle); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars($pageDesc); ?>">
+    <?php if (!empty($pageKeywords)): ?>
+    <meta name="keywords" content="<?php echo htmlspecialchars($pageKeywords); ?>">
+    <?php endif; ?>
     
     <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo SITE_PATH; ?>/assets/img/favicon.png">

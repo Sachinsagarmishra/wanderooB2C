@@ -53,6 +53,9 @@ try {
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `destination` varchar(50) NOT NULL,
       `title` varchar(255) NOT NULL,
+      `meta_title` varchar(255) DEFAULT NULL,
+      `meta_description` text DEFAULT NULL,
+      `focus_keywords` text DEFAULT NULL,
       `slug` varchar(255) NOT NULL,
       `description` text DEFAULT NULL,
       `overview` text DEFAULT NULL,
@@ -69,6 +72,18 @@ try {
       PRIMARY KEY (`id`),
       UNIQUE KEY `slug` (`slug`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+    foreach ([
+        "ALTER TABLE `tour_packages` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",
+        "ALTER TABLE `tour_packages` ADD COLUMN `meta_description` text DEFAULT NULL AFTER `meta_title`",
+        "ALTER TABLE `tour_packages` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`"
+    ] as $alterSql) {
+        try {
+            $pdo->exec($alterSql);
+        } catch (PDOException $e) {
+            // Column already exists.
+        }
+    }
 
     // 4. Package Photos Table
     $pdo->exec("CREATE TABLE IF NOT EXISTS `package_photos` (
@@ -156,6 +171,9 @@ try {
       `slug` varchar(100) NOT NULL,
       `name` varchar(100) NOT NULL,
       `title` varchar(255) NOT NULL,
+      `meta_title` varchar(255) DEFAULT NULL,
+      `meta_description` text DEFAULT NULL,
+      `focus_keywords` text DEFAULT NULL,
       `breadcrumb` varchar(100) NOT NULL,
       `hero_bg` varchar(500) DEFAULT NULL,
       `dropdown_icon` varchar(500) DEFAULT NULL,
@@ -166,6 +184,18 @@ try {
       PRIMARY KEY (`id`),
       UNIQUE KEY `slug` (`slug`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+    foreach ([
+        "ALTER TABLE `destinations` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",
+        "ALTER TABLE `destinations` ADD COLUMN `meta_description` text DEFAULT NULL AFTER `meta_title`",
+        "ALTER TABLE `destinations` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`"
+    ] as $alterSql) {
+        try {
+            $pdo->exec($alterSql);
+        } catch (PDOException $e) {
+            // Column already exists.
+        }
+    }
 
     // Seed default destinations if they do not exist
     $defaultDestinations = [

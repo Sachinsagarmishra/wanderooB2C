@@ -26,11 +26,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
+    foreach ([
+        "ALTER TABLE `tour_packages` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",
+        "ALTER TABLE `tour_packages` ADD COLUMN `meta_description` text DEFAULT NULL AFTER `meta_title`",
+        "ALTER TABLE `tour_packages` ADD COLUMN `focus_keywords` text DEFAULT NULL AFTER `meta_description`"
+    ] as $alterSql) {
+        try {
+            $pdo->exec($alterSql);
+        } catch (PDOException $e) {
+            // Column already exists on updated installations.
+        }
+    }
+
     $packageId = intval($_POST['package_id'] ?? 0);
     $isEdit = $packageId > 0;
 
     // Basic fields
     $title = trim($_POST['title'] ?? '');
+    $slugInput = trim($_POST['slug'] ?? '');
+    $metaTitle = trim($_POST['meta_title'] ?? '');
+    $metaDescription = trim($_POST['meta_description'] ?? '');
+    $focusKeywords = trim($_POST['focus_keywords'] ?? '');
     $destination = trim($_POST['destination'] ?? '');
     $duration = trim($_POST['duration'] ?? '');
     $description = trim($_POST['description'] ?? '');
@@ -62,8 +78,8 @@ try {
         }
     }
 
-    // Generate slug from title
-    $slug = slugify($title);
+    // Generate slug from SEO URL Slug field, fallback to title.
+    $slug = slugify(!empty($slugInput) ? $slugInput : $title);
 
     // Check slug uniqueness (exclude current package if editing)
     $stmtCheck = $pdo->prepare("SELECT id FROM tour_packages WHERE slug = ? AND id != ?");
@@ -119,22 +135,22 @@ try {
     // ─── Insert or Update Package ───
     if ($isEdit) {
         $stmt = $pdo->prepare("UPDATE tour_packages SET 
-            destination = ?, title = ?, slug = ?, description = ?, overview = ?,
+            destination = ?, title = ?, slug = ?, meta_title = ?, meta_description = ?, focus_keywords = ?, description = ?, overview = ?,
             duration = ?, old_price = ?, price = ?, save_text = ?,
             rating = ?, rating_count = ?, hero_image = ?, status = ?
             WHERE id = ?");
         $stmt->execute([
-            $destination, $title, $slug, $description, $overview,
+            $destination, $title, $slug, $metaTitle, $metaDescription, $focusKeywords, $description, $overview,
             $duration, $old_price, $price, $save_text,
             $rating, $rating_count, $heroImagePath, $status,
             $packageId
         ]);
     } else {
         $stmt = $pdo->prepare("INSERT INTO tour_packages 
-            (destination, title, slug, description, overview, duration, old_price, price, save_text, rating, rating_count, hero_image, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (destination, title, slug, meta_title, meta_description, focus_keywords, description, overview, duration, old_price, price, save_text, rating, rating_count, hero_image, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
-            $destination, $title, $slug, $description, $overview,
+            $destination, $title, $slug, $metaTitle, $metaDescription, $focusKeywords, $description, $overview,
             $duration, $old_price, $price, $save_text,
             $rating, $rating_count, $heroImagePath, $status
         ]);

@@ -168,7 +168,7 @@ if ($editId > 0) {
                 <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Switzerland" required value="<?php echo $isEdit ? htmlspecialchars($dest['name']) : ''; ?>">
             </div>
             <div class="form-group">
-                <label for="slug">URL Slug * (auto-generated)</label>
+                <label for="slug">SEO URL Slug * (auto-generated)</label>
                 <input type="text" id="slug" name="slug" class="form-control" placeholder="e.g. switzerland" required value="<?php echo $isEdit ? htmlspecialchars($dest['slug']) : ''; ?>">
             </div>
         </div>
@@ -192,6 +192,22 @@ if ($editId > 0) {
         <div class="form-group">
             <label for="description">About Description (appears on Destination page)</label>
             <textarea id="description" name="description" class="form-control" placeholder="Write details about this destination..."><?php echo $isEdit ? htmlspecialchars($dest['description']) : ''; ?></textarea>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <div class="form-section-title">SEO Settings</div>
+        <div class="form-group">
+            <label for="meta_title">Meta Title</label>
+            <input type="text" id="meta_title" name="meta_title" class="form-control" maxlength="255" placeholder="e.g. Best Switzerland Tour Packages from India" value="<?php echo $isEdit ? htmlspecialchars($dest['meta_title'] ?? '') : ''; ?>">
+        </div>
+        <div class="form-group">
+            <label for="meta_description">Meta Description</label>
+            <textarea id="meta_description" name="meta_description" class="form-control" maxlength="320" placeholder="Write a Google-friendly 150-160 character description..."><?php echo $isEdit ? htmlspecialchars($dest['meta_description'] ?? '') : ''; ?></textarea>
+        </div>
+        <div class="form-group">
+            <label for="focus_keywords">Focus Keywords</label>
+            <input type="text" id="focus_keywords" name="focus_keywords" class="form-control" placeholder="e.g. Switzerland packages, Switzerland honeymoon, Europe tour" value="<?php echo $isEdit ? htmlspecialchars($dest['focus_keywords'] ?? '') : ''; ?>">
         </div>
     </div>
 

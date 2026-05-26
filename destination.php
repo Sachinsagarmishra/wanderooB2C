@@ -32,8 +32,9 @@ if (!empty($heroBg) && strpos($heroBg, 'http://') !== 0 && strpos($heroBg, 'http
     $heroBg = SITE_PATH . '/' . $heroBg;
 }
 
-$pageTitle = $dest['title'];
-$pageDesc = $dest['desc'];
+$pageTitle = !empty($dest['meta_title']) ? $dest['meta_title'] : $dest['title'];
+$pageDesc = !empty($dest['meta_description']) ? $dest['meta_description'] : $dest['desc'];
+$pageKeywords = !empty($dest['focus_keywords']) ? $dest['focus_keywords'] : '';
 $bodyClass = "destination-page " . htmlspecialchars($slug) . "-page";
 
 include_once 'includes/header.php';
