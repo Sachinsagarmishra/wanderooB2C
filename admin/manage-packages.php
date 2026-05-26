@@ -5,17 +5,59 @@ include_once 'includes/header.php';
 $success = $_GET['success'] ?? '';
 $error = $_GET['error'] ?? '';
 
-// Handle filter
+// Handle filter & search parameters
 $filterDest = isset($_GET['destination']) ? trim($_GET['destination']) : '';
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$status = isset($_GET['status']) ? trim($_GET['status']) : '';
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+if ($page < 1) $page = 1;
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+$whereClauses = [];
+$params = [];
+
+if ($filterDest !== '') {
+    $whereClauses[] = "destination = ?";
+    $params[] = $filterDest;
+}
+
+if ($search !== '') {
+    $whereClauses[] = "(title LIKE ? OR duration LIKE ? OR slug LIKE ? OR description LIKE ?)";
+    $searchParam = "%$search%";
+    $params = array_merge($params, [$searchParam, $searchParam, $searchParam, $searchParam]);
+}
+
+if ($status !== '' && $status !== 'all') {
+    $whereClauses[] = "status = ?";
+    $params[] = $status;
+}
+
+$whereSql = '';
+if (!empty($whereClauses)) {
+    $whereSql = "WHERE " . implode(" AND ", $whereClauses);
+}
+
+// Get total count
+try {
+    $countStmt = $pdo->prepare("SELECT COUNT(*) FROM tour_packages $whereSql");
+    $countStmt->execute($params);
+    $totalPackages = intval($countStmt->fetchColumn());
+} catch (PDOException $e) {
+    die("Database query error (count): " . $e->getMessage());
+}
+
+$totalPages = ceil($totalPackages / $limit);
+if ($totalPages < 1) $totalPages = 1;
+if ($page > $totalPages) {
+    $page = $totalPages;
+    $offset = ($page - 1) * $limit;
+}
 
 // Fetch packages
 try {
-    if (!empty($filterDest)) {
-        $stmt = $pdo->prepare("SELECT * FROM tour_packages WHERE destination = ? ORDER BY created_at DESC");
-        $stmt->execute([$filterDest]);
-    } else {
-        $stmt = $pdo->query("SELECT * FROM tour_packages ORDER BY created_at DESC");
-    }
+    $stmt = $pdo->prepare("SELECT * FROM tour_packages $whereSql ORDER BY created_at DESC LIMIT $limit OFFSET $offset");
+    $stmt->execute($params);
     $packages = $stmt->fetchAll();
 } catch (PDOException $e) {
     $packages = [];
@@ -114,13 +156,92 @@ try {
         background: rgba(245, 197, 24, 0.1);
         color: var(--accent);
     }
+    
+    /* Search, Filter & Pagination */
+    .search-filter-bar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        padding: 16px;
+        border-radius: var(--radius-main);
+        align-items: center;
+    }
+    .form-control {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-int);
+        padding: 10px 14px;
+        color: var(--fg);
+        outline: none;
+        font-family: inherit;
+        font-size: 13px;
+        transition: border-color 0.2s;
+        width: 100%;
+    }
+    .form-control:focus {
+        border-color: var(--accent);
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        margin-top: 24px;
+    }
+    .page-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        padding: 0 8px;
+        border-radius: var(--radius-int);
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        color: var(--fg2);
+        font-weight: 500;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    .page-link:hover {
+        background: var(--bg3);
+        color: var(--fg);
+        border-color: var(--fg3);
+    }
+    .page-link.active {
+        background: var(--accent);
+        color: #000;
+        border-color: var(--accent);
+    }
+    .page-link.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
 </style>
 
-<div class="page-header">
-    <h1>Tour Packages</h1>
+<div class="page-header" style="margin-bottom: 24px;">
+    <div>
+        <h1>Tour Packages</h1>
+        <div class="fg3" style="font-size: 12px; margin-top: -12px;">Total: <strong><?php echo $totalPackages; ?></strong> packages found</div>
+    </div>
     <div class="page-header-actions">
-        <form method="GET" style="display: flex; gap: 8px; align-items: center;">
-            <select name="destination" class="filter-select" onchange="this.form.submit()">
+        <a href="package-form.php" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px;">+ Add New Package</a>
+    </div>
+</div>
+
+<div class="search-filter-bar">
+    <form method="GET" style="display: flex; gap: 12px; flex: 1; flex-wrap: wrap; width: 100%; align-items: center;">
+        <div style="flex: 1; min-width: 250px;">
+            <input type="text" name="search" class="form-control" placeholder="Search packages by title, duration, slug..." value="<?php echo htmlspecialchars($search); ?>">
+        </div>
+        
+        <div style="width: 180px;">
+            <select name="destination" class="form-control" onchange="this.form.submit()">
                 <option value="">All Destinations</option>
                 <?php
                 try {
@@ -138,9 +259,23 @@ try {
                 }
                 ?>
             </select>
-        </form>
-        <a href="package-form.php" class="btn btn-primary" style="padding: 8px 16px; font-size: 12px;">+ Add New Package</a>
-    </div>
+        </div>
+        
+        <div style="width: 140px;">
+            <select name="status" class="form-control" onchange="this.form.submit()">
+                <option value="all" <?php echo $status === 'all' || $status === '' ? 'selected' : ''; ?>>All Status</option>
+                <option value="active" <?php echo $status === 'active' ? 'selected' : ''; ?>>Active</option>
+                <option value="draft" <?php echo $status === 'draft' ? 'selected' : ''; ?>>Draft</option>
+            </select>
+        </div>
+        
+        <div style="display: flex; gap: 8px;">
+            <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">Search</button>
+            <?php if ($search !== '' || $filterDest !== '' || ($status !== '' && $status !== 'all')): ?>
+                <a href="manage-packages.php" class="btn" style="background: var(--bg3); border: 1px solid var(--border); color: var(--fg); padding: 10px 16px;">Clear</a>
+            <?php endif; ?>
+        </div>
+    </form>
 </div>
 
 <?php if (!empty($success)): ?>
@@ -205,8 +340,15 @@ try {
                             </td>
                             <td>
                                 <div style="display: flex; gap: 8px;">
-                                    <a href="package-form.php?id=<?php echo $pkg['id']; ?>" class="btn btn-primary" style="padding: 5px 10px; font-size: 11px;">Edit</a>
-                                    <a href="delete-package.php?id=<?php echo $pkg['id']; ?>" class="btn" style="padding: 5px 10px; font-size: 11px; background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); color: var(--danger);" onclick="return confirm('Are you sure you want to delete this package? This cannot be undone.');">Delete</a>
+                                    <?php
+                                    $queryStrings = $_GET;
+                                    unset($queryStrings['id']);
+                                    $queryString = http_build_query($queryStrings);
+                                    $editUrl = "package-form.php?id=" . $pkg['id'] . ($queryString ? '&' . $queryString : '');
+                                    $deleteUrl = "delete-package.php?id=" . $pkg['id'] . ($queryString ? '&' . $queryString : '');
+                                    ?>
+                                    <a href="<?php echo $editUrl; ?>" class="btn btn-primary" style="padding: 5px 10px; font-size: 11px;">Edit</a>
+                                    <a href="<?php echo $deleteUrl; ?>" class="btn" style="padding: 5px 10px; font-size: 11px; background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); color: var(--danger);" onclick="return confirm('Are you sure you want to delete this package? This cannot be undone.');">Delete</a>
                                 </div>
                             </td>
                         </tr>
@@ -216,5 +358,43 @@ try {
         </table>
     </div>
 </div>
+
+<?php if ($totalPages > 1): ?>
+    <div class="pagination">
+        <?php
+        $queryParams = $_GET;
+        
+        // Previous page
+        if ($page > 1) {
+            $queryParams['page'] = $page - 1;
+            echo '<a href="manage-packages.php?' . http_build_query($queryParams) . '" class="page-link">&laquo;</a>';
+        } else {
+            echo '<span class="page-link disabled">&laquo;</span>';
+        }
+        
+        // Page numbers
+        for ($i = 1; $i <= $totalPages; $i++) {
+            if ($i == $page) {
+                echo '<span class="page-link active">' . $i . '</span>';
+            } else {
+                if ($i == 1 || $i == $totalPages || abs($i - $page) <= 2) {
+                    $queryParams['page'] = $i;
+                    echo '<a href="manage-packages.php?' . http_build_query($queryParams) . '" class="page-link">' . $i . '</a>';
+                } elseif ($i == 2 || $i == $totalPages - 1) {
+                    echo '<span class="page-link disabled">...</span>';
+                }
+            }
+        }
+        
+        // Next page
+        if ($page < $totalPages) {
+            $queryParams['page'] = $page + 1;
+            echo '<a href="manage-packages.php?' . http_build_query($queryParams) . '" class="page-link">&raquo;</a>';
+        } else {
+            echo '<span class="page-link disabled">&raquo;</span>';
+        }
+        ?>
+    </div>
+<?php endif; ?>
 
 <?php include_once 'includes/footer.php'; ?>

@@ -17,9 +17,52 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])
     }
 }
 
-// Fetch all leads
+// Fetch leads with search, filter, and pagination
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$type = isset($_GET['type']) ? trim($_GET['type']) : '';
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+if ($page < 1) $page = 1;
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+$whereClauses = [];
+$params = [];
+
+if ($search !== '') {
+    $whereClauses[] = "(fullname LIKE ? OR email LIKE ? OR phone LIKE ? OR destination LIKE ? OR subject LIKE ? OR message LIKE ?)";
+    $searchParam = "%$search%";
+    $params = array_merge($params, [$searchParam, $searchParam, $searchParam, $searchParam, $searchParam, $searchParam]);
+}
+
+if ($type !== '' && $type !== 'all') {
+    $whereClauses[] = "type = ?";
+    $params[] = $type;
+}
+
+$whereSql = '';
+if (!empty($whereClauses)) {
+    $whereSql = "WHERE " . implode(" AND ", $whereClauses);
+}
+
 try {
-    $stmt = $pdo->query("SELECT * FROM leads ORDER BY created_at DESC");
+    // Total count for pagination
+    $countStmt = $pdo->prepare("SELECT COUNT(*) FROM leads $whereSql");
+    $countStmt->execute($params);
+    $totalLeads = intval($countStmt->fetchColumn());
+} catch (PDOException $e) {
+    die("Database query error (count): " . $e->getMessage());
+}
+
+$totalPages = ceil($totalLeads / $limit);
+if ($totalPages < 1) $totalPages = 1;
+if ($page > $totalPages) {
+    $page = $totalPages;
+    $offset = ($page - 1) * $limit;
+}
+
+try {
+    $stmt = $pdo->prepare("SELECT * FROM leads $whereSql ORDER BY created_at DESC LIMIT $limit OFFSET $offset");
+    $stmt->execute($params);
     $leads = $stmt->fetchAll();
 } catch (PDOException $e) {
     die("Database query error: " . $e->getMessage());
@@ -113,11 +156,98 @@ try {
         color: var(--danger);
         border: 1px solid rgba(239, 68, 68, 0.2);
     }
+    
+    /* Search, Filter & Pagination */
+    .search-filter-bar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        padding: 16px;
+        border-radius: var(--radius-main);
+        align-items: center;
+    }
+    .form-control {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-int);
+        padding: 10px 14px;
+        color: var(--fg);
+        outline: none;
+        font-family: inherit;
+        font-size: 13px;
+        transition: border-color 0.2s;
+        width: 100%;
+    }
+    .form-control:focus {
+        border-color: var(--accent);
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        margin-top: 24px;
+    }
+    .page-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        padding: 0 8px;
+        border-radius: var(--radius-int);
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        color: var(--fg2);
+        font-weight: 500;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    .page-link:hover {
+        background: var(--bg3);
+        color: var(--fg);
+        border-color: var(--fg3);
+    }
+    .page-link.active {
+        background: var(--accent);
+        color: #000;
+        border-color: var(--accent);
+    }
+    .page-link.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
 </style>
 
-<div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+<div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
     <h1>Leads Manager</h1>
-    <div class="fg3">Total: <strong><?php echo count($leads); ?></strong> entries</div>
+    <div class="fg3">Total: <strong><?php echo $totalLeads; ?></strong> entries</div>
+</div>
+
+<div class="search-filter-bar">
+    <form method="GET" style="display: flex; gap: 12px; flex: 1; flex-wrap: wrap; width: 100%; align-items: center;">
+        <div style="flex: 1; min-width: 250px;">
+            <input type="text" name="search" class="form-control" placeholder="Search by name, email, phone, destination..." value="<?php echo htmlspecialchars($search); ?>">
+        </div>
+        <div style="width: 180px;">
+            <select name="type" class="form-control" onchange="this.form.submit()">
+                <option value="all" <?php echo $type === 'all' || $type === '' ? 'selected' : ''; ?>>All Lead Types</option>
+                <option value="enquiry" <?php echo $type === 'enquiry' ? 'selected' : ''; ?>>Popup Enquiry</option>
+                <option value="contact" <?php echo $type === 'contact' ? 'selected' : ''; ?>>Contact Form</option>
+            </select>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">Search</button>
+            <?php if ($search !== '' || ($type !== '' && $type !== 'all')): ?>
+                <a href="leads.php" class="btn" style="background: var(--bg3); border: 1px solid var(--border); color: var(--fg); padding: 10px 16px;">Clear</a>
+            <?php endif; ?>
+        </div>
+    </form>
 </div>
 
 <?php if (!empty($success)): ?>
@@ -172,7 +302,13 @@ try {
                             <td>
                                 <div style="display: flex; gap: 8px;">
                                     <button class="btn btn-primary" style="padding: 6px 12px; font-size: 11px;" onclick='showLead(<?php echo json_encode($lead); ?>)'>View</button>
-                                    <a href="leads.php?action=delete&id=<?php echo $lead['id']; ?>" class="btn" style="padding: 6px 12px; font-size: 11px; background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); color: var(--danger);" onclick="return confirm('Are you sure you want to delete this lead?');">Delete</a>
+                                    <?php
+                                    $queryStrings = $_GET;
+                                    unset($queryStrings['action'], $queryStrings['id']);
+                                    $queryString = http_build_query($queryStrings);
+                                    $deleteUrl = "leads.php?action=delete&id=" . $lead['id'] . ($queryString ? '&' . $queryString : '');
+                                    ?>
+                                    <a href="<?php echo $deleteUrl; ?>" class="btn" style="padding: 6px 12px; font-size: 11px; background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); color: var(--danger);" onclick="return confirm('Are you sure you want to delete this lead?');">Delete</a>
                                 </div>
                             </td>
                         </tr>
@@ -182,6 +318,44 @@ try {
         </table>
     </div>
 </div>
+
+<?php if ($totalPages > 1): ?>
+    <div class="pagination">
+        <?php
+        $queryParams = $_GET;
+        
+        // Previous page
+        if ($page > 1) {
+            $queryParams['page'] = $page - 1;
+            echo '<a href="leads.php?' . http_build_query($queryParams) . '" class="page-link">&laquo;</a>';
+        } else {
+            echo '<span class="page-link disabled">&laquo;</span>';
+        }
+        
+        // Page numbers
+        for ($i = 1; $i <= $totalPages; $i++) {
+            if ($i == $page) {
+                echo '<span class="page-link active">' . $i . '</span>';
+            } else {
+                if ($i == 1 || $i == $totalPages || abs($i - $page) <= 2) {
+                    $queryParams['page'] = $i;
+                    echo '<a href="leads.php?' . http_build_query($queryParams) . '" class="page-link">' . $i . '</a>';
+                } elseif ($i == 2 || $i == $totalPages - 1) {
+                    echo '<span class="page-link disabled">...</span>';
+                }
+            }
+        }
+        
+        // Next page
+        if ($page < $totalPages) {
+            $queryParams['page'] = $page + 1;
+            echo '<a href="leads.php?' . http_build_query($queryParams) . '" class="page-link">&raquo;</a>';
+        } else {
+            echo '<span class="page-link disabled">&raquo;</span>';
+        }
+        ?>
+    </div>
+<?php endif; ?>
 
 <!-- Modal Viewer -->
 <div id="leadModal" class="admin-modal" style="display: none;">
