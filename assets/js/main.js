@@ -262,6 +262,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Destination package filters
+    const destinationFilterLayout = document.querySelector('.destination-package-layout');
+    if (destinationFilterLayout) {
+        const filterGroups = destinationFilterLayout.querySelectorAll('.destination-filter-group');
+        const filterChips = destinationFilterLayout.querySelectorAll('.destination-filter-chip');
+        const clearBtn = destinationFilterLayout.querySelector('.destination-filter-clear');
+        const filterCards = destinationFilterLayout.querySelectorAll('.destination-filter-results .package-card');
+        const noResults = destinationFilterLayout.querySelector('.destination-no-filter-results');
+        const selectedFilters = {};
+
+        filterGroups.forEach(group => {
+            const toggle = group.querySelector('.destination-filter-toggle');
+            if (!toggle) return;
+            toggle.addEventListener('click', () => {
+                group.classList.toggle('active');
+            });
+        });
+
+        function applyDestinationFilters() {
+            let visibleCount = 0;
+
+            filterCards.forEach(card => {
+                let matches = true;
+                Object.keys(selectedFilters).forEach(key => {
+                    const values = Array.from(selectedFilters[key] || []);
+                    if (values.length === 0) return;
+                    const cardValues = (card.dataset[`filter${key.charAt(0).toUpperCase()}${key.slice(1)}`] || '').split(/\s+/);
+                    const groupMatches = values.some(value => cardValues.includes(value));
+                    if (!groupMatches) matches = false;
+                });
+
+                card.style.display = matches ? '' : 'none';
+                if (matches) visibleCount++;
+            });
+
+            if (noResults) {
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+        }
+
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const key = chip.dataset.filterKey;
+                const value = chip.dataset.filterValue;
+                if (!selectedFilters[key]) selectedFilters[key] = new Set();
+
+                if (selectedFilters[key].has(value)) {
+                    selectedFilters[key].delete(value);
+                    chip.classList.remove('active');
+                } else {
+                    selectedFilters[key].add(value);
+                    chip.classList.add('active');
+                }
+
+                applyDestinationFilters();
+            });
+        });
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                Object.keys(selectedFilters).forEach(key => selectedFilters[key].clear());
+                filterChips.forEach(chip => chip.classList.remove('active'));
+                applyDestinationFilters();
+            });
+        }
+    }
+
     // Staggered card image slideshow auto-cycle
     const cardsList = document.querySelectorAll('.package-card');
     

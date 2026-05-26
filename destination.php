@@ -20,6 +20,21 @@ function package_card_image_url($path) {
     return SITE_PATH . '/' . ltrim($path, '/');
 }
 
+function destination_filter_slug($value) {
+    return slugify(trim($value));
+}
+
+function add_destination_filter_option(&$options, $label) {
+    $label = trim($label);
+    if ($label === '') {
+        return '';
+    }
+
+    $slug = destination_filter_slug($label);
+    $options[$slug] = $label;
+    return $slug;
+}
+
 
 
 // Get destination from URL parameter, default to maldives
@@ -106,6 +121,68 @@ include_once 'includes/header.php';
                         // DB error
                     }
 
+                    $packageFilterMeta = [];
+                    $filterOptions = [
+                        'city' => [],
+                        'occasion' => [],
+                        'duration' => [],
+                        'inclusive' => []
+                    ];
+
+                    if (!empty($dbPkgs)) {
+                        $occasionKeywords = ['birthday', 'honeymoon', 'anniversary', 'family', 'couple', 'friends', 'solo', 'group'];
+                        foreach ($dbPkgs as $filterPkg) {
+                            $pkgId = intval($filterPkg['id']);
+                            $stmtMetaTags = $pdo->prepare("SELECT tag_name FROM package_tags WHERE package_id = ? ORDER BY id");
+                            $stmtMetaTags->execute([$pkgId]);
+                            $metaTags = $stmtMetaTags->fetchAll(PDO::FETCH_COLUMN);
+
+                            $stmtMetaInclusions = $pdo->prepare("SELECT item_text FROM package_inclusions WHERE package_id = ? AND type = 'inclusion' ORDER BY sort_order");
+                            $stmtMetaInclusions->execute([$pkgId]);
+                            $metaInclusions = $stmtMetaInclusions->fetchAll(PDO::FETCH_COLUMN);
+
+                            $pkgFilters = [
+                                'city' => [],
+                                'occasion' => [],
+                                'duration' => [],
+                                'inclusive' => []
+                            ];
+
+                            if (!empty($filterPkg['duration'])) {
+                                $pkgFilters['duration'][] = add_destination_filter_option($filterOptions['duration'], $filterPkg['duration']);
+                            }
+
+                            foreach ($metaTags as $tagValue) {
+                                $tagValue = trim($tagValue);
+                                if (preg_match('/^from\s+/i', $tagValue)) {
+                                    $pkgFilters['city'][] = add_destination_filter_option($filterOptions['city'], $tagValue);
+                                }
+
+                                foreach ($occasionKeywords as $keyword) {
+                                    if (stripos($tagValue, $keyword) !== false) {
+                                        $pkgFilters['occasion'][] = add_destination_filter_option($filterOptions['occasion'], $tagValue);
+                                        break;
+                                    }
+                                }
+
+                                if (preg_match('/inclusive|hotel|flight|resort/i', $tagValue)) {
+                                    $pkgFilters['inclusive'][] = add_destination_filter_option($filterOptions['inclusive'], $tagValue);
+                                }
+                            }
+
+                            foreach ($metaInclusions as $inclusionValue) {
+                                if (preg_match('/all\s*inclusive|inclusive|hotel|flight|resort/i', $inclusionValue)) {
+                                    $pkgFilters['inclusive'][] = add_destination_filter_option($filterOptions['inclusive'], $inclusionValue);
+                                }
+                            }
+
+                            $packageFilterMeta[$pkgId] = [
+                                'tags' => $metaTags,
+                                'filters' => array_map('array_unique', $pkgFilters)
+                            ];
+                        }
+                    }
+
                     if (empty($dbPkgs)):
                     ?>
                         <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #666; font-family: 'Urbanist', sans-serif;">
@@ -116,7 +193,47 @@ include_once 'includes/header.php';
                     <?php
                     else:
                         $contactPhone = preg_replace('/\D/', '', get_setting('contact_phone', '919113515462'));
+                    ?>
+                        <div class="destination-package-layout">
+                            <aside class="destination-filter-sidebar" aria-label="Package filters">
+                                <?php
+                                $filterLabels = [
+                                    'city' => 'City',
+                                    'occasion' => 'Occasion',
+                                    'duration' => 'Duration',
+                                    'inclusive' => 'Inclusive'
+                                ];
+                                $filterIcons = [
+                                    'city' => '☷',
+                                    'occasion' => '◎',
+                                    'duration' => '▦',
+                                    'inclusive' => '▣'
+                                ];
+                                foreach ($filterLabels as $filterKey => $filterLabel):
+                                    if (empty($filterOptions[$filterKey])) {
+                                        continue;
+                                    }
+                                ?>
+                                    <div class="destination-filter-group <?php echo $filterKey === 'city' ? 'active' : ''; ?>" data-filter-group="<?php echo htmlspecialchars($filterKey); ?>">
+                                        <button type="button" class="destination-filter-toggle">
+                                            <span><span class="filter-icon"><?php echo htmlspecialchars($filterIcons[$filterKey]); ?></span><?php echo htmlspecialchars($filterLabel); ?></span>
+                                            <span class="filter-chevron">⌄</span>
+                                        </button>
+                                        <div class="destination-filter-options">
+                                            <?php foreach ($filterOptions[$filterKey] as $optionSlug => $optionLabel): ?>
+                                                <button type="button" class="destination-filter-chip" data-filter-key="<?php echo htmlspecialchars($filterKey); ?>" data-filter-value="<?php echo htmlspecialchars($optionSlug); ?>">
+                                                    <?php echo htmlspecialchars($optionLabel); ?>
+                                                </button>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                                <button type="button" class="destination-filter-clear">Clear Filters</button>
+                            </aside>
+                            <div class="destination-filter-results">
+                    <?php
                         foreach ($dbPkgs as $dbPkg) {
+                            $pkgId = intval($dbPkg['id']);
                             $cardImages = [];
                             $cardAlts = [];
 
@@ -142,11 +259,10 @@ include_once 'includes/header.php';
                             $cardAlt = $cardAlts[0] ?? $dbPkg['title'];
 
                             // Fetch tags
-                            $stmtTags = $pdo->prepare("SELECT tag_name FROM package_tags WHERE package_id = ? ORDER BY id");
-                            $stmtTags->execute([$dbPkg['id']]);
-                            $dbTagNames = $stmtTags->fetchAll(PDO::FETCH_COLUMN);
+                            $dbTagNames = $packageFilterMeta[$pkgId]['tags'] ?? [];
+                            $pkgFilters = $packageFilterMeta[$pkgId]['filters'] ?? ['city' => [], 'occasion' => [], 'duration' => [], 'inclusive' => []];
                     ?>
-                        <div class="package-card" data-card-images="<?php echo htmlspecialchars(json_encode($cardImages)); ?>" data-card-alts="<?php echo htmlspecialchars(json_encode($cardAlts)); ?>">
+                        <div class="package-card" data-card-images="<?php echo htmlspecialchars(json_encode($cardImages)); ?>" data-card-alts="<?php echo htmlspecialchars(json_encode($cardAlts)); ?>" data-filter-city="<?php echo htmlspecialchars(implode(' ', $pkgFilters['city'])); ?>" data-filter-occasion="<?php echo htmlspecialchars(implode(' ', $pkgFilters['occasion'])); ?>" data-filter-duration="<?php echo htmlspecialchars(implode(' ', $pkgFilters['duration'])); ?>" data-filter-inclusive="<?php echo htmlspecialchars(implode(' ', $pkgFilters['inclusive'])); ?>">
                             <div class="card-img">
                                 <?php if (!empty($cardImg)): ?>
                                     <img src="<?php echo htmlspecialchars($cardImg); ?>" alt="<?php echo htmlspecialchars($cardAlt); ?>">
@@ -201,6 +317,11 @@ include_once 'includes/header.php';
                         </div>
                     <?php
                         }
+                    ?>
+                            <div class="destination-no-filter-results" style="display:none;">No packages match the selected filters.</div>
+                            </div>
+                        </div>
+                    <?php
                     endif;
                     ?>
                 </div>
