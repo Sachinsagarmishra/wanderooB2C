@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/turnstile.php';
 
 $message = '';
 $messageType = '';
@@ -303,6 +304,12 @@ try {
 
 // Handle Form Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verify Turnstile CAPTCHA first
+    $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+    if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
+        $message = "CAPTCHA verification failed. Please try again.";
+        $messageType = "danger";
+    } else {
     $username = trim($_POST['username'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -334,7 +341,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "Error handling admin registration: " . $e->getMessage();
             $messageType = "danger";
         }
-    }
+    } // end turnstile check
 }
 ?>
 <!DOCTYPE html>
@@ -344,6 +351,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Admin Account | <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/admin/assets/css/admin-style.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <!-- Prevent flash of wrong theme -->
     <script>
         (function() {
@@ -475,6 +483,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
                 </div>
+                <!-- Cloudflare Turnstile CAPTCHA -->
+                <div class="cf-turnstile" data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" data-theme="dark" style="margin-bottom: 12px;"></div>
                 <button type="submit" class="btn btn-primary btn-block">Register Admin</button>
             </form>
 

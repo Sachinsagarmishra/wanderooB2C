@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/turnstile.php';
 
 $successMsg = '';
 $errorMsg = '';
@@ -14,7 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subject = trim($_POST['subject'] ?? '');
     $message = trim($_POST['message'] ?? '');
 
-    if (empty($fullname) || empty($email) || empty($phone_raw) || empty($subject) || empty($message)) {
+    // Verify Turnstile CAPTCHA first
+    $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+    if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
+        $errorMsg = 'CAPTCHA verification failed. Please try again.';
+    } elseif (empty($fullname) || empty($email) || empty($phone_raw) || empty($subject) || empty($message)) {
         $errorMsg = 'All fields marked with an asterisk are required.';
     } elseif ($country_code === '+91' && strlen($phone_digits) !== 10) {
         $errorMsg = 'Indian phone numbers must be exactly 10 digits.';
@@ -54,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle = "Contact Us";
 $pageDesc = "Get in touch with Wanderoo for bespoke itinerary design, luxury honeymoons, and premium travel planning support.";
+$extraHeadHtml = '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
 include_once 'includes/header.php';
 
 $contactEmail = get_setting('contact_email', 'support@wanderoo.world');
@@ -137,6 +143,8 @@ $contactAddress = get_setting('contact_address', "Wanderoo\nThe landmark\n2nd Fl
                         <label for="message">Your Message <span class="required">*</span></label>
                         <textarea id="message" name="message" rows="5" required placeholder="Enter your message"></textarea>
                     </div>
+                    <!-- Cloudflare Turnstile CAPTCHA -->
+                    <div class="cf-turnstile" data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" style="margin-bottom: 8px;"></div>
                     <button type="submit" class="btn-send-message">Send Message</button>
                 </form>
             </div>

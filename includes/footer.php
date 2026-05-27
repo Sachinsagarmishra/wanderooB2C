@@ -53,6 +53,33 @@
     </a>
 
     <script src="<?php echo SITE_PATH; ?>/assets/js/main.js?v=2.9"></script>
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script>
+        // Global Turnstile callbacks for the enquiry modal
+        function onEnquiryTurnstileSuccess(token) {
+            // Token is automatically inserted into the hidden input by Turnstile;
+            // hide any captcha error if it was showing
+            var banner = document.getElementById('enquiryErrorBanner');
+            var bannerText = document.getElementById('enquiryErrorText');
+            if (banner && bannerText && bannerText.textContent.indexOf('CAPTCHA') !== -1) {
+                banner.style.display = 'none';
+            }
+        }
+        function onEnquiryTurnstileExpired() {
+            if (typeof turnstile !== 'undefined') {
+                try { turnstile.reset('#enquiryTurnstile'); } catch(e) {}
+            }
+        }
+        function onEnquiryTurnstileError() {
+            var banner = document.getElementById('enquiryErrorBanner');
+            var bannerText = document.getElementById('enquiryErrorText');
+            if (banner && bannerText) {
+                bannerText.textContent = 'CAPTCHA failed to load. Please refresh the page and try again.';
+                banner.style.display = 'flex';
+            }
+        }
+    </script>
     <?php include_once __DIR__ . '/enquiry-modal.php'; ?>
 </body>
 </html>

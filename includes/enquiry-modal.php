@@ -183,6 +183,16 @@
                             <label for="enquiryNotes" class="enquiry-input-label">How can we make this trip better for you? (Optional)</label>
                             <textarea id="enquiryNotes" name="notes" rows="3" class="enquiry-textarea-field" placeholder="Any preferences (e.g. food, hotels, sightseeing)..."></textarea>
                         </div>
+                        <!-- Cloudflare Turnstile CAPTCHA -->
+                        <div class="enquiry-input-group">
+                            <div class="cf-turnstile"
+                                 id="enquiryTurnstile"
+                                 data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>"
+                                 data-callback="onEnquiryTurnstileSuccess"
+                                 data-expired-callback="onEnquiryTurnstileExpired"
+                                 data-error-callback="onEnquiryTurnstileError">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1083,6 +1093,11 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.removeAttribute('data-countdown-interval');
         }
         
+        // Reset Turnstile so next open gets a fresh challenge
+        if (typeof turnstile !== 'undefined') {
+            try { turnstile.reset('#enquiryTurnstile'); } catch(e) {}
+        }
+
         setTimeout(() => {
             modal.style.display = 'none';
         }, 300);
@@ -1330,6 +1345,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function submitEnquiry() {
+        // Check Turnstile token
+        const turnstileInput = document.querySelector('#enquiryTurnstile [name="cf-turnstile-response"]');
+        if (!turnstileInput || !turnstileInput.value) {
+            showError('Please complete the CAPTCHA verification before submitting.');
+            return;
+        }
+
         const formData = new FormData(form);
         
         // Show submission state on Next button

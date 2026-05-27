@@ -1,8 +1,16 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/turnstile.php';
 
 try {
+    // Verify Turnstile CAPTCHA first
+    $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+    if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
+        echo json_encode(['success' => false, 'error' => 'CAPTCHA verification failed. Please try again.']);
+        exit;
+    }
+
     $destination = trim($_POST['destination'] ?? '');
     $departure_date = trim($_POST['departure_date'] ?? '');
     if (empty($departure_date)) {

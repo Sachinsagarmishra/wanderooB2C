@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/turnstile.php';
 
 // Check if already logged in
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
@@ -13,7 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    if (empty($username) || empty($password)) {
+    // Verify Turnstile CAPTCHA first
+    $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+    if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
+        $error = "CAPTCHA verification failed. Please try again.";
+    } elseif (empty($username) || empty($password)) {
         $error = "Both fields are required!";
     } else {
         try {
@@ -46,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/admin/assets/css/admin-style.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <!-- Prevent flash of wrong theme -->
     <script>
         (function() {
@@ -166,6 +172,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
                 </div>
+                <!-- Cloudflare Turnstile CAPTCHA -->
+                <div class="cf-turnstile" data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" data-theme="dark" style="margin-bottom: 12px;"></div>
                 <button type="submit" class="btn btn-primary btn-block">Log In</button>
             </form>
         </div>

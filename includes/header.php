@@ -23,6 +23,7 @@ $pageKeywords = isset($pageKeywords) ? $pageKeywords : "";
     
     <!-- Google Fonts & Styles -->
     <link rel="stylesheet" href="<?php echo SITE_PATH; ?>/assets/css/style.css?v=5.9">
+    <?php if (!empty($extraHeadHtml)) echo $extraHeadHtml; ?>
 </head>
 <body class="<?php echo isset($bodyClass) ? htmlspecialchars($bodyClass) : ''; ?>">
     <header>
