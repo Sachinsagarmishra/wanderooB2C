@@ -156,6 +156,7 @@ if ($editId > 0) {
 </div>
 
 <form action="save-destination.php" method="POST" enctype="multipart/form-data" id="destinationForm">
+    <?php csrf_input(); ?>
     <?php if ($isEdit): ?>
         <input type="hidden" name="destination_id" value="<?php echo $editId; ?>">
     <?php endif; ?>

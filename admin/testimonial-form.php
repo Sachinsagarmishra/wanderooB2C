@@ -58,6 +58,7 @@ function testimonial_form_image_url($path) {
 </div>
 
 <form action="save-testimonial.php" method="POST" enctype="multipart/form-data">
+    <?php csrf_input(); ?>
     <input type="hidden" name="testimonial_id" value="<?php echo $isEdit ? intval($testimonial['id']) : 0; ?>">
 
     <div class="form-section">

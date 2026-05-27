@@ -14,6 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// Verify CSRF Token
+if (!csrf_verify()) {
+    header("Location: manage-testimonials.php?error=" . urlencode("Security validation failed (CSRF token mismatch)."));
+    exit;
+}
+
 try {
     $testimonialId = intval($_POST['testimonial_id'] ?? 0);
     $isEdit = $testimonialId > 0;

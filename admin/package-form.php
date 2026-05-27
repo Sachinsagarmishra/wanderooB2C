@@ -331,6 +331,7 @@ if ($editId > 0) {
 </div>
 
 <form action="save-package.php" method="POST" enctype="multipart/form-data" id="packageForm">
+    <?php csrf_input(); ?>
     <?php if ($isEdit): ?>
         <input type="hidden" name="package_id" value="<?php echo $editId; ?>">
     <?php endif; ?>

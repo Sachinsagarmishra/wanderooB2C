@@ -9,50 +9,54 @@ $errorMsg = '';
 
 // Handle Settings Update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $updates = [
-        'contact_email' => trim($_POST['contact_email'] ?? ''),
-        'contact_phone' => trim($_POST['contact_phone'] ?? ''),
-        'contact_whatsapp' => preg_replace('/\D/', '', trim($_POST['contact_whatsapp'] ?? '')),
-        'contact_address' => trim($_POST['contact_address'] ?? ''),
-        'smtp_enabled' => isset($_POST['smtp_enabled']) ? '1' : '0',
-        'smtp_host' => trim($_POST['smtp_host'] ?? ''),
-        'smtp_port' => trim($_POST['smtp_port'] ?? '587'),
-        'smtp_auth' => isset($_POST['smtp_auth']) ? '1' : '0',
-        'smtp_username' => trim($_POST['smtp_username'] ?? ''),
-        'smtp_password' => $_POST['smtp_password'] ?? '',
-        'smtp_secure' => trim($_POST['smtp_secure'] ?? 'tls'),
-        'smtp_from_email' => trim($_POST['smtp_from_email'] ?? ''),
-        'smtp_from_name' => trim($_POST['smtp_from_name'] ?? ''),
-        'lead_email_to' => trim($_POST['lead_email_to'] ?? ''),
-        'lead_email_bcc' => trim($_POST['lead_email_bcc'] ?? '')
-    ];
-
-    if (empty($updates['contact_email']) || empty($updates['contact_phone']) || empty($updates['contact_whatsapp']) || empty($updates['contact_address'])) {
-        $errorMsg = "All global contact fields are required!";
-    } elseif ($updates['smtp_enabled'] === '1' && (empty($updates['smtp_host']) || empty($updates['smtp_port']) || empty($updates['smtp_from_email']))) {
-        $errorMsg = "SMTP Host, Port, and From Email are required when SMTP is enabled!";
-    } elseif ($updates['smtp_enabled'] === '1' && $updates['smtp_auth'] === '1' && (empty($updates['smtp_username']) || empty($updates['smtp_password']))) {
-        $errorMsg = "SMTP Username and Password are required when SMTP Authentication is enabled!";
+    if (!csrf_verify()) {
+        $errorMsg = "Security validation failed (CSRF token mismatch).";
     } else {
-        try {
-            $pdo->beginTransaction();
+        $updates = [
+            'contact_email' => trim($_POST['contact_email'] ?? ''),
+            'contact_phone' => trim($_POST['contact_phone'] ?? ''),
+            'contact_whatsapp' => preg_replace('/\D/', '', trim($_POST['contact_whatsapp'] ?? '')),
+            'contact_address' => trim($_POST['contact_address'] ?? ''),
+            'smtp_enabled' => isset($_POST['smtp_enabled']) ? '1' : '0',
+            'smtp_host' => trim($_POST['smtp_host'] ?? ''),
+            'smtp_port' => trim($_POST['smtp_port'] ?? '587'),
+            'smtp_auth' => isset($_POST['smtp_auth']) ? '1' : '0',
+            'smtp_username' => trim($_POST['smtp_username'] ?? ''),
+            'smtp_password' => $_POST['smtp_password'] ?? '',
+            'smtp_secure' => trim($_POST['smtp_secure'] ?? 'tls'),
+            'smtp_from_email' => trim($_POST['smtp_from_email'] ?? ''),
+            'smtp_from_name' => trim($_POST['smtp_from_name'] ?? ''),
+            'lead_email_to' => trim($_POST['lead_email_to'] ?? ''),
+            'lead_email_bcc' => trim($_POST['lead_email_bcc'] ?? '')
+        ];
 
-            foreach ($updates as $key => $val) {
-                $stmt = $pdo->prepare("INSERT INTO settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = ?");
-                $stmt->execute([$key, $val, $val]);
-            }
+        if (empty($updates['contact_email']) || empty($updates['contact_phone']) || empty($updates['contact_whatsapp']) || empty($updates['contact_address'])) {
+            $errorMsg = "All global contact fields are required!";
+        } elseif ($updates['smtp_enabled'] === '1' && (empty($updates['smtp_host']) || empty($updates['smtp_port']) || empty($updates['smtp_from_email']))) {
+            $errorMsg = "SMTP Host, Port, and From Email are required when SMTP is enabled!";
+        } elseif ($updates['smtp_enabled'] === '1' && $updates['smtp_auth'] === '1' && (empty($updates['smtp_username']) || empty($updates['smtp_password']))) {
+            $errorMsg = "SMTP Username and Password are required when SMTP Authentication is enabled!";
+        } else {
+            try {
+                $pdo->beginTransaction();
 
-            $pdo->commit();
-            $successMsg = "Settings updated successfully!";
-            
-            // Reload global settings cache for this request
-            global $site_settings;
-            foreach ($updates as $key => $val) {
-                $site_settings[$key] = $val;
+                foreach ($updates as $key => $val) {
+                    $stmt = $pdo->prepare("INSERT INTO settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = ?");
+                    $stmt->execute([$key, $val, $val]);
+                }
+
+                $pdo->commit();
+                $successMsg = "Settings updated successfully!";
+                
+                // Reload global settings cache for this request
+                global $site_settings;
+                foreach ($updates as $key => $val) {
+                    $site_settings[$key] = $val;
+                }
+            } catch (PDOException $e) {
+                $pdo->rollBack();
+                $errorMsg = "Database error: " . $e->getMessage();
             }
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            $errorMsg = "Database error: " . $e->getMessage();
         }
     }
 }
@@ -233,6 +237,7 @@ $leadEmailBcc = get_setting('lead_email_bcc', '');
     <?php endif; ?>
 
     <form action="" method="POST" id="settingsForm">
+        <?php csrf_input(); ?>
         <div class="settings-grid">
             
             <!-- Left Column: Contact settings -->

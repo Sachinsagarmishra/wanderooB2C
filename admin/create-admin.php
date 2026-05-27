@@ -304,44 +304,50 @@ try {
 
 // Handle Form Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verify Turnstile CAPTCHA first
-    $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
-    if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
-        $message = "CAPTCHA verification failed. Please try again.";
+    if (!csrf_verify()) {
+        $message = "Security validation failed (CSRF token mismatch).";
         $messageType = "danger";
     } else {
-    $username = trim($_POST['username'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
-
-    if (empty($username) || empty($email) || empty($password)) {
-        $message = "All fields are required!";
-        $messageType = "danger";
-    } else {
-        try {
-            // Check if username already exists
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
-            $stmt->execute([$username]);
-            
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            if ($stmt->fetchColumn() > 0) {
-                // Force overwrite existing admin account details
-                $stmt = $pdo->prepare("UPDATE users SET password = ?, email = ? WHERE username = ?");
-                $stmt->execute([$hashed_password, $email, $username]);
-                $message = "Admin user password has been force overwritten successfully! You can now log in.";
-                $messageType = "success";
-            } else {
-                // Insert new admin
-                $stmt = $pdo->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
-                $stmt->execute([$username, $hashed_password, $email]);
-                $message = "Admin user successfully created! You can now log in.";
-                $messageType = "success";
-            }
-        } catch (PDOException $e) {
-            $message = "Error handling admin registration: " . $e->getMessage();
+        // Verify Turnstile CAPTCHA first
+        $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+        if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
+            $message = "CAPTCHA verification failed. Please try again.";
             $messageType = "danger";
-        }
-    } // end turnstile check
+        } else {
+            $username = trim($_POST['username'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $password = $_POST['password'] ?? '';
+
+            if (empty($username) || empty($email) || empty($password)) {
+                $message = "All fields are required!";
+                $messageType = "danger";
+            } else {
+                try {
+                    // Check if username already exists
+                    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
+                    $stmt->execute([$username]);
+                    
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                    if ($stmt->fetchColumn() > 0) {
+                        // Force overwrite existing admin account details
+                        $stmt = $pdo->prepare("UPDATE users SET password = ?, email = ? WHERE username = ?");
+                        $stmt->execute([$hashed_password, $email, $username]);
+                        $message = "Admin user password has been force overwritten successfully! You can now log in.";
+                        $messageType = "success";
+                    } else {
+                        // Insert new admin
+                        $stmt = $pdo->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
+                        $stmt->execute([$username, $hashed_password, $email]);
+                        $message = "Admin user successfully created! You can now log in.";
+                        $messageType = "success";
+                    }
+                } catch (PDOException $e) {
+                    $message = "Error handling admin registration: " . $e->getMessage();
+                    $messageType = "danger";
+                }
+            }
+        } // end turnstile check
+    } // end csrf check
 }
 ?>
 <!DOCTYPE html>
@@ -471,6 +477,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <form action="" method="POST">
+                <?php csrf_input(); ?>
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" class="form-control" placeholder="Choose a username" required autocomplete="off">

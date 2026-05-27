@@ -15,6 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// Verify CSRF Token
+if (!csrf_verify()) {
+    header("Location: manage-destinations.php?error=" . urlencode("Security validation failed (CSRF token mismatch)."));
+    exit;
+}
+
 try {
     foreach ([
         "ALTER TABLE `destinations` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",

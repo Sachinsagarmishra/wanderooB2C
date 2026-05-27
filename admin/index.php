@@ -9,37 +9,58 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 }
 
 $error = '';
+$ip = $_SERVER['REMOTE_ADDR'] ?? '';
+$check = rate_limit_check($pdo, $ip);
+
+if ($check['blocked']) {
+    $error = "Too many failed attempts. Please try again after " . rate_limit_format_time($check['remaining_seconds']) . ".";
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
+    if (!$check['blocked']) {
+        // Verify CSRF Token
+        if (!csrf_verify()) {
+            $error = "Security validation failed (CSRF token mismatch).";
+        } else {
+            $username = trim($_POST['username'] ?? '');
+            $password = $_POST['password'] ?? '';
 
-    // Verify Turnstile CAPTCHA first
-    $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
-    if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
-        $error = "CAPTCHA verification failed. Please try again.";
-    } elseif (empty($username) || empty($password)) {
-        $error = "Both fields are required!";
-    } else {
-        try {
-            // Retrieve user
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-            $stmt->execute([$username]);
-            $user = $stmt->fetch();
-
-            if ($user && password_verify($password, $user['password'])) {
-                // Log in user
-                $_SESSION['admin_logged_in'] = true;
-                $_SESSION['admin_username'] = $user['username'];
-                $_SESSION['admin_email'] = $user['email'];
-
-                header("Location: dashboard.php");
-                exit;
+            // Verify Turnstile CAPTCHA first
+            $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+            if (!verify_turnstile($turnstileToken, $ip)) {
+                $error = "CAPTCHA verification failed. Please try again.";
+            } elseif (empty($username) || empty($password)) {
+                $error = "Both fields are required!";
             } else {
-                $error = "Invalid username or password!";
+                try {
+                    // Retrieve user
+                    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+                    $stmt->execute([$username]);
+                    $user = $stmt->fetch();
+
+                    if ($user && password_verify($password, $user['password'])) {
+                        // Success: clear rate limit and log in user
+                        rate_limit_clear($pdo, $ip);
+                        $_SESSION['admin_logged_in'] = true;
+                        $_SESSION['admin_username'] = $user['username'];
+                        $_SESSION['admin_email'] = $user['email'];
+
+                        header("Location: dashboard.php");
+                        exit;
+                    } else {
+                        // Failure: record attempt
+                        rate_limit_record_failure($pdo, $ip);
+                        $check = rate_limit_check($pdo, $ip);
+                        if ($check['blocked']) {
+                            $error = "Too many failed attempts. Please try again after " . rate_limit_format_time($check['remaining_seconds']) . ".";
+                        } else {
+                            $error = "Invalid username or password!";
+                        }
+                    }
+                } catch (PDOException $e) {
+                    $error = "Database error: " . $e->getMessage();
+                }
             }
-        } catch (PDOException $e) {
-            $error = "Database error: " . $e->getMessage();
         }
     }
 }
@@ -164,17 +185,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <form action="" method="POST">
+                <?php csrf_input(); ?>
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required autocomplete="off">
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required autocomplete="off" <?php if ($check['blocked']) echo 'disabled'; ?>>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required <?php if ($check['blocked']) echo 'disabled'; ?>>
                 </div>
                 <!-- Cloudflare Turnstile CAPTCHA -->
-                <div class="cf-turnstile" data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" data-theme="dark" style="margin-bottom: 12px;"></div>
-                <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                <?php if (!$check['blocked']): ?>
+                    <div class="cf-turnstile" data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>" data-theme="dark" style="margin-bottom: 12px;"></div>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-primary btn-block" <?php if ($check['blocked']) echo 'disabled'; ?>>Log In</button>
             </form>
         </div>
     </div>

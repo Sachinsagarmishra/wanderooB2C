@@ -65,6 +65,7 @@
 
             <!-- Form Multi-steps Container -->
             <form action="#" method="POST" id="enquiryForm" class="enquiry-form-container">
+                <?php csrf_input(); ?>
                 <input type="hidden" name="source_page" id="enquirySourcePage" value="">
                 <!-- Step 1: Select Destination -->
                 <div class="enquiry-form-step active" data-step="1">

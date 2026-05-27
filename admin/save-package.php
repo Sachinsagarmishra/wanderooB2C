@@ -25,6 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// Verify CSRF Token
+if (!csrf_verify()) {
+    file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "CSRF validation failed. Redirecting to manage-packages.php.\n", FILE_APPEND);
+    header("Location: manage-packages.php?error=" . urlencode("Security validation failed (CSRF token mismatch)."));
+    exit;
+}
+
 try {
     foreach ([
         "ALTER TABLE `tour_packages` ADD COLUMN `meta_title` varchar(255) DEFAULT NULL AFTER `title`",

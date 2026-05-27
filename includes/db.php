@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/turnstile.php';
+require_once __DIR__ . '/csrf.php';
+require_once __DIR__ . '/rate_limit.php';
 
 /**
  * Database Connection using PDO

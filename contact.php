@@ -6,53 +6,57 @@ $successMsg = '';
 $errorMsg = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $fullname = trim($_POST['fullname'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $country_code = trim($_POST['country_code'] ?? '+91');
-    $phone_raw = trim($_POST['phone'] ?? '');
-    $phone_digits = preg_replace('/\D/', '', $phone_raw);
-    $phone = $country_code . ' ' . $phone_raw;
-    $subject = trim($_POST['subject'] ?? '');
-    $message = trim($_POST['message'] ?? '');
-
-    // Verify Turnstile CAPTCHA first
-    $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
-    if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
-        $errorMsg = 'CAPTCHA verification failed. Please try again.';
-    } elseif (empty($fullname) || empty($email) || empty($phone_raw) || empty($subject) || empty($message)) {
-        $errorMsg = 'All fields marked with an asterisk are required.';
-    } elseif ($country_code === '+91' && strlen($phone_digits) !== 10) {
-        $errorMsg = 'Indian phone numbers must be exactly 10 digits.';
-    } elseif (strlen($phone_digits) < 7 || strlen($phone_digits) > 15) {
-        $errorMsg = 'Please enter a valid phone number (between 7 and 15 digits).';
+    if (!csrf_verify()) {
+        $errorMsg = 'Security validation failed (CSRF token mismatch).';
     } else {
-        try {
-            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-            $source_page = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $fullname = trim($_POST['fullname'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $country_code = trim($_POST['country_code'] ?? '+91');
+        $phone_raw = trim($_POST['phone'] ?? '');
+        $phone_digits = preg_replace('/\D/', '', $phone_raw);
+        $phone = $country_code . ' ' . $phone_raw;
+        $subject = trim($_POST['subject'] ?? '');
+        $message = trim($_POST['message'] ?? '');
 
-            $stmt = $pdo->prepare("INSERT INTO leads (type, fullname, email, phone, subject, message, source_page) VALUES ('contact', ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$fullname, $email, $phone, $subject, $message, $source_page]);
-
-            // Send email notification (fails silently if SMTP disabled or fails)
+        // Verify Turnstile CAPTCHA first
+        $turnstileToken = $_POST['cf-turnstile-response'] ?? '';
+        if (!verify_turnstile($turnstileToken, $_SERVER['REMOTE_ADDR'] ?? '')) {
+            $errorMsg = 'CAPTCHA verification failed. Please try again.';
+        } elseif (empty($fullname) || empty($email) || empty($phone_raw) || empty($subject) || empty($message)) {
+            $errorMsg = 'All fields marked with an asterisk are required.';
+        } elseif ($country_code === '+91' && strlen($phone_digits) !== 10) {
+            $errorMsg = 'Indian phone numbers must be exactly 10 digits.';
+        } elseif (strlen($phone_digits) < 7 || strlen($phone_digits) > 15) {
+            $errorMsg = 'Please enter a valid phone number (between 7 and 15 digits).';
+        } else {
             try {
-                $leadData = [
-                    'type' => 'contact',
-                    'fullname' => $fullname,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'subject' => $subject,
-                    'message' => $message,
-                    'source_page' => $source_page
-                ];
-                require_once __DIR__ . '/includes/mailer.php';
-                send_lead_notification($leadData);
-            } catch (\Exception $ex) {
-                // Fallback catch, error_log handled within send_lead_notification
-            }
+                $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+                $source_page = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-            $successMsg = 'Thank you! Your message has been sent successfully. We will get back to you shortly.';
-        } catch (PDOException $e) {
-            $errorMsg = 'Error saving lead: ' . $e->getMessage();
+                $stmt = $pdo->prepare("INSERT INTO leads (type, fullname, email, phone, subject, message, source_page) VALUES ('contact', ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$fullname, $email, $phone, $subject, $message, $source_page]);
+
+                // Send email notification (fails silently if SMTP disabled or fails)
+                try {
+                    $leadData = [
+                        'type' => 'contact',
+                        'fullname' => $fullname,
+                        'email' => $email,
+                        'phone' => $phone,
+                        'subject' => $subject,
+                        'message' => $message,
+                        'source_page' => $source_page
+                    ];
+                    require_once __DIR__ . '/includes/mailer.php';
+                    send_lead_notification($leadData);
+                } catch (\Exception $ex) {
+                    // Fallback catch, error_log handled within send_lead_notification
+                }
+
+                $successMsg = 'Thank you! Your message has been sent successfully. We will get back to you shortly.';
+            } catch (PDOException $e) {
+                $errorMsg = 'Error saving lead: ' . $e->getMessage();
+            }
         }
     }
 }
@@ -104,6 +108,7 @@ $contactAddress = get_setting('contact_address', "Wanderoo\nThe landmark\n2nd Fl
                 <?php endif; ?>
 
                 <form action="" method="POST" class="contact-form">
+                    <?php csrf_input(); ?>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="fullname">Full Name</label>
