@@ -351,7 +351,7 @@ try {
                             <a href="#" class="btn-craft-trip">Craft Your Trip</a>
                         </div>
                         <div class="panel-right">
-                            <img src="<?php echo SITE_PATH; ?>/assets/img/how-it-works.png" alt="How it works">
+                            <img src="<?php echo SITE_PATH; ?>/assets/img/balistep1.jpg" alt="How it works">
                         </div>
                     </div>
                 </div>
@@ -382,7 +382,7 @@ try {
                             <a href="#" class="btn-craft-trip">Craft Your Trip</a>
                         </div>
                         <div class="panel-right">
-                            <img src="<?php echo SITE_PATH; ?>/assets/img/how-it-works.png" alt="How it works">
+                            <img src="<?php echo SITE_PATH; ?>/assets/img/step2hpwitworks.webp" alt="How it works">
                         </div>
                     </div>
                 </div>
@@ -413,7 +413,7 @@ try {
                             <a href="#" class="btn-craft-trip">Craft Your Trip</a>
                         </div>
                         <div class="panel-right">
-                            <img src="<?php echo SITE_PATH; ?>/assets/img/how-it-works.png" alt="How it works">
+                            <img src="<?php echo SITE_PATH; ?>/assets/img/step3howitworks.jpg" alt="How it works">
                         </div>
                     </div>
                 </div>
