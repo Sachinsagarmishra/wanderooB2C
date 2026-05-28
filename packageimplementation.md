@@ -7,7 +7,7 @@ The goal is to add a complete package into the live Wanderoo website with:
 - SEO rewritten package content
 - destination mapping
 - main package record
-- tags
+- exactly 2 package tags
 - highlights
 - day-wise itinerary
 - inclusions and exclusions
@@ -93,6 +93,7 @@ Follow this order. It avoids repeated context and repeated network calls.
 6. Download required images only once into `uploads/packages/{package_id}/`.
 7. Commit and push image/code changes only if local files changed.
 8. Verify live URL and one or two image URLs with `curl -I` or `curl -L`.
+9. After GitHub push and live-site verification, remove the local working-copy image files from the Mac without committing those deletions. This keeps the Mac clean while GitHub/Hostinger still have the images.
 
 Avoid:
 
@@ -133,6 +134,42 @@ uploads/packages/{package_id}/hong-island.webp
 
 Do not leave important package images pointing to competitor CDN if the user wants the images "in my website/database".
 
+## Local Image Cleanup Rule
+
+The user does not want downloaded package images to remain on the Mac after they are safely pushed and visible on the website.
+
+For every package image import:
+
+1. Download images into `uploads/packages/{package_id}/`.
+2. Commit and push those images to GitHub.
+3. Verify the live site serves at least the hero image with `HTTP/2 200`.
+4. Then remove the local working-copy image files from the Mac.
+
+Important: do not commit the local deletions. The images must stay in GitHub and on Hostinger.
+
+Recommended cleanup approach after successful push and live verification:
+
+```bash
+git update-index --skip-worktree uploads/packages/{package_id}/*
+rm uploads/packages/{package_id}/*
+```
+
+Why:
+
+- GitHub keeps the committed image files.
+- Hostinger keeps/deploys the image files from GitHub.
+- The local Mac frees the image space.
+- `skip-worktree` prevents `git status` from showing local deletions as pending deletes.
+
+If an agent later needs to replace or edit those local images, first undo skip-worktree:
+
+```bash
+git update-index --no-skip-worktree uploads/packages/{package_id}/*
+git checkout -- uploads/packages/{package_id}
+```
+
+Never run a broad cleanup like `rm -rf uploads/packages` because older live package assets may be affected locally and create confusing Git state.
+
 ## Content Rewrite Rules
 
 Do not copy competitor text verbatim.
@@ -161,6 +198,55 @@ Recommended fields:
 - `duration`: e.g. `8 days & 7 nights`
 - `old_price`, `price`, `save_text`: preserve competitor values only if user wants same pricing
 - `rating`, `rating_count`: can mirror visible values if user asked to recreate package
+
+## Package Tag Rule
+
+Use exactly 2 tags per imported package. More tags create spacing/card-height issues on destination cards.
+
+Rules:
+
+- Always insert only 2 rows into `package_tags`.
+- Tags should be SEO useful and visible-card friendly.
+- Prefer one broad intent tag and one destination/route/theme tag.
+- Keep tags short, ideally 1-3 words.
+- Do not add city lists as separate tags.
+- Do not add generic filler tags if they do not help SEO or card scanning.
+
+Good examples:
+
+```text
+Fully Customizable
+Honeymoon
+```
+
+```text
+Fully Customizable
+Offbeat Thailand
+```
+
+```text
+Family Friendly
+Singapore
+```
+
+Bad examples:
+
+```text
+Fully Customizable
+Couples
+Offbeat
+Bangkok
+Chiang Mai
+Krabi
+Culture & Nature
+```
+
+When choosing tags:
+
+- Romantic/couple package: `Fully Customizable`, `Honeymoon`
+- Offbeat/culture package: `Fully Customizable`, `Offbeat Thailand`
+- Family package: `Family Friendly`, destination name
+- Luxury package: `Luxury Escape`, destination name
 
 ## SEO Template
 
@@ -223,6 +309,8 @@ DELETE FROM package_day_images WHERE package_id = ?;
 7. Commit.
 
 This makes reruns safe and avoids duplicated highlights/days/images.
+
+When reinserting `package_tags`, insert only the final 2 selected tags.
 
 ## Temporary Node Setup
 
@@ -329,7 +417,7 @@ function download(url, file) {
 })();
 ```
 
-After download, stage/commit/push the `uploads/packages/{package_id}` folder.
+After download, stage/commit/push the `uploads/packages/{package_id}` folder. Once live image URLs are verified, clean local image files using the Local Image Cleanup Rule above.
 
 ## DB Image Mapping
 
@@ -477,6 +565,9 @@ content-type: image/webp
 - gallery count correct
 - day image count correct
 - day count correct
+- tag count is exactly 2
+
+5. Clean local image files after live verification if images were downloaded into the repo.
 
 ## Git Workflow
 
@@ -490,6 +581,15 @@ git add uploads/packages/{package_id}
 git commit -m "Add {destination} package images"
 git push origin main
 ```
+
+After successful live verification:
+
+```bash
+git update-index --skip-worktree uploads/packages/{package_id}/*
+rm uploads/packages/{package_id}/*
+```
+
+Do not commit the local image deletion.
 
 If code was changed:
 
@@ -525,9 +625,10 @@ DB mein package ID 10 update hua:
 - 7 gallery images
 - 8 day-wise images
 - 8 itinerary days
+- 2 package tags
 - SEO title/meta/keywords
 
-Images `uploads/packages/10/` mein push ho gayi and live image URL 200 OK hai.
+Images GitHub/Hostinger par push ho gayi, live image URL 200 OK hai, aur local Mac copy cleanup ho gaya.
 ```
 
 ## Common Problems
@@ -555,6 +656,14 @@ Solution: use or preserve `package_image_url()` behavior in `package-detail.php`
 Problem: DB updated before images deployed.
 
 Solution: push images to GitHub first, then update DB paths, or accept a short deployment gap.
+
+Problem: too many tags make destination cards tall or uneven.
+
+Solution: keep exactly 2 tags per imported package.
+
+Problem: local Mac storage grows because downloaded images remain in the repo working copy.
+
+Solution: after GitHub push and live verification, mark package image files `skip-worktree` and remove the local working-copy files. Do not commit deletion.
 
 Problem: duplicate content risk.
 
