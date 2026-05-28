@@ -81,5 +81,6 @@
         }
     </script>
     <?php include_once __DIR__ . '/enquiry-modal.php'; ?>
+    <?php include_once __DIR__ . '/timed-popup.php'; ?>
 </body>
 </html>
