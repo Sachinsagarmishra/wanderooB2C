@@ -44,10 +44,13 @@ $contactEmail = get_setting('contact_email', 'support@wanderoo.world');
         <h2>8. Website Use</h2>
         <p>You agree not to misuse the website, attempt unauthorised access, disrupt website operations, copy content for commercial use without permission, or submit false or misleading information.</p>
 
-        <h2>9. Limitation of Liability</h2>
+        <h2>9. Intellectual Property and Image Disclaimer</h2>
+        <p>All content on this website, including text, graphics, logos, and layout, is owned by or licensed to Wanderoo. The images used on our website are either copyright-free, purchased under standard commercial licenses, or sourced from third-party travel platforms. We respect all intellectual property rights and make every effort to attribute appropriate credit to original creators. If you believe any image or content has been used on our website without proper authorization or credit, please contact us at <a href="mailto:<?php echo htmlspecialchars($contactEmail); ?>"><?php echo htmlspecialchars($contactEmail); ?></a>, and we will review and update or remove it immediately.</p>
+
+        <h2>10. Limitation of Liability</h2>
         <p>To the maximum extent permitted by law, Wanderoo is not liable for indirect, incidental, consequential, or unforeseen losses arising from website use, travel supplier changes, or events outside our reasonable control.</p>
 
-        <h2>10. Contact Us</h2>
+        <h2>11. Contact Us</h2>
         <p>If you have questions about these Terms of Service, contact us at <a href="mailto:<?php echo htmlspecialchars($contactEmail); ?>"><?php echo htmlspecialchars($contactEmail); ?></a>.</p>
     </section>
 </main>
