@@ -2082,9 +2082,14 @@ footer {
     font-weight: 600;
     color: #333333;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     margin-bottom: 12px;
+}
+
+.detail-highlights li span {
+    flex: 1;
+    min-width: 0;
 }
 
 .detail-highlights li svg {
@@ -2167,6 +2172,8 @@ footer {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex: 1;
+    min-width: 0;
 }
 
 .itinerary-day-badge {
@@ -2178,6 +2185,7 @@ footer {
     padding: 6px 12px;
     border-radius: 6px;
     text-transform: uppercase;
+    flex-shrink: 0;
 }
 
 .itinerary-title-text {
@@ -2185,6 +2193,8 @@ footer {
     font-size: 18px;
     font-weight: 700;
     color: var(--text-dark);
+    flex: 1;
+    min-width: 0;
 }
 
 .itinerary-toggle-icon {
@@ -2323,15 +2333,21 @@ footer {
     color: #4a4a4a;
     font-weight: 600;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     margin-bottom: 12px;
+}
+
+.detail-inclusions-col li span {
+    flex: 1;
+    min-width: 0;
 }
 
 .detail-inclusions-col li svg {
     flex-shrink: 0;
     width: 16px;
     height: 16px;
+    margin-top: 3px;
 }
 
 .detail-inclusions-col.inclusions li svg {

@@ -209,7 +209,7 @@ include 'includes/header.php';
                     <?php foreach ($dbHighlights as $hl): ?>
                         <li>
                             <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14.2507 8.98735C13.7507 11.4874 11.8657 13.8414 9.22071 14.3674C7.9307 14.6243 6.59252 14.4676 5.39672 13.9197C4.20091 13.3719 3.20843 12.4607 2.56061 11.3159C1.91278 10.1712 1.64263 8.85124 1.78862 7.54402C1.93461 6.23681 2.4893 5.00898 3.37371 4.03535C5.18771 2.03735 8.25071 1.48735 10.7507 2.48735" stroke="#0FB680" stroke-width="1.5px" stroke-linecap="round" stroke-linejoin="round" fill-opacity="0" fill="#F6F6F6"></path><path d="M5.75 7.98828L8.25 10.4883L14.25 3.98828" stroke="#0FB680" stroke-width="1.5px" stroke-linecap="round" stroke-linejoin="round" fill-opacity="0" fill="#F6F6F6"></path></svg>
-                            <?php echo htmlspecialchars($hl); ?>
+                            <span><?php echo htmlspecialchars($hl); ?></span>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -285,7 +285,7 @@ include 'includes/header.php';
                                     <?php foreach ($dbInclusions as $inc): ?>
                                         <li>
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                            <?php echo htmlspecialchars($inc); ?>
+                                            <span><?php echo htmlspecialchars($inc); ?></span>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
@@ -298,7 +298,7 @@ include 'includes/header.php';
                                     <?php foreach ($dbExclusions as $exc): ?>
                                         <li>
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                            <?php echo htmlspecialchars($exc); ?>
+                                            <span><?php echo htmlspecialchars($exc); ?></span>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
