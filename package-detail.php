@@ -79,7 +79,18 @@ $tourTitle = $dbPackage['title'];
 $pageTitle = !empty($dbPackage['meta_title']) ? $dbPackage['meta_title'] : $tourTitle;
 $pageDesc = !empty($dbPackage['meta_description']) ? $dbPackage['meta_description'] : (!empty($dbPackage['description']) ? $dbPackage['description'] : "Welcome to " . htmlspecialchars($tourTitle) . " – a custom package in " . htmlspecialchars(ucfirst($destSlug)) . " curated by Wanderoo.");
 $pageKeywords = !empty($dbPackage['focus_keywords']) ? $dbPackage['focus_keywords'] : '';
-$mainImg = !empty($dbPackage['hero_image']) ? SITE_PATH . '/' . $dbPackage['hero_image'] : SITE_PATH . '/assets/img/hero-bg.webp';
+
+function package_image_url($path) {
+    if (empty($path)) {
+        return SITE_PATH . '/assets/img/hero-bg.webp';
+    }
+    if (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) {
+        return $path;
+    }
+    return SITE_PATH . '/' . ltrim($path, '/');
+}
+
+$mainImg = package_image_url($dbPackage['hero_image'] ?? '');
 $heroForBanner = $mainImg;
 $tourDuration = $dbPackage['duration'];
 $tourDescription = $dbPackage['description'];
