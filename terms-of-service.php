@@ -9,7 +9,7 @@ $contactEmail = get_setting('contact_email', 'support@wanderoo.world');
 
 <main>
     <div class="about-hero-banner">
-        <img src="<?php echo SITE_PATH; ?>/assets/img/group-hiking.png" alt="Terms of Service" class="about-hero-bg">
+        <img src="<?php echo SITE_PATH; ?>/assets/img/policy-hero.jpg" alt="Terms of Service" class="about-hero-bg">
         <div class="about-hero-overlay"></div>
         <div class="about-hero-content">
             <span class="about-breadcrumb-text"><a href="<?php echo SITE_PATH; ?>/">Home</a> &raquo; Terms of Service</span>
