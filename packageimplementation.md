@@ -183,6 +183,7 @@ Rewrite in Wanderoo style:
 - descriptive enough for Google
 - clean day-wise structure
 - natural CTAs are already handled by the site, so do not add CTA spam inside content
+- inclusions and exclusions must be short, simple, and easy English
 
 Keep the same package concept, route, duration, price, major places, and activities when requested.
 
@@ -198,6 +199,79 @@ Recommended fields:
 - `duration`: e.g. `8 days & 7 nights`
 - `old_price`, `price`, `save_text`: preserve competitor values only if user wants same pricing
 - `rating`, `rating_count`: can mirror visible values if user asked to recreate package
+
+## Inclusions And Exclusions Rule
+
+Write inclusions and exclusions in very simple English.
+
+The target reader may not be comfortable with long travel/legal wording. Each point should be quick to read and easy to understand.
+
+Rules:
+
+- Use short points only.
+- Keep each point ideally under 6-8 words.
+- Use plain words.
+- Avoid legal/travel jargon.
+- Avoid long sentences.
+- Avoid commas where possible.
+- Avoid words like `quotation`, `applicable`, `explicitly`, `surcharge`, `itinerary customisation`, `payable directly`.
+- Do not write full paragraphs.
+- Do not combine too many things in one point.
+- Use 6-8 inclusions and 6-8 exclusions unless the user asks otherwise.
+- Each point should fit cleanly in the package detail section without looking heavy.
+
+Good inclusion examples:
+
+```text
+Airport pickup and drop
+Hotel stay included
+Daily breakfast
+Sightseeing transfers
+Activity tickets included
+Local guide support
+Ferry tickets included
+Trip expert support
+```
+
+Good exclusion examples:
+
+```text
+Flights not included
+Visa fee not included
+Travel insurance extra
+Personal shopping extra
+Lunch and dinner extra
+Tips not included
+Hotel taxes extra
+Room upgrades extra
+```
+
+Bad inclusion examples:
+
+```text
+Private and shared transfers in air-conditioned vehicles
+Accommodation in Bangkok, Chiang Mai and Krabi as per selected hotel category
+Professional local guides for included tours, wherever applicable
+Lunch on selected activity days as specified in the final voucher
+Wanderoo destination expert support for itinerary customisation
+```
+
+Bad exclusion examples:
+
+```text
+International and domestic flights unless specifically added to the quotation
+Thailand visa charges, travel insurance and passport-related expenses
+Hotel city taxes, tourism fees or local charges payable directly at the property
+Peak-season, public-holiday or last-minute surcharges, if applicable
+Room, flight or activity upgrades requested after confirmation
+```
+
+When rewriting competitor inclusions/exclusions:
+
+- Convert meaning, not wording.
+- Split complex points into shorter simple points only if needed.
+- If a point becomes too long, shorten it aggressively.
+- Prefer user-friendly wording over exact supplier wording.
 
 ## Package Tag Rule
 
