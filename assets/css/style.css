@@ -2603,6 +2603,13 @@ footer {
 
     .detail-container {
         padding: 0 16px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .detail-main-content {
+        width: 100%;
+        max-width: 100%;
     }
 
     .detail-main-content h2 {
@@ -2633,15 +2640,18 @@ footer {
     }
 
     .detail-highlights li {
-        align-items: flex-start;
+        display: block;
+        position: relative;
+        padding-left: 28px;
         font-size: 14px;
         line-height: 1.55;
-        gap: 10px;
         margin-bottom: 10px;
     }
 
     .detail-highlights li svg {
-        margin-top: 3px;
+        position: absolute;
+        left: 0;
+        top: 3px;
         width: 16px;
         height: 16px;
     }
@@ -2711,8 +2721,20 @@ footer {
     }
 
     .detail-inclusions-col li {
+        display: block;
+        position: relative;
+        padding-left: 28px;
         font-size: 14px;
         line-height: 1.45;
+        margin-bottom: 12px;
+    }
+
+    .detail-inclusions-col li svg {
+        position: absolute;
+        left: 0;
+        top: 2px;
+        width: 16px;
+        height: 16px;
     }
 
     .detail-inclusions-columns {
