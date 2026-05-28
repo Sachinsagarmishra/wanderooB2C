@@ -74,7 +74,7 @@ $contactAddress = get_setting('contact_address', "Wanderoo\nThe landmark\n2nd Fl
 
 <main>
     <div class="contact-hero-banner">
-        <img src="<?php echo SITE_PATH; ?>/assets/img/group-hiking.png" alt="Contact Us" class="contact-hero-bg">
+        <img src="<?php echo SITE_PATH; ?>/assets/img/step3howitworks.jpg" alt="Contact Us" class="contact-hero-bg">
         <div class="contact-hero-overlay"></div>
         <div class="contact-hero-content">
             <span class="contact-breadcrumb-text"><a href="<?php echo SITE_PATH; ?>/">Home</a> &raquo; Contact</span>

@@ -36,7 +36,7 @@ include_once 'includes/header.php';
 <main>
     <!-- About Hero Banner -->
     <div class="about-hero-banner">
-        <img src="<?php echo SITE_PATH; ?>/assets/img/group-hiking.png" alt="About Us" class="about-hero-bg">
+        <img src="<?php echo SITE_PATH; ?>/assets/img/rafting.jpg" alt="About Us" class="about-hero-bg">
         <div class="about-hero-overlay"></div>
         <div class="about-hero-content">
             <span class="about-breadcrumb-text"><a href="<?php echo SITE_PATH; ?>/">Home</a> &raquo; About Us</span>
