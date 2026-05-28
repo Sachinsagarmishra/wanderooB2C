@@ -258,7 +258,7 @@ try {
     <section class="group-travel-section" style="background-image: url('<?php echo SITE_PATH; ?>/assets/img/patternbg.png');">
         <div class="group-container">
             <div class="group-image-col">
-                <img src="<?php echo SITE_PATH; ?>/assets/img/grop-in-india.jpg" alt="Traveling in a Group">
+                <img src="<?php echo SITE_PATH; ?>/assets/img/rafting.jpg" alt="Traveling in a Group">
             </div>
             <div class="group-content-col">
                 <h2 class="group-title">
