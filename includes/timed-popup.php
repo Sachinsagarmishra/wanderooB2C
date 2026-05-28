@@ -236,8 +236,8 @@
 
 .timed-popup-group input:focus,
 .timed-popup-group select:focus {
-    border-color: #ff2d55;
-    box-shadow: 0 0 0 4px rgba(255, 45, 85, 0.1);
+    border-color: var(--primary, #FFDE59);
+    box-shadow: 0 0 0 4px rgba(255, 222, 89, 0.15);
     background-color: #ffffff;
 }
 
@@ -272,14 +272,14 @@
 .radio-label input[type="radio"] {
     width: 18px;
     height: 18px;
-    accent-color: #ff2d55;
+    accent-color: var(--primary, #FFDE59);
     cursor: pointer;
 }
 
 /* Submit button */
 .timed-popup-submit-btn {
-    background-color: #ff2d55;
-    color: #ffffff;
+    background-color: var(--primary, #FFDE59);
+    color: #111111;
     border: none;
     border-radius: 30px;
     padding: 14px;
@@ -287,16 +287,16 @@
     font-size: 16px;
     font-weight: 750;
     cursor: pointer;
-    box-shadow: 0 6px 20px rgba(255, 45, 85, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 222, 89, 0.2);
     transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
     margin-top: 10px;
     outline: none;
 }
 
 .timed-popup-submit-btn:hover {
-    background-color: #e02047;
+    background-color: var(--primary-dark, #e6c850);
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(255, 45, 85, 0.4);
+    box-shadow: 0 8px 24px rgba(255, 222, 89, 0.3);
 }
 
 .timed-popup-submit-btn:disabled {
