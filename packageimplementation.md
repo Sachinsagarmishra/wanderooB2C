@@ -197,8 +197,62 @@ Recommended fields:
 - `description`: short summary paragraph
 - `overview`: longer planning paragraph
 - `duration`: e.g. `8 days & 7 nights`
-- `old_price`, `price`, `save_text`: preserve competitor values only if user wants same pricing
+- `old_price`, `price`, `save_text`: use natural varied savings unless user asks to copy exact pricing
 - `rating`, `rating_count`: can mirror visible values if user asked to recreate package
+
+## Pricing And Saving Rule
+
+Do not make every package show the same saving amount.
+
+The package cards look fake if every old price is exactly `price + ₹12,000` and every chip says `SAVE ₹12,000`.
+
+Rules:
+
+- Keep the visible current price close to the competitor/package reference unless the user asks otherwise.
+- Choose a natural-looking old price above the current price.
+- Vary the saving amount across packages.
+- Do not reuse `SAVE ₹12,000` as a default.
+- Use different realistic savings like `₹8,500`, `₹13,700`, `₹18,250`, `₹27,302`, `₹34,000`, etc.
+- Larger/longer packages can have larger savings.
+- Shorter/budget packages should usually have smaller savings.
+- The old price should look believable and should not feel randomly inflated.
+- Always keep `save_text` consistent with `old_price - price`.
+
+Examples:
+
+```text
+Price: ₹27,999
+Old price: ₹41,499
+Save text: SAVE ₹13,500
+```
+
+```text
+Price: ₹65,699
+Old price: ₹99,699
+Save text: SAVE ₹34,000
+```
+
+```text
+Price: ₹60,199
+Old price: ₹87,501
+Save text: SAVE ₹27,302
+```
+
+Bad examples:
+
+```text
+Price: ₹27,999
+Old price: ₹39,999
+Save text: SAVE ₹12,000
+
+Price: ₹65,699
+Old price: ₹77,699
+Save text: SAVE ₹12,000
+
+Price: ₹60,199
+Old price: ₹72,199
+Save text: SAVE ₹12,000
+```
 
 ## Inclusions And Exclusions Rule
 
@@ -277,6 +331,8 @@ When rewriting competitor inclusions/exclusions:
 
 Use exactly 2 tags per imported package. More tags create spacing/card-height issues on destination cards.
 
+Do not put `Honeymoon` on every package by default. Tags must match the actual package theme.
+
 Rules:
 
 - Always insert only 2 rows into `package_tags`.
@@ -285,6 +341,9 @@ Rules:
 - Keep tags short, ideally 1-3 words.
 - Do not add city lists as separate tags.
 - Do not add generic filler tags if they do not help SEO or card scanning.
+- Avoid repeating the same second tag across many packages.
+- Use `Honeymoon` only when the package is clearly honeymoon-focused.
+- Use package-specific tags for short trips, island trips, city trips, family trips, luxury trips, adventure trips, offbeat trips, or Delhi-departure packages.
 
 Good examples:
 
@@ -303,7 +362,38 @@ Family Friendly
 Singapore
 ```
 
+```text
+Island Escape
+Krabi Phuket
+```
+
+```text
+From Delhi
+Couple Trip
+```
+
+```text
+Beach Holiday
+Phi Phi Islands
+```
+
+```text
+Adventure Trip
+Krabi Nature
+```
+
 Bad examples:
+
+```text
+Fully Customizable
+Honeymoon
+
+Fully Customizable
+Honeymoon
+
+Fully Customizable
+Honeymoon
+```
 
 ```text
 Fully Customizable
@@ -317,7 +407,12 @@ Culture & Nature
 
 When choosing tags:
 
-- Romantic/couple package: `Fully Customizable`, `Honeymoon`
+- Honeymoon-led package: `Fully Customizable`, `Honeymoon`
+- General couple package: `Couple Trip`, route/theme tag
+- Delhi departure package: `From Delhi`, route/theme tag
+- Island-heavy package: `Island Escape`, island/route tag
+- Beach package: `Beach Holiday`, destination/theme tag
+- Adventure package: `Adventure Trip`, destination/theme tag
 - Offbeat/culture package: `Fully Customizable`, `Offbeat Thailand`
 - Family package: `Family Friendly`, destination name
 - Luxury package: `Luxury Escape`, destination name
