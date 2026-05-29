@@ -19,7 +19,7 @@
 
     // ──── DOM References ───────────────────────────────────────
     let launcher, chatContainer, chatBody, chatInput, sendBtn;
-    let leadForm, leadFormInner, backdrop;
+    let leadForm, leadFormInner, backdrop, typingInterval;
 
     // ──── Init ─────────────────────────────────────────────────
     function init() {
@@ -196,15 +196,42 @@
         var div = document.createElement('div');
         div.className = 'joey-typing';
         div.id = 'joeyTyping';
+
+        const messages = [
+            "🔍 We are fetching the best things for you, please wait...",
+            "🌴 Scanning Wanderoo database for active tour packages...",
+            "✈️ Curating custom romance, adventure, & luxury options...",
+            "✨ Matching live rates, durations, and traveler reviews...",
+            "🦘 Almost there! Generating your personalized holiday guide..."
+        ];
+        let currentMsgIdx = 0;
+
         div.innerHTML =
-            '<span class="joey-typing-dot"></span>' +
-            '<span class="joey-typing-dot"></span>' +
-            '<span class="joey-typing-dot"></span>';
+            '<div class="joey-typing-text">' + escapeHtml(messages[0]) + '</div>' +
+            '<div class="joey-typing-dots">' +
+                '<span class="joey-typing-dot"></span>' +
+                '<span class="joey-typing-dot"></span>' +
+                '<span class="joey-typing-dot"></span>' +
+            '</div>';
+
         chatBody.appendChild(div);
         scrollToBottom();
+
+        if (typingInterval) clearInterval(typingInterval);
+        typingInterval = setInterval(function() {
+            const textEl = div.querySelector('.joey-typing-text');
+            if (textEl) {
+                currentMsgIdx = (currentMsgIdx + 1) % messages.length;
+                textEl.textContent = messages[currentMsgIdx];
+            }
+        }, 1500);
     }
 
     function hideTyping() {
+        if (typingInterval) {
+            clearInterval(typingInterval);
+            typingInterval = null;
+        }
         var el = document.getElementById('joeyTyping');
         if (el) el.remove();
     }

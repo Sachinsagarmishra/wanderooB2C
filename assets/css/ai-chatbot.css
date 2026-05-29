@@ -373,19 +373,33 @@
 /* ─── Typing Indicator ─── */
 .joey-typing {
     display: flex;
-    align-items: center;
-    gap: 4px;
+    flex-direction: column;
+    gap: 8px;
     padding: 14px 18px;
     background: var(--joey-ai-bubble);
     border-radius: 16px;
     border-bottom-left-radius: 4px;
     align-self: flex-start;
-    max-width: 80px;
+    max-width: 85%;
+    animation: joey-msgIn 0.3s ease;
+}
+
+.joey-typing-text {
+    font-size: 12px;
+    color: var(--joey-text-muted);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.joey-typing-dots {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .joey-typing-dot {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: #94a3b8;
     animation: joey-bounce 1.4s infinite;

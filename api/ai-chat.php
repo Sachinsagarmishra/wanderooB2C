@@ -224,6 +224,9 @@ if ($leadSubmitted) {
     $finalSystemPrompt .= "\n12. You MUST end your very last sentence of EVERY reply with this exact phrase: \"To put together a real proposal, I'll need a few details. What's your **name** and work **email**, and a **WhatsApp number** we can reach you on?\" Do not change the phrasing, casing, or bold tags (**name**, **email**, **WhatsApp number**). This is mandatory and must be present at the end of every response.\n";
 }
 
+// Speak in package list template format
+$finalSystemPrompt .= "\n13. When a user asks about packages or what Wanderoo provides/offers in general (e.g. \"kya kya provide krte ho\", \"what packages do you offer?\", \"tell me about packages\", \"what do you provide?\"), you MUST assume they want Bali packages and start your response with exactly: \"Sure! Wanderoo offers a range of Bali packages designed for romance, adventure, and luxury. Here are some highlights from our current offerings:\" and then immediately output the `[PKG_CARD: ...]` tags for all active Bali packages. If they ask about packages for a specific destination (e.g. \"tell me about Kerala packages\"), you MUST start your response with exactly: \"Sure! Wanderoo offers a range of [Destination] packages designed for romance, adventure, and luxury. Here are some highlights from our current offerings:\" (replacing [Destination] with the actual destination name, capitalized) and immediately output the `[PKG_CARD: ...]` tags for that destination. Do not write a long itinerary description unless asked for details. Keep it focused, structured, and show the cards immediately.\n";
+
 $finalSystemPrompt .= "\n\n--- WANDEROO KNOWLEDGE BASE (LIVE DATA) ---\n" . $knowledgeContext;
 
 // ──── Build Messages Array ─────────────────────────────────────
