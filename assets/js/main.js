@@ -41,6 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let currentIndex = 0;
         let startX = 0;
+        let startY = 0;
+        let isScrolling = false;
+        let isSwiping = false;
         let currentTranslate = 0;
         let prevTranslate = 0;
         let isDragging = false;
@@ -164,43 +167,96 @@ document.addEventListener('DOMContentLoaded', () => {
         track.addEventListener('touchstart', dragStart, { passive: true });
         
         window.addEventListener('mousemove', dragMove);
-        window.addEventListener('touchmove', dragMove, { passive: true });
+        track.addEventListener('touchmove', dragMove, { passive: false });
         
         window.addEventListener('mouseup', dragEnd);
-        window.addEventListener('touchend', dragEnd);
+        track.addEventListener('touchend', dragEnd);
         
         function dragStart(e) {
             isDragging = true;
+            isScrolling = false;
+            isSwiping = false;
             startX = getPositionX(e);
+            startY = getPositionY(e);
             stopAutoSlide();
             track.style.transition = 'none'; // remove transition during drag
-            animationId = requestAnimationFrame(animation);
         }
         
         function dragMove(e) {
             if (!isDragging) return;
             const currentX = getPositionX(e);
+            const currentY = getPositionY(e);
             const diffX = currentX - startX;
-            currentTranslate = prevTranslate + diffX;
+            const diffY = currentY - startY;
+
+            if (window.innerWidth <= 768) {
+                if (!isScrolling && !isSwiping) {
+                    if (Math.abs(diffX) > 5 || Math.abs(diffY) > 5) {
+                        if (Math.abs(diffX) > Math.abs(diffY)) {
+                            isSwiping = true;
+                        } else {
+                            isScrolling = true;
+                        }
+                    }
+                }
+
+                if (isScrolling) {
+                    return; // let native scrolling handle it
+                }
+
+                if (isSwiping) {
+                    if (e.cancelable) e.preventDefault();
+                    currentTranslate = prevTranslate + diffX;
+                    if (animationId === 0) {
+                        animationId = requestAnimationFrame(animation);
+                    }
+                }
+            } else {
+                currentTranslate = prevTranslate + diffX;
+                if (animationId === 0) {
+                    animationId = requestAnimationFrame(animation);
+                }
+            }
         }
         
         function dragEnd() {
             if (!isDragging) return;
             isDragging = false;
-            cancelAnimationFrame(animationId);
+            if (animationId !== 0) {
+                cancelAnimationFrame(animationId);
+                animationId = 0;
+            }
             
             track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             
-            const movedBy = currentTranslate - prevTranslate;
-            const cardWidth = getCardWidth();
-            const threshold = cardWidth / 4; // swipe 25% of card to slide
-            
-            if (movedBy < -threshold) {
-                slideTo(currentIndex + 1);
-            } else if (movedBy > threshold) {
-                slideTo(currentIndex - 1);
+            if (window.innerWidth <= 768) {
+                if (isSwiping) {
+                    const movedBy = currentTranslate - prevTranslate;
+                    const cardWidth = getCardWidth();
+                    const threshold = cardWidth / 4; // swipe 25% of card to slide
+                    
+                    if (movedBy < -threshold) {
+                        slideTo(currentIndex + 1);
+                    } else if (movedBy > threshold) {
+                        slideTo(currentIndex - 1);
+                    } else {
+                        slideTo(currentIndex);
+                    }
+                } else {
+                    slideTo(currentIndex);
+                }
             } else {
-                slideTo(currentIndex);
+                const movedBy = currentTranslate - prevTranslate;
+                const cardWidth = getCardWidth();
+                const threshold = cardWidth / 4;
+                
+                if (movedBy < -threshold) {
+                    slideTo(currentIndex + 1);
+                } else if (movedBy > threshold) {
+                    slideTo(currentIndex - 1);
+                } else {
+                    slideTo(currentIndex);
+                }
             }
             
             startAutoSlide();
@@ -208,6 +264,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         function getPositionX(e) {
             return e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        }
+
+        function getPositionY(e) {
+            return e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
         }
         
         function animation() {
