@@ -65,12 +65,12 @@
             // Force reflow for animation
             requestAnimationFrame(() => {
                 chatContainer.style.opacity = '1';
-                chatContainer.style.transform = 'translateY(0) scale(1)';
+                chatContainer.style.transform = 'translateX(0)';
             });
             chatInput.focus();
         } else {
             chatContainer.style.opacity = '0';
-            chatContainer.style.transform = 'translateY(20px) scale(0.95)';
+            chatContainer.style.transform = 'translateX(100%)';
             setTimeout(() => {
                 chatContainer.classList.remove('active');
             }, 300);

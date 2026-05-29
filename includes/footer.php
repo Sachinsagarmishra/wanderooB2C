@@ -68,7 +68,7 @@
         }
     }
     $joeyQuickCardsJson = !empty($joeyQuickCards) ? htmlspecialchars(json_encode($joeyQuickCards), ENT_QUOTES, 'UTF-8') : '';
-    $joeyAvatarPath = SITE_PATH . '/assets/img/wanderoo_Logo.png';
+    $joeyAvatarPath = SITE_PATH . '/assets/img/favicon.png';
     ?>
 
     <!-- Floating Launcher -->
@@ -104,10 +104,12 @@
 
         <!-- Input Footer -->
         <div class="joey-footer">
-            <input type="text" class="joey-input" id="joeyChatInput" placeholder="Ask about destinations, packages..." autocomplete="off">
-            <button class="joey-send-btn" id="joeySendBtn" title="Send">
-                <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-            </button>
+            <div class="joey-input-container">
+                <input type="text" class="joey-input" id="joeyChatInput" placeholder="Ask about destinations, packages..." autocomplete="off">
+                <button class="joey-send-btn" id="joeySendBtn" title="Send">
+                    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
         </div>
 
         <!-- Credits -->
