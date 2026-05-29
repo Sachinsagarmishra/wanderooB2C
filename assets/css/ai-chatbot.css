@@ -729,15 +729,34 @@
     }
 
     .joey-launcher {
-        bottom: 16px;
-        right: 16px;
-        width: 56px;
-        height: 56px;
+        bottom: 20px !important;
+        right: 20px !important;
+        width: 54px !important;
+        height: 54px !important;
     }
 
     .joey-launcher img {
-        width: 38px;
-        height: 38px;
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    /* Align WhatsApp launcher symmetrically on mobile */
+    .whatsapp-float-btn {
+        bottom: 20px !important;
+        left: 20px !important;
+        width: 54px !important;
+        height: 54px !important;
+    }
+    
+    .whatsapp-svg-icon {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    /* Float both above the mobile sticky CTA bar when it is present on the page */
+    body:has(.mobile-sticky-cta) .whatsapp-float-btn,
+    body:has(.mobile-sticky-cta) .joey-launcher {
+        bottom: 95px !important;
     }
 
     /* Mobile Header Layout Adjustment */
