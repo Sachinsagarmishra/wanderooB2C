@@ -77,6 +77,9 @@
         <span class="joey-close-icon">✕</span>
     </button>
 
+    <!-- Backdrop -->
+    <div class="joey-backdrop" id="joeyBackdrop"></div>
+
     <!-- Chat Container -->
     <div class="joey-chat-container" id="joeyChatContainer"
          data-api-base="<?php echo SITE_PATH; ?>"
@@ -92,7 +95,7 @@
             </div>
             <div class="joey-header-badges">
                 <span class="joey-badge joey-badge-encrypted">🔒 ENCRYPTED</span>
-                <span class="joey-badge joey-badge-new">NEW</span>
+                <span class="joey-badge joey-badge-new" id="joeyNewChatBtn" style="cursor: pointer;" title="Start New Conversation">NEW</span>
             </div>
             <button class="joey-close-btn" id="joeyCloseBtn" title="Close">×</button>
         </div>

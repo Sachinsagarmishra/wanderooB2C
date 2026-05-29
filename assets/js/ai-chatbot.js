@@ -12,11 +12,14 @@
         history: [],
         isSending: false,
         quickCards: [],
+        leadCaptured: false,
+        leadDismissed: false,
+        isResetting: false,
     };
 
     // ──── DOM References ───────────────────────────────────────
     let launcher, chatContainer, chatBody, chatInput, sendBtn;
-    let leadForm, leadFormInner;
+    let leadForm, leadFormInner, backdrop;
 
     // ──── Init ─────────────────────────────────────────────────
     function init() {
@@ -26,6 +29,7 @@
         chatInput      = document.getElementById('joeyChatInput');
         sendBtn        = document.getElementById('joeySendBtn');
         leadForm       = document.getElementById('joeyLeadForm');
+        backdrop       = document.getElementById('joeyBackdrop');
 
         if (!launcher || !chatContainer) return;
 
@@ -48,6 +52,17 @@
             }
         });
 
+        // Backdrop click to close
+        if (backdrop) {
+            backdrop.addEventListener('click', toggleChat);
+        }
+
+        // New Chat reset button event
+        const newChatBtn = document.getElementById('joeyNewChatBtn');
+        if (newChatBtn) {
+            newChatBtn.addEventListener('click', confirmNewChat);
+        }
+
         // Lead form events
         document.getElementById('joeyLeadSubmit').addEventListener('click', submitLead);
         document.getElementById('joeyLeadCancel').addEventListener('click', closeLeadForm);
@@ -62,6 +77,12 @@
         if (state.isOpen) {
             chatContainer.classList.add('active');
             launcher.classList.add('active');
+            if (backdrop) {
+                backdrop.classList.add('active');
+                requestAnimationFrame(() => {
+                    backdrop.style.opacity = '1';
+                });
+            }
             // Force reflow for animation
             requestAnimationFrame(() => {
                 chatContainer.style.opacity = '1';
@@ -71,6 +92,12 @@
         } else {
             chatContainer.style.opacity = '0';
             chatContainer.style.transform = 'translateX(100%)';
+            if (backdrop) {
+                backdrop.style.opacity = '0';
+                setTimeout(() => {
+                    backdrop.classList.remove('active');
+                }, 300);
+            }
             setTimeout(() => {
                 chatContainer.classList.remove('active');
             }, 300);
@@ -182,7 +209,7 @@
         if (el) el.remove();
     }
 
-    // ──── Call AI Chat API ─────────────────────────────────────
+    // ──── Call AI Chat API (Streaming) ──────────────────────────
     function callAPI(userMessage) {
         state.isSending = true;
         sendBtn.disabled = true;
@@ -198,45 +225,131 @@
                 history: state.history.slice(0, -1), // exclude the just-added user msg
             }),
         })
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                hideTyping();
-                state.isSending = false;
-                sendBtn.disabled = false;
-
-                if (data.success && data.reply) {
-                    appendMessage('ai', data.reply);
-
-                    // Check if the reply triggers lead capture
-                    checkLeadTrigger(data.reply);
-                } else {
-                    appendMessage('ai', data.error || 'Sorry, something went wrong. Please try again.');
+        .then(async function (response) {
+            hideTyping();
+            if (!response.ok) {
+                // If not ok, read text to see if it's a JSON error
+                const errText = await response.text();
+                try {
+                    const parsedErr = JSON.parse(errText);
+                    throw new Error(parsedErr.error || 'Network error.');
+                } catch (e) {
+                    throw new Error('Oops! Couldn\'t reach Joey right now. Please try again in a moment.');
                 }
-            })
-            .catch(function () {
-                hideTyping();
-                state.isSending = false;
-                sendBtn.disabled = false;
-                appendMessage('ai', 'Oops! Couldn\'t reach Joey right now. Please try again in a moment.');
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder('utf-8');
+            let firstChunkRead = false;
+            let buffer = '';
+            let fullReply = '';
+
+            // Create placeholder message bubble for streaming response
+            var div = document.createElement('div');
+            div.className = 'joey-message ai';
+            var bubble = document.createElement('div');
+            bubble.className = 'joey-bubble';
+            div.appendChild(bubble);
+            chatBody.appendChild(div);
+            scrollToBottom();
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                const chunkText = decoder.decode(value, { stream: true });
+
+                // Check if the response started as a JSON error object
+                if (!firstChunkRead) {
+                    firstChunkRead = true;
+                    if (chunkText.trim().startsWith('{')) {
+                        try {
+                            const errData = JSON.parse(chunkText);
+                            bubble.textContent = errData.error || errData.error?.message || 'AI service error.';
+                            state.isSending = false;
+                            sendBtn.disabled = false;
+                            return;
+                        } catch (e) { /* fall through to SSE stream */ }
+                    }
+                }
+
+                buffer += chunkText;
+                const lines = buffer.split('\n');
+                buffer = lines.pop(); // keep last incomplete line in buffer
+
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (!trimmed) continue;
+                    if (trimmed.startsWith('data: ')) {
+                        const dataStr = trimmed.slice(6);
+                        if (dataStr === '[DONE]') {
+                            break;
+                        }
+                        try {
+                            const parsed = JSON.parse(dataStr);
+                            const content = parsed.choices[0]?.delta?.content || '';
+                            if (content) {
+                                fullReply += content;
+                                bubble.innerHTML = formatMarkdown(fullReply);
+                                scrollToBottom();
+                            }
+                        } catch (err) {
+                            // ignore incomplete chunk json parsing errors
+                        }
+                    }
+                }
+            }
+
+            // Cleanup & Save to history
+            state.isSending = false;
+            sendBtn.disabled = false;
+
+            state.history.push({
+                role: 'assistant',
+                content: fullReply,
             });
+
+            // Trigger lead check
+            checkLeadTrigger(fullReply);
+        })
+        .catch(function (error) {
+            hideTyping();
+            state.isSending = false;
+            sendBtn.disabled = false;
+            appendMessage('ai', error.message || 'Oops! Couldn\'t reach Joey right now. Please try again in a moment.');
+        });
     }
 
     // ──── Check if AI reply suggests lead capture ──────────────
     function checkLeadTrigger(reply) {
+        // Do not pop up repeatedly if already submitted or dismissed in this session
+        if (state.leadCaptured || state.leadDismissed || sessionStorage.getItem('joey_lead_submitted')) {
+            return;
+        }
         var lower = reply.toLowerCase();
         var triggers = ['fill the form', 'share your details', 'your name', 'your email', 'your whatsapp',
             'connect you with', 'get in touch', 'share your contact', 'leave your details',
             'book this', 'request a quote', 'custom proposal'];
         for (var i = 0; i < triggers.length; i++) {
             if (lower.indexOf(triggers[i]) !== -1) {
-                setTimeout(function () { openLeadForm(); }, 1200);
+                setTimeout(function () { openLeadForm(false); }, 1200);
                 return;
             }
         }
     }
 
+    // ──── Confirm New Chat Reset ────────────────────────────────
+    function confirmNewChat() {
+        if (confirm("Are you sure you want to start a new conversation? This will clear your current chat history.")) {
+            // Open lead form to capture details before reset
+            openLeadForm(true);
+        }
+    }
+
     // ──── Lead Form ────────────────────────────────────────────
-    function openLeadForm() {
+    function openLeadForm(fromReset) {
+        state.isResetting = !!fromReset;
+
         // Build the context summary from recent conversation
         var contextParts = [];
         state.history.forEach(function (msg) {
@@ -245,6 +358,10 @@
             }
         });
         var contextSummary = contextParts.slice(-3).join(' | ');
+        if (state.isResetting) {
+            contextSummary = "[NEW CHAT RESET] " + contextSummary;
+        }
+        
         leadForm.setAttribute('data-context', contextSummary);
         leadForm.classList.add('active');
 
@@ -258,6 +375,14 @@
 
     function closeLeadForm() {
         leadForm.classList.remove('active');
+        state.leadDismissed = true;
+
+        if (state.isResetting) {
+            state.isResetting = false;
+            state.history = [];
+            renderWelcome();
+            appendMessage('ai', 'Started a new session for you. How can I help you today? 🦘');
+        }
     }
 
     function submitLead() {
@@ -293,11 +418,23 @@
                 submitBtn.textContent = 'Submit Details';
 
                 if (data.success) {
+                    state.leadCaptured = true;
+                    sessionStorage.setItem('joey_lead_submitted', 'true');
+
                     document.getElementById('joeyLeadFormInner').style.display = 'none';
                     document.getElementById('joeyLeadSuccess').style.display = 'block';
                     setTimeout(function () {
-                        closeLeadForm();
-                        appendMessage('ai', '✅ Your details have been captured! A Wanderoo travel expert will contact you soon on WhatsApp. 🦘✨');
+                        // Close form
+                        leadForm.classList.remove('active');
+
+                        if (state.isResetting) {
+                            state.isResetting = false;
+                            state.history = [];
+                            renderWelcome();
+                            appendMessage('ai', '✅ Details captured! I have started a fresh session for you. How can I help you today? 🦘✨');
+                        } else {
+                            appendMessage('ai', '✅ Your details have been captured! A Wanderoo travel expert will contact you soon on WhatsApp. 🦘✨');
+                        }
                     }, 2500);
                 } else {
                     alert(data.error || 'Something went wrong. Please try again.');
@@ -331,23 +468,59 @@
 
     function formatMarkdown(text) {
         if (!text) return '';
-        // Basic markdown: bold, italic, line breaks, lists
-        var html = escapeHtml(text);
-        // Bold **text**
+
+        // Extract and replace PKG_CARD shortcodes
+        const pkgCards = [];
+        let html = text.replace(/\[PKG_CARD:\s*(.*?)\s*\]/g, function(match, inner) {
+            const parts = inner.split('|');
+            if (parts.length >= 4) {
+                const slug = parts[0].trim();
+                const title = parts[1].trim();
+                const price = parts[2].trim();
+                const duration = parts[3].trim();
+                const dest = parts[4] ? parts[4].trim() : '';
+
+                const basePath = chatContainer.getAttribute('data-api-base') || '';
+                // Clean URL format: basePath/destination/slug
+                const url = basePath + '/' + encodeURIComponent(dest) + '/' + encodeURIComponent(slug);
+
+                const cardHtml = 
+                    '<a href="' + escapeAttr(url) + '" class="joey-pkg-card" target="_blank">' +
+                    '<div class="joey-pkg-card-content">' +
+                    '<div class="joey-pkg-card-left">' +
+                    '<span class="joey-pkg-card-badge">🌴 ' + escapeHtml(duration) + '</span>' +
+                    '<h4 class="joey-pkg-card-title">' + escapeHtml(title) + '</h4>' +
+                    '<p class="joey-pkg-card-price">Starting from <span class="joey-pkg-price-amount">' + escapeHtml(price) + '</span>/person</p>' +
+                    '</div>' +
+                    '<div class="joey-pkg-card-right">' +
+                    '<div class="joey-pkg-card-arrow">➔</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</a>';
+
+                pkgCards.push(cardHtml);
+                return '___PKG_CARD_PLACEHOLDER_' + (pkgCards.length - 1) + '___';
+            }
+            return '';
+        });
+
+        // Run standard markdown formatting on the remaining text
+        html = escapeHtml(html);
         html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-        // Italic *text*
         html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-        // Unordered lists
         html = html.replace(/^[-•]\s+(.+)$/gm, '<li>$1</li>');
         html = html.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
-        // Numbered lists
         html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
-        // Paragraphs
         html = html.replace(/\n\n/g, '</p><p>');
         html = html.replace(/\n/g, '<br>');
         html = '<p>' + html + '</p>';
-        // Clean up empty tags
         html = html.replace(/<p><\/p>/g, '');
+
+        // Restore PKG_CARD HTML
+        pkgCards.forEach(function(cardHtml, idx) {
+            html = html.replace('___PKG_CARD_PLACEHOLDER_' + idx + '___', cardHtml);
+        });
+
         return html;
     }
 

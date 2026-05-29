@@ -105,7 +105,8 @@ function buildKnowledgeContext($pdo) {
         foreach ($packages as $pkg) {
             $context .= "  <PACKAGE>\n";
             $context .= "    Title: " . $pkg['title'] . "\n";
-            $context .= "    Destination: " . $pkg['destination'] . "\n";
+            $context .= "    Slug: " . $pkg['slug'] . "\n";
+            $context .= "    Destination Slug: " . $pkg['destination'] . "\n";
             $context .= "    Duration: " . $pkg['duration'] . "\n";
             $context .= "    Price: " . $pkg['price'] . "\n";
             if (!empty($pkg['old_price'])) {
@@ -206,6 +207,10 @@ CRITICAL RULES:
 PROMPT;
 
 $finalSystemPrompt = !empty($systemPrompt) ? $systemPrompt : $defaultSystemPrompt;
+
+// Append package cards formatting rule
+$finalSystemPrompt .= "\n\n10. When recommending or listing tour packages to the user, you MUST include a special shortcode tag on its own line: `[PKG_CARD: slug|title|price|duration|destination]`. The destination should be the destination slug. For example: `[PKG_CARD: 5-nights-luxury-bali-escape|5 Nights Luxury Bali Escape|₹67,999|6 days / 5 nights|bali]`. Do not write markdown links for packages. Use this shortcode instead right after the description so the user gets a beautiful interactive card to click.\n";
+
 $finalSystemPrompt .= "\n\n--- WANDEROO KNOWLEDGE BASE (LIVE DATA) ---\n" . $knowledgeContext;
 
 // ──── Build Messages Array ─────────────────────────────────────
@@ -224,17 +229,27 @@ foreach ($recentHistory as $msg) {
 // Append current user message
 $messages[] = ['role' => 'user', 'content' => $userMessage];
 
-// ──── Call OpenRouter API ──────────────────────────────────────
+// ──── Call OpenRouter API with SSE Streaming ───────────────────
+// Turn off output buffering to allow real-time flushing
+if (ob_get_level() > 0) {
+    ob_end_clean();
+}
+
+header('Content-Type: text/event-stream');
+header('Cache-Control: no-cache');
+header('Connection: keep-alive');
+header('X-Accel-Buffering: no'); // Disable buffering on Nginx
+
 $payload = json_encode([
     'model'       => $modelId,
     'messages'    => $messages,
     'temperature' => $temperature,
     'max_tokens'  => 1024,
+    'stream'      => true,
 ]);
 
 $ch = curl_init('https://openrouter.ai/api/v1/chat/completions');
 curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST           => true,
     CURLOPT_HTTPHEADER     => [
         'Content-Type: application/json',
@@ -245,31 +260,16 @@ curl_setopt_array($ch, [
     CURLOPT_POSTFIELDS     => $payload,
     CURLOPT_TIMEOUT        => 60,
     CURLOPT_CONNECTTIMEOUT => 10,
+    CURLOPT_WRITEFUNCTION  => function($ch, $chunk) {
+        echo $chunk;
+        if (ob_get_level() > 0) {
+            ob_flush();
+        }
+        flush();
+        return strlen($chunk);
+    }
 ]);
 
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$curlError = curl_error($ch);
+curl_exec($ch);
 curl_close($ch);
-
-if ($curlError) {
-    http_response_code(502);
-    echo json_encode(['error' => 'Failed to reach the AI service. Please try again later.']);
-    exit;
-}
-
-$data = json_decode($response, true);
-
-if ($httpCode !== 200 || !isset($data['choices'][0]['message']['content'])) {
-    $errorMsg = isset($data['error']['message']) ? $data['error']['message'] : 'Unknown API error.';
-    http_response_code(502);
-    echo json_encode(['error' => 'AI service error: ' . $errorMsg]);
-    exit;
-}
-
-$aiReply = $data['choices'][0]['message']['content'];
-
-echo json_encode([
-    'success' => true,
-    'reply'   => $aiReply,
-]);
+exit;
