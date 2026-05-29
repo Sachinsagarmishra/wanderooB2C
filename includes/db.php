@@ -55,6 +55,21 @@ try {
     // Non-blocking migration; day-wise images are optional.
 }
 
+// Joey AI — ai_leads table for chatbot lead capture
+try {
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `ai_leads` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `client_name` varchar(150) NOT NULL,
+      `work_email` varchar(150) NOT NULL,
+      `whatsapp_line` varchar(50) NOT NULL,
+      `captured_context` text NOT NULL,
+      `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
+} catch (PDOException $e) {
+    // Non-blocking migration; AI leads are optional.
+}
+
 // Load global settings
 global $site_settings;
 $site_settings = [];

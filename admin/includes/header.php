@@ -45,6 +45,7 @@ $currentPage = basename($_SERVER['SCRIPT_NAME']);
                 <a href="manage-packages.php" class="nav-item <?php echo $currentPage === 'manage-packages.php' || $currentPage === 'package-form.php' ? 'active' : ''; ?>">Packages</a>
                 <a href="manage-testimonials.php" class="nav-item <?php echo $currentPage === 'manage-testimonials.php' || $currentPage === 'testimonial-form.php' ? 'active' : ''; ?>">Testimonials</a>
                 <a href="leads.php" class="nav-item <?php echo $currentPage === 'leads.php' ? 'active' : ''; ?>">Leads</a>
+                <a href="ai-agent.php" class="nav-item <?php echo $currentPage === 'ai-agent.php' ? 'active' : ''; ?>" style="color: <?php echo $currentPage === 'ai-agent.php' ? 'var(--accent)' : 'var(--fg2)'; ?>;">🦘 Joey AI</a>
                 <a href="settings.php" class="nav-item <?php echo $currentPage === 'settings.php' ? 'active' : ''; ?>">Settings</a>
             </nav>
             <nav class="admin-nav nav-spacer">
