@@ -113,7 +113,7 @@
             { icon: '✈️', title: 'Singapore packages', desc: 'Gardens by the bay, Sentosa' },
             { icon: '🏝️', title: 'Maldives luxury', desc: 'Overwater villas, retreats' },
             { icon: '🗻', title: 'Japan explorer', desc: 'Tokyo, Kyoto, Mt Fuji' },
-            { icon: '🏔️', title: 'Kerala getaway', desc: 'Tea gardens, backwaters' },
+            { icon: '🏝️', title: 'Sri Lanka escape', desc: 'Beaches, hills, wildlife' },
             { icon: '🔍', title: 'Custom travel', desc: 'Plan a tailormade holiday' },
         ];
 

@@ -255,7 +255,7 @@ try {
                     echo '<option value="maldives" ' . ($filterDest === 'maldives' ? 'selected' : '') . '>Maldives</option>';
                     echo '<option value="bali" ' . ($filterDest === 'bali' ? 'selected' : '') . '>Bali</option>';
                     echo '<option value="japan" ' . ($filterDest === 'japan' ? 'selected' : '') . '>Japan</option>';
-                    echo '<option value="kerala" ' . ($filterDest === 'kerala' ? 'selected' : '') . '>Kerala</option>';
+                    echo '<option value="sri-lanka" ' . ($filterDest === 'sri-lanka' ? 'selected' : '') . '>Sri Lanka</option>';
                 }
                 ?>
             </select>

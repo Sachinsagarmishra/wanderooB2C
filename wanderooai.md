@@ -96,7 +96,7 @@ Every query sent to the LLM backend will dynamically compile this data into a st
     2. **✈️ Singapore stopover** (Gardens by the bay, Sentosa)
     3. **🏝️ Maldives luxury** (Overwater villas, beachfront retreats)
     4. **🗻 Japan explorer** (Tokyo, Kyoto highlights, Mt Fuji)
-    5. **🏔️ Munnar Hills** (Tea gardens, Kerala backwaters)
+    5. **🏝️ Sri Lanka escape** (Beaches, hills, wildlife)
     6. **🔍 Custom travel** (Plan a tailormade holiday)
 * **Chat Message Bubbles**:
   - Clean typography using Google Font `Inter`.

@@ -270,13 +270,13 @@ try {
             'description' => 'Discover the perfect harmony of ancient traditions and futuristic innovation in Japan. Journey through the bustling streets of Tokyo, the historic temples of Kyoto, and the scenic beauty of Mount Fuji. Our custom Japan itineraries bring you the best of cherry blossoms, culinary wonders, and rich culture.'
         ],
         [
-            'slug' => 'kerala',
-            'name' => 'Kerala',
-            'title' => 'Kerala Packages',
-            'breadcrumb' => 'Kerala',
-            'hero_bg' => 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&q=80&w=1600',
-            'dropdown_icon' => 'assets/img/Kerala.svg',
-            'description' => 'Unwind in \'God\'s Own Country\' with our curated Kerala tour packages. Cruise along the serene backwaters of Alappuzha on a traditional houseboat, explore the misty tea gardens of Munnar, and relax on the pristine beaches of Kovalam. Kerala is the ultimate destination for slow travel and rejuvenation.'
+            'slug' => 'sri-lanka',
+            'name' => 'Sri Lanka',
+            'title' => 'Sri Lanka Packages',
+            'breadcrumb' => 'Sri Lanka',
+            'hero_bg' => 'https://images.unsplash.com/photo-1588252613571-86c316a8fb90?auto=format&fit=crop&q=80&w=1600',
+            'dropdown_icon' => 'assets/img/SriLanka.svg',
+            'description' => 'Explore Sri Lanka with curated tour packages covering golden beaches, tea hills, wildlife safaris, heritage forts, river rides and romantic coastal stays.'
         ]
     ];
 

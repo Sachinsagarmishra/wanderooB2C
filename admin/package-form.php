@@ -360,7 +360,7 @@ if ($editId > 0) {
                         echo '<option value="maldives" ' . ($isEdit && $pkg['destination'] === 'maldives' ? 'selected' : '') . '>Maldives</option>';
                         echo '<option value="bali" ' . ($isEdit && $pkg['destination'] === 'bali' ? 'selected' : '') . '>Bali</option>';
                         echo '<option value="japan" ' . ($isEdit && $pkg['destination'] === 'japan' ? 'selected' : '') . '>Japan</option>';
-                        echo '<option value="kerala" ' . ($isEdit && $pkg['destination'] === 'kerala' ? 'selected' : '') . '>Kerala</option>';
+                        echo '<option value="sri-lanka" ' . ($isEdit && $pkg['destination'] === 'sri-lanka' ? 'selected' : '') . '>Sri Lanka</option>';
                     }
                     ?>
                 </select>

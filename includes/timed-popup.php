@@ -43,7 +43,7 @@
                             echo '<option value="maldives">Maldives</option>';
                             echo '<option value="bali">Bali</option>';
                             echo '<option value="japan">Japan</option>';
-                            echo '<option value="kerala">Kerala</option>';
+                            echo '<option value="sri-lanka">Sri Lanka</option>';
                         }
                         ?>
                     </select>

@@ -336,72 +336,72 @@ $destinations = [
             ]
         ]
     ],
-    'kerala' => [
-        'name' => 'Kerala',
-        'title' => 'Kerala Packages',
-        'breadcrumb' => 'Kerala',
-        'hero_bg' => 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&q=80&w=1600',
-        'desc' => 'Unwind in \'God\'s Own Country\' with our curated Kerala tour packages. Cruise along the serene backwaters of Alappuzha on a traditional houseboat, explore the misty tea gardens of Munnar, and relax on the pristine beaches of Kovalam. Kerala is the ultimate destination for slow travel and rejuvenation.',
+    'sri-lanka' => [
+        'name' => 'Sri Lanka',
+        'title' => 'Sri Lanka Packages',
+        'breadcrumb' => 'Sri Lanka',
+        'hero_bg' => 'https://images.unsplash.com/photo-1588252613571-86c316a8fb90?auto=format&fit=crop&q=80&w=1600',
+        'desc' => 'Explore Sri Lanka with curated tour packages covering golden beaches, tea hills, wildlife safaris, heritage forts, river rides and romantic coastal stays. Sri Lanka is ideal for couples, families and travellers who want culture, nature and easy island comfort in one trip.',
         'packages' => [
             [
-                'img' => 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&q=80&w=800',
-                'alt' => 'Kerala Tea Gardens',
-                'duration' => '4 days & 3 nights',
+                'img' => 'https://images.unsplash.com/photo-1588252613571-86c316a8fb90?auto=format&fit=crop&q=80&w=800',
+                'alt' => 'Sri Lanka coast',
+                'duration' => '5 days & 4 nights',
                 'rating' => '4.7',
                 'rating_count' => '51',
-                'title' => 'Munnar Hills & Tea Gardens',
-                'tags' => ['Hills', 'Tea Garden'],
-                'old_price' => 'INR 45,000',
-                'save' => 'SAVE INR 8,000',
-                'price' => 'INR 37,000'
+                'title' => 'Sri Lanka Seaside Escape',
+                'tags' => ['Beach Holiday', 'Mirissa'],
+                'old_price' => 'INR 43,799',
+                'save' => 'SAVE INR 13,700',
+                'price' => 'INR 30,099'
             ],
             [
-                'img' => 'https://images.unsplash.com/photo-1593693411515-c202e974eb8f?auto=format&fit=crop&q=80&w=800',
-                'alt' => 'Kerala Backwaters',
-                'duration' => '3 days & 2 nights',
+                'img' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800',
+                'alt' => 'Sri Lanka beach',
+                'duration' => '7 days & 6 nights',
                 'rating' => '4.8',
                 'rating_count' => '73',
-                'title' => 'Alleppey Houseboat Cruise',
-                'tags' => ['Backwaters', 'Houseboat'],
-                'old_price' => 'INR 35,000',
-                'save' => 'SAVE INR 7,000',
-                'price' => 'INR 28,000'
+                'title' => 'Offbeat Sri Lanka South Coast',
+                'tags' => ['Offbeat Trip', 'South Coast'],
+                'old_price' => 'INR 93,701',
+                'save' => 'SAVE INR 28,302',
+                'price' => 'INR 65,399'
             ],
             [
-                'img' => 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&q=80&w=800',
-                'alt' => 'Kerala Complete',
-                'duration' => '7 days & 6 nights',
+                'img' => 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&q=80&w=800',
+                'alt' => 'Sri Lanka hills',
+                'duration' => '9 days & 8 nights',
                 'rating' => '4.9',
                 'rating_count' => '92',
-                'title' => 'Kerala Complete Experience',
-                'tags' => ['Hills', 'Houseboat', 'Beach'],
-                'old_price' => 'INR 85,000',
-                'save' => 'SAVE INR 15,000',
-                'price' => 'INR 70,000'
+                'title' => 'Romantic Sri Lanka Hills & Beach',
+                'tags' => ['Romantic Trip', 'Hill Country'],
+                'old_price' => 'INR 81,499',
+                'save' => 'SAVE INR 24,500',
+                'price' => 'INR 56,999'
             ],
             [
-                'img' => 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&q=80&w=800',
-                'alt' => 'Wayanad Treehouse',
-                'duration' => '5 days & 4 nights',
+                'img' => 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=800',
+                'alt' => 'Sri Lanka wildlife',
+                'duration' => '10 days & 9 nights',
                 'rating' => '4.8',
                 'rating_count' => '37',
-                'title' => 'Wayanad Treehouse & Wildlife',
-                'tags' => ['Treehouse', 'Safari'],
-                'old_price' => 'INR 48,000',
-                'save' => 'SAVE INR 8,000',
-                'price' => 'INR 40,000'
+                'title' => 'Best of Sri Lanka Complete',
+                'tags' => ['Best Seller', 'Wildlife'],
+                'old_price' => 'INR 102,199',
+                'save' => 'SAVE INR 34,000',
+                'price' => 'INR 68,199'
             ],
             [
-                'img' => 'https://images.unsplash.com/photo-1589982441164-325cfccb9557?auto=format&fit=crop&q=80&w=800',
-                'alt' => 'Kovalam Beach',
+                'img' => 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&q=80&w=800',
+                'alt' => 'Sri Lanka heritage',
                 'duration' => '6 days & 5 nights',
                 'rating' => '4.9',
                 'rating_count' => '45',
-                'title' => 'Kovalam Beach & Varkala Cliffs',
-                'tags' => ['Beach', 'Varkala Cliff'],
-                'old_price' => 'INR 44,000',
-                'save' => 'SAVE INR 6,000',
-                'price' => 'INR 38,000'
+                'title' => 'Sri Lanka Heritage Coast',
+                'tags' => ['Heritage Trip', 'Galle'],
+                'old_price' => 'INR 58,500',
+                'save' => 'SAVE INR 17,250',
+                'price' => 'INR 41,250'
             ]
         ]
     ]

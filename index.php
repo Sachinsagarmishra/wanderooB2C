@@ -1,6 +1,6 @@
 <?php
 $pageTitle = "Wanderoo - Premium Handpicked Getaways & Luxury Honeymoons";
-$pageDesc = "Discover handpicked luxury getaways, romantic honeymoon packages, and custom travel itineraries to Singapore, Maldives, Bali, Japan, and Kerala with Wanderoo.";
+$pageDesc = "Discover handpicked luxury getaways, romantic honeymoon packages, and custom travel itineraries to Singapore, Maldives, Bali, Japan, and Sri Lanka with Wanderoo.";
 $bodyClass = "home-page";
 include_once 'includes/header.php';
 
