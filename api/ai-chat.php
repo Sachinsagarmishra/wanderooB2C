@@ -47,8 +47,9 @@ if (!$input || empty($input['message'])) {
     exit;
 }
 
-$userMessage = trim($input['message']);
-$history     = isset($input['history']) && is_array($input['history']) ? $input['history'] : [];
+$userMessage   = trim($input['message']);
+$history       = isset($input['history']) && is_array($input['history']) ? $input['history'] : [];
+$leadSubmitted = !empty($input['lead_submitted']) && $input['lead_submitted'] === true;
 
 // ──── Build Dynamic Knowledge Context ──────────────────────────
 function buildKnowledgeContext($pdo) {
@@ -215,8 +216,13 @@ $finalSystemPrompt .= "\n\n10. When recommending or listing tour packages to the
 // Speak in simple English
 $finalSystemPrompt .= "\n11. Speak in simple, clear, and friendly English. Avoid complex words, fancy vocabulary, or corporate jargon. Keep sentences short and easy to understand.\n";
 
-// Exact call-to-action signature at the end of every single message
-$finalSystemPrompt .= "\n12. You MUST end your very last sentence of EVERY reply with this exact phrase: \"To put together a real proposal, I'll need a few details. What's your **name** and work **email**, and a **WhatsApp number** we can reach you on?\" Do not change the phrasing, casing, or bold tags (**name**, **email**, **WhatsApp number**). This is mandatory and must be present at the end of every response.\n";
+if ($leadSubmitted) {
+    // Lead is already submitted! DO NOT ask for contact details again.
+    $finalSystemPrompt .= "\n12. NOTE: The user has already provided their contact details (name, email, WhatsApp number). DO NOT ask for these details again, and DO NOT append the proposal CTA signature. Respond directly and helpfully to their travel questions.\n";
+} else {
+    // Exact call-to-action signature at the end of every single message
+    $finalSystemPrompt .= "\n12. You MUST end your very last sentence of EVERY reply with this exact phrase: \"To put together a real proposal, I'll need a few details. What's your **name** and work **email**, and a **WhatsApp number** we can reach you on?\" Do not change the phrasing, casing, or bold tags (**name**, **email**, **WhatsApp number**). This is mandatory and must be present at the end of every response.\n";
+}
 
 $finalSystemPrompt .= "\n\n--- WANDEROO KNOWLEDGE BASE (LIVE DATA) ---\n" . $knowledgeContext;
 

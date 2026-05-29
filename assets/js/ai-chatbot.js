@@ -217,12 +217,15 @@
 
         var basePath = chatContainer.getAttribute('data-api-base') || '';
 
+        var isLeadSubmitted = sessionStorage.getItem('joey_lead_submitted') === 'true' || state.leadCaptured;
+
         fetch(basePath + '/api/ai-chat.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: userMessage,
                 history: state.history.slice(0, -1), // exclude the just-added user msg
+                lead_submitted: isLeadSubmitted,
             }),
         })
         .then(async function (response) {
@@ -409,6 +412,27 @@
 
         if (!name || !email || !phone) {
             alert('Please fill in all fields.');
+            return;
+        }
+
+        // WhatsApp number validation check
+        const cleanPhone = phone.replace(/\D/g, '');
+        if (cleanPhone.length < 10 || cleanPhone.length > 15) {
+            alert('Please enter a valid WhatsApp number (at least 10 digits).');
+            return;
+        }
+
+        // Reject identical digits (e.g. 0000000000, 9999999999)
+        if (/^(\d)\1+$/.test(cleanPhone)) {
+            alert('Please enter a valid WhatsApp number (avoid repeating digits).');
+            return;
+        }
+
+        // Reject simple sequences (e.g. 1234567890, 9876543210)
+        const seq = "01234567890123456789";
+        const revSeq = "98765432109876543210";
+        if (seq.indexOf(cleanPhone) !== -1 || revSeq.indexOf(cleanPhone) !== -1 || cleanPhone === '123456789' || cleanPhone === '12345678' || cleanPhone === '1234567890') {
+            alert('Please enter a valid WhatsApp number (avoid dummy sequential runs).');
             return;
         }
 
