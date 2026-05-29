@@ -290,7 +290,15 @@
                             const content = parsed.choices[0]?.delta?.content || '';
                             if (content) {
                                 fullReply += content;
-                                bubble.innerHTML = formatMarkdown(fullReply);
+                                // Clean up any trailing assistant tags
+                                let cleanedText = fullReply
+                                    .replace(/<\/assistant>/gi, '')
+                                    .replace(/<assistant>/gi, '')
+                                    .replace(/<\/system>/gi, '')
+                                    .replace(/<system>/gi, '')
+                                    .replace(/<\/user>/gi, '')
+                                    .replace(/<user>/gi, '');
+                                bubble.innerHTML = formatMarkdown(cleanedText);
                                 scrollToBottom();
                             }
                         } catch (err) {
@@ -304,13 +312,21 @@
             state.isSending = false;
             sendBtn.disabled = false;
 
+            let finalCleaned = fullReply
+                .replace(/<\/assistant>/gi, '')
+                .replace(/<assistant>/gi, '')
+                .replace(/<\/system>/gi, '')
+                .replace(/<system>/gi, '')
+                .replace(/<\/user>/gi, '')
+                .replace(/<user>/gi, '');
+
             state.history.push({
                 role: 'assistant',
-                content: fullReply,
+                content: finalCleaned,
             });
 
             // Trigger lead check
-            checkLeadTrigger(fullReply);
+            checkLeadTrigger(finalCleaned);
         })
         .catch(function (error) {
             hideTyping();
@@ -469,37 +485,52 @@
     function formatMarkdown(text) {
         if (!text) return '';
 
-        // Extract and replace PKG_CARD shortcodes
-        const pkgCards = [];
-        let html = text.replace(/\[PKG_CARD:\s*(.*?)\s*\]/g, function(match, inner) {
-            const parts = inner.split('|');
-            if (parts.length >= 4) {
-                const slug = parts[0].trim();
-                const title = parts[1].trim();
-                const price = parts[2].trim();
-                const duration = parts[3].trim();
-                const dest = parts[4] ? parts[4].trim() : '';
+        // Extract and replace consecutive PKG_CARD shortcodes
+        const pkgCardGroups = [];
+        let html = text.replace(/(?:\[PKG_CARD:\s*[^\n\]]+?\s*\]\s*)+/g, function(match) {
+            const cardsHtml = [];
+            const tagRegex = /\[PKG_CARD:\s*([^\n\]]*?)\s*\]/g;
+            let tagMatch;
 
-                const basePath = chatContainer.getAttribute('data-api-base') || '';
-                // Clean URL format: basePath/destination/slug
-                const url = basePath + '/' + encodeURIComponent(dest) + '/' + encodeURIComponent(slug);
+            while ((tagMatch = tagRegex.exec(match)) !== null) {
+                const inner = tagMatch[1];
+                const parts = inner.split('|');
+                if (parts.length >= 4) {
+                    const slug = parts[0].trim();
+                    const title = parts[1].trim();
+                    const price = parts[2].trim();
+                    const duration = parts[3].trim();
+                    const dest = parts[4] ? parts[4].trim() : '';
+                    const heroImage = parts[5] ? parts[5].trim() : '';
+                    const rating = parts[6] ? parts[6].trim() : '4.5';
 
-                const cardHtml = 
-                    '<a href="' + escapeAttr(url) + '" class="joey-pkg-card" target="_blank">' +
-                    '<div class="joey-pkg-card-content">' +
-                    '<div class="joey-pkg-card-left">' +
-                    '<span class="joey-pkg-card-badge">🌴 ' + escapeHtml(duration) + '</span>' +
-                    '<h4 class="joey-pkg-card-title">' + escapeHtml(title) + '</h4>' +
-                    '<p class="joey-pkg-card-price">Starting from <span class="joey-pkg-price-amount">' + escapeHtml(price) + '</span>/person</p>' +
-                    '</div>' +
-                    '<div class="joey-pkg-card-right">' +
-                    '<div class="joey-pkg-card-arrow">➔</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</a>';
+                    const basePath = chatContainer.getAttribute('data-api-base') || '';
+                    const url = basePath + '/' + encodeURIComponent(dest) + '/' + encodeURIComponent(slug);
+                    
+                    let imgUrl = heroImage ? (heroImage.startsWith('http') ? heroImage : (basePath + '/' + heroImage)) : (basePath + '/assets/img/hero-bg.webp');
 
-                pkgCards.push(cardHtml);
-                return '___PKG_CARD_PLACEHOLDER_' + (pkgCards.length - 1) + '___';
+                    const cardHtml = 
+                        '<a href="' + escapeAttr(url) + '" class="joey-pkg-mini-card" target="_blank">' +
+                        '<div class="joey-pkg-card-img-wrapper">' +
+                        '<img src="' + escapeAttr(imgUrl) + '" alt="' + escapeAttr(title) + '" class="joey-pkg-card-img">' +
+                        '</div>' +
+                        '<div class="joey-pkg-card-body">' +
+                        '<h4 class="joey-pkg-card-title">' + escapeHtml(title) + '</h4>' +
+                        '<p class="joey-pkg-card-duration">⏱️ ' + escapeHtml(duration) + '</p>' +
+                        '<div class="joey-pkg-card-footer">' +
+                        '<span class="joey-pkg-card-price">' + escapeHtml(price) + '</span>' +
+                        '<span class="joey-pkg-card-rating">★ ' + escapeHtml(rating) + '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</a>';
+
+                    cardsHtml.push(cardHtml);
+                }
+            }
+
+            if (cardsHtml.length > 0) {
+                pkgCardGroups.push('<div class="joey-pkg-cards-grid">' + cardsHtml.join('') + '</div>');
+                return '___PKG_CARD_GROUP_PLACEHOLDER_' + (pkgCardGroups.length - 1) + '___';
             }
             return '';
         });
@@ -516,9 +547,9 @@
         html = '<p>' + html + '</p>';
         html = html.replace(/<p><\/p>/g, '');
 
-        // Restore PKG_CARD HTML
-        pkgCards.forEach(function(cardHtml, idx) {
-            html = html.replace('___PKG_CARD_PLACEHOLDER_' + idx + '___', cardHtml);
+        // Restore PKG_CARD groups HTML
+        pkgCardGroups.forEach(function(groupHtml, idx) {
+            html = html.replace('___PKG_CARD_GROUP_PLACEHOLDER_' + idx + '___', groupHtml);
         });
 
         return html;

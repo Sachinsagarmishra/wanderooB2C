@@ -94,7 +94,7 @@ function buildKnowledgeContext($pdo) {
 
     // 3. Tour Packages with inner details
     try {
-        $pkgStmt = $pdo->query("SELECT id, destination, title, slug, description, overview, duration, old_price, price, save_text, rating, rating_count FROM tour_packages WHERE status = 'active' ORDER BY destination, title");
+        $pkgStmt = $pdo->query("SELECT id, destination, title, slug, hero_image, description, overview, duration, old_price, price, save_text, rating, rating_count FROM tour_packages WHERE status = 'active' ORDER BY destination, title");
         $packages = $pkgStmt->fetchAll();
     } catch (PDOException $e) {
         $packages = [];
@@ -107,6 +107,7 @@ function buildKnowledgeContext($pdo) {
             $context .= "    Title: " . $pkg['title'] . "\n";
             $context .= "    Slug: " . $pkg['slug'] . "\n";
             $context .= "    Destination Slug: " . $pkg['destination'] . "\n";
+            $context .= "    Hero Image: " . $pkg['hero_image'] . "\n";
             $context .= "    Duration: " . $pkg['duration'] . "\n";
             $context .= "    Price: " . $pkg['price'] . "\n";
             if (!empty($pkg['old_price'])) {
@@ -208,8 +209,14 @@ PROMPT;
 
 $finalSystemPrompt = !empty($systemPrompt) ? $systemPrompt : $defaultSystemPrompt;
 
-// Append package cards formatting rule
-$finalSystemPrompt .= "\n\n10. When recommending or listing tour packages to the user, you MUST include a special shortcode tag on its own line: `[PKG_CARD: slug|title|price|duration|destination]`. The destination should be the destination slug. For example: `[PKG_CARD: 5-nights-luxury-bali-escape|5 Nights Luxury Bali Escape|₹67,999|6 days / 5 nights|bali]`. Do not write markdown links for packages. Use this shortcode instead right after the description so the user gets a beautiful interactive card to click.\n";
+// Append package cards formatting rule with image and rating details
+$finalSystemPrompt .= "\n\n10. When recommending or listing tour packages to the user, you MUST include a special shortcode tag on its own line: `[PKG_CARD: slug|title|price|duration|destination|hero_image|rating]`. The destination should be the destination slug. For example: `[PKG_CARD: 5-nights-luxury-bali-escape|5 Nights Luxury Bali Escape|₹67,999|6 days / 5 nights|bali|uploads/packages/bali.jpg|4.8]`. Do not write standard HTML or markdown links for packages. Always use this shortcode right after the description so the user gets a beautiful visual card to click.\n";
+
+// Speak in simple English
+$finalSystemPrompt .= "\n11. Speak in simple, clear, and friendly English. Avoid complex words, fancy vocabulary, or corporate jargon. Keep sentences short and easy to understand.\n";
+
+// Exact call-to-action signature at the end of every single message
+$finalSystemPrompt .= "\n12. You MUST end your very last sentence of EVERY reply with this exact phrase: \"To put together a real proposal, I'll need a few details. What's your **name** and work **email**, and a **WhatsApp number** we can reach you on?\" Do not change the phrasing, casing, or bold tags (**name**, **email**, **WhatsApp number**). This is mandatory and must be present at the end of every response.\n";
 
 $finalSystemPrompt .= "\n\n--- WANDEROO KNOWLEDGE BASE (LIVE DATA) ---\n" . $knowledgeContext;
 
