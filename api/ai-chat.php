@@ -111,6 +111,11 @@ function buildKnowledgeContext($pdo) {
             $context .= "    Hero Image: " . $pkg['hero_image'] . "\n";
             $context .= "    Duration: " . $pkg['duration'] . "\n";
             $context .= "    Price: " . $pkg['price'] . "\n";
+            
+            // Pre-formatted PKG_CARD shortcode for ease of model copying
+            $ratingVal = !empty($pkg['rating']) ? $pkg['rating'] : '4.5';
+            $shortcode = "[PKG_CARD: " . $pkg['slug'] . "|" . $pkg['title'] . "|" . $pkg['price'] . "|" . $pkg['duration'] . "|" . $pkg['destination'] . "|" . $pkg['hero_image'] . "|" . $ratingVal . "]";
+            $context .= "    SHORTCODE: " . $shortcode . "\n";
             if (!empty($pkg['old_price'])) {
                 $context .= "    Original Price: " . $pkg['old_price'] . "\n";
             }
@@ -211,7 +216,7 @@ PROMPT;
 $finalSystemPrompt = !empty($systemPrompt) ? $systemPrompt : $defaultSystemPrompt;
 
 // Append package cards formatting rule with image and rating details
-$finalSystemPrompt .= "\n\n10. When recommending or listing tour packages to the user, you MUST include a special shortcode tag on its own line: `[PKG_CARD: slug|title|price|duration|destination|hero_image|rating]`. The destination should be the destination slug. For example: `[PKG_CARD: 5-nights-luxury-bali-escape|5 Nights Luxury Bali Escape|₹67,999|6 days / 5 nights|bali|uploads/packages/bali.jpg|4.8]`. Do not write standard HTML or markdown links for packages. Always use this shortcode right after the description so the user gets a beautiful visual card to click.\n";
+$finalSystemPrompt .= "\n\n10. When recommending or listing tour packages to the user, you MUST copy and paste the exact pre-formatted `SHORTCODE` line provided for each package in the database context (e.g. `[PKG_CARD: ...]`). You are STRICTLY PROHIBITED from outputting packages as plain text lists, markdown headers (e.g., `###`), bullet points, itineraries, prices, or descriptions. You must ONLY show the introductory sentence and then directly list the `[PKG_CARD: ...]` tags on their own lines. Standard text listing of packages is forbidden.\n";
 
 // Speak in simple English
 $finalSystemPrompt .= "\n11. Speak in simple, clear, and friendly English. Avoid complex words, fancy vocabulary, or corporate jargon. Keep sentences short and easy to understand.\n";
@@ -225,7 +230,7 @@ if ($leadSubmitted) {
 }
 
 // Speak in package list template format
-$finalSystemPrompt .= "\n13. When a user asks about packages or what Wanderoo provides/offers in general (e.g. \"kya kya provide krte ho\", \"what packages do you offer?\", \"tell me about packages\", \"what do you provide?\"), you MUST assume they want Bali packages and start your response with exactly: \"Sure! Wanderoo offers a range of Bali packages designed for romance, adventure, and luxury. Here are some highlights from our current offerings:\" and then immediately output the `[PKG_CARD: ...]` tags for all active Bali packages. If they ask about packages for a specific destination (e.g. \"tell me about Kerala packages\"), you MUST start your response with exactly: \"Sure! Wanderoo offers a range of [Destination] packages designed for romance, adventure, and luxury. Here are some highlights from our current offerings:\" (replacing [Destination] with the actual destination name, capitalized) and immediately output the `[PKG_CARD: ...]` tags for that destination. Do not write a long itinerary description unless asked for details. Keep it focused, structured, and show the cards immediately.\n";
+$finalSystemPrompt .= "\n13. When a user asks about packages or what Wanderoo provides/offers in general (e.g. \"kya kya provide krte ho\", \"what packages do you offer?\", \"tell me about packages\", \"what do you provide?\"), you MUST assume they want Bali packages and start your response with exactly: \"Sure! Wanderoo offers a range of Bali packages designed for romance, adventure, and luxury. Here are some highlights from our current offerings:\" and then immediately output the `SHORTCODE` tags for all active Bali packages. If they ask about packages for a specific destination (e.g. \"tell me about Kerala packages\"), you MUST start your response with exactly: \"Sure! Wanderoo offers a range of [Destination] packages designed for romance, adventure, and luxury. Here are some highlights from our current offerings:\" (replacing [Destination] with the actual destination name, capitalized) and immediately output the `SHORTCODE` tags for that destination. Do NOT write any itinerary descriptions, bullet points, headers, or text details about the packages; just show the intro sentence followed by the `[PKG_CARD: ...]` tags directly on their own lines.\n";
 
 $finalSystemPrompt .= "\n\n--- WANDEROO KNOWLEDGE BASE (LIVE DATA) ---\n" . $knowledgeContext;
 
