@@ -18,6 +18,60 @@ The goal is to add a complete package into the live Wanderoo website with:
 
 Keep credit usage low. Do not over-browse, do not re-read unrelated files, and do not ask unnecessary questions.
 
+## Default Mode: Low-Credit Bulk Import
+
+When the user gives multiple package links for one destination, always use low-credit bulk import mode.
+
+Do not process package-by-package unless there is only one package link or a package fails and must be retried.
+
+Use:
+
+```text
+scripts/package-bulk-import/bulk-import.js
+```
+
+The standard batch process is:
+
+1. Create one input JSON in `/private/tmp/wanderoo-batch/input.json`.
+2. Run one fetch/extract pass for all competitor URLs:
+
+```bash
+node scripts/package-bulk-import/bulk-import.js fetch /private/tmp/wanderoo-batch/input.json
+```
+
+3. Read `/private/tmp/wanderoo-batch/extracted.json`.
+4. Write one complete rewritten package data file:
+
+```text
+/private/tmp/wanderoo-batch/packages.json
+```
+
+5. Run one DB/image import for all packages:
+
+```bash
+node scripts/package-bulk-import/bulk-import.js import /private/tmp/wanderoo-batch/packages.json
+```
+
+6. Commit all code/image changes once.
+7. Push once.
+8. Verify only:
+   - 1 destination/listing URL if applicable
+   - 1-2 sample package URLs
+   - 1-2 sample image URLs
+9. Clean local package image folders after live verification.
+
+This keeps content and images complete, but reduces tool calls, commits, pushes, DB connections, and live checks.
+
+Important:
+
+- Still include all gallery images needed for the package.
+- Still include all day-wise images.
+- Still rewrite all SEO/AEO fields properly.
+- Still use exactly 2 package-specific tags.
+- Still vary savings naturally.
+- Still keep inclusions/exclusions short and easy.
+- Do not use browser/UI unless `curl` cannot verify the issue.
+
 ## Current Project Facts
 
 - Repo path:
@@ -77,9 +131,9 @@ Example:
 https://wanderoo.world/thailand/romantic-thailand-escape-krabi-phi-phi-phuket
 ```
 
-## Low-Credit Workflow
+## Single-Package Fallback Workflow
 
-Follow this order. It avoids repeated context and repeated network calls.
+Use this only when importing one package or when retrying one failed package from a batch. It avoids repeated context and repeated network calls.
 
 1. Read only these local files if needed:
    - `config.php`
