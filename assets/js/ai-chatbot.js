@@ -256,8 +256,8 @@
             }),
         })
         .then(async function (response) {
-            hideTyping();
             if (!response.ok) {
+                hideTyping();
                 // If not ok, read text to see if it's a JSON error
                 const errText = await response.text();
                 try {
@@ -273,15 +273,9 @@
             let firstChunkRead = false;
             let buffer = '';
             let fullReply = '';
-
-            // Create placeholder message bubble for streaming response
-            var div = document.createElement('div');
-            div.className = 'joey-message ai';
-            var bubble = document.createElement('div');
-            bubble.className = 'joey-bubble';
-            div.appendChild(bubble);
-            chatBody.appendChild(div);
-            scrollToBottom();
+            let hasInitializedBubble = false;
+            let div = null;
+            let bubble = null;
 
             while (true) {
                 const { value, done } = await reader.read();
@@ -295,6 +289,16 @@
                     if (chunkText.trim().startsWith('{')) {
                         try {
                             const errData = JSON.parse(chunkText);
+                            hideTyping();
+                            // Create placeholder message bubble for error
+                            div = document.createElement('div');
+                            div.className = 'joey-message ai';
+                            bubble = document.createElement('div');
+                            bubble.className = 'joey-bubble';
+                            div.appendChild(bubble);
+                            chatBody.appendChild(div);
+                            scrollToBottom();
+
                             bubble.textContent = errData.error || errData.error?.message || 'AI service error.';
                             state.isSending = false;
                             sendBtn.disabled = false;
@@ -319,6 +323,19 @@
                             const parsed = JSON.parse(dataStr);
                             const content = parsed.choices[0]?.delta?.content || '';
                             if (content) {
+                                // Initialize bubble and hide typing on the first content token
+                                if (!hasInitializedBubble) {
+                                    hideTyping();
+                                    div = document.createElement('div');
+                                    div.className = 'joey-message ai';
+                                    bubble = document.createElement('div');
+                                    bubble.className = 'joey-bubble';
+                                    div.appendChild(bubble);
+                                    chatBody.appendChild(div);
+                                    scrollToBottom();
+                                    hasInitializedBubble = true;
+                                }
+
                                 fullReply += content;
                                 // Clean up any trailing assistant tags
                                 let cleanedText = fullReply
@@ -338,6 +355,9 @@
                 }
             }
 
+            // Ensure typing is hidden even if response was empty
+            hideTyping();
+
             // Cleanup & Save to history
             state.isSending = false;
             sendBtn.disabled = false;
@@ -350,13 +370,15 @@
                 .replace(/<\/user>/gi, '')
                 .replace(/<user>/gi, '');
 
-            state.history.push({
-                role: 'assistant',
-                content: finalCleaned,
-            });
+            if (hasInitializedBubble) {
+                state.history.push({
+                    role: 'assistant',
+                    content: finalCleaned,
+                });
 
-            // Trigger lead check
-            checkLeadTrigger(finalCleaned);
+                // Trigger lead check
+                checkLeadTrigger(finalCleaned);
+            }
         })
         .catch(function (error) {
             hideTyping();
