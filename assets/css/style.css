@@ -1082,7 +1082,7 @@ header {
 }
 
 .faq-item.active .faq-body {
-    max-height: 200px;
+    max-height: 500px;
     margin-top: 15px;
 }
 
