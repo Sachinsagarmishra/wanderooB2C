@@ -207,7 +207,7 @@ try {
 
             <div class="packages-grid">
                 <?php foreach ($homeHoneymoonPackages as $homeIndex => $homePkg): ?>
-                    <?php home_render_package_card($pdo, $homePkg, $homeWhatsappNum, $homeIndex >= 3 ? 'hidden-mobile' : ''); ?>
+                    <?php home_render_package_card($pdo, $homePkg, $homeWhatsappNum); ?>
                 <?php endforeach; ?>
             </div>
             
