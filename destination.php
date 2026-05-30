@@ -98,7 +98,7 @@ include_once 'includes/header.php';
             <div class="destination-intro-right">
                 <p><?php echo htmlspecialchars($dest['desc']); ?></p>
                 <a href="#" class="read-more-btn btn-enquire" data-destination="<?php echo htmlspecialchars($slug); ?>">
-                    Read More
+                    Learn More
                 </a>
             </div>
         </div>
@@ -185,11 +185,169 @@ include_once 'includes/header.php';
 
                     if (empty($dbPkgs)):
                     ?>
-                        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #666; font-family: 'Urbanist', sans-serif;">
-                            <h3 style="font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px;">No Packages Available</h3>
-                            <p style="font-size: 14px; color: #666;">We are currently updating our offerings. Please check back later or contact us to customize a bespoke trip.</p>
-                            <a href="<?php echo SITE_PATH; ?>/contact" class="btn-enquire" style="display: inline-block; margin-top: 20px; text-decoration: none; padding: 12px 28px; border-radius: 30px; font-weight: 750;">Contact Us</a>
+                        <div class="empty-dest-container" style="grid-column: 1 / -1; width: 100%;">
+                            <div class="empty-dest-wrapper" style="display: flex; gap: 40px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 24px; padding: 40px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); flex-wrap: wrap;">
+                                <!-- Left Info Block -->
+                                <div class="empty-dest-info" style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; font-family: 'Urbanist', sans-serif;">
+                                    <span style="color: #FFb800; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: inline-block; background: rgba(255,222,89,0.1); padding: 6px 12px; border-radius: 20px; width: fit-content;">Bespoke Travel Planning</span>
+                                    <h3 style="font-family: 'Playfair Display', serif; font-size: 32px; font-style: italic; font-weight: 700; color: #1e293b; margin: 0 0 16px 0; line-height: 1.2;">Plan a Custom Trip to <?php echo htmlspecialchars($dest['name']); ?></h3>
+                                    <p style="font-size: 16px; color: #475569; line-height: 1.6; margin: 0 0 24px 0;">While we don't have ready-made itineraries online for <?php echo htmlspecialchars($dest['name']); ?> at the moment, our destination experts can craft a <strong>100% tailor-made package</strong> just for you.</p>
+                                    
+                                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px;">
+                                        <li style="display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #334155;">
+                                            <span style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #4ade80; color: #fff; font-size: 12px;">✓</span>
+                                            100% Customized to your pace & budget
+                                        </li>
+                                        <li style="display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #334155;">
+                                            <span style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #4ade80; color: #fff; font-size: 12px;">✓</span>
+                                            Vetted local stays, activities & transfers
+                                        </li>
+                                        <li style="display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #334155;">
+                                            <span style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #4ade80; color: #fff; font-size: 12px;">✓</span>
+                                            24/7 support throughout your holiday
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Right Form Block -->
+                                <div class="empty-dest-form-card" style="flex: 1.2; min-width: 320px; background: #f8fafc; border-radius: 20px; padding: 30px; border: 1px solid #edf2f7; font-family: 'Urbanist', sans-serif;">
+                                    <h4 style="font-size: 18px; font-weight: 750; color: #0f172a; margin: 0 0 8px 0;">Request a Free Callback</h4>
+                                    <p style="font-size: 13px; color: #64748b; margin: 0 0 20px 0;">Fill in your details and our expert will get in touch with you shortly.</p>
+
+                                    <form id="destCustomEnquiryForm" style="display: flex; flex-direction: column; gap: 16px;">
+                                        <?php csrf_input(); ?>
+                                        <input type="hidden" name="destination" value="<?php echo htmlspecialchars($slug); ?>">
+                                        <input type="hidden" name="source_page" value="<?php 
+                                            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
+                                            echo $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; 
+                                        ?>">
+
+                                        <div style="display: none; background-color: #fee2e2; border: 1px solid #fecaca; color: #ef4444; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600;" id="destFormError"></div>
+
+                                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                                            <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormName">Full Name*</label>
+                                            <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="text" id="destFormName" name="fullname" placeholder="Enter your full name" required>
+                                        </div>
+
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                                <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormEmail">Email Address*</label>
+                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="email" id="destFormEmail" name="email" placeholder="Enter email address" required>
+                                            </div>
+                                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                                <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormPhone">WhatsApp / Phone*</label>
+                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="tel" id="destFormPhone" name="phone" placeholder="Enter contact number" required>
+                                            </div>
+                                        </div>
+
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                                <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormDate">Travel Date</label>
+                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="date" id="destFormDate" name="departure_date" min="<?php echo date('Y-m-d'); ?>">
+                                            </div>
+                                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                                <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormNights">Duration (Nights)</label>
+                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="number" id="destFormNights" name="nights" min="1" placeholder="e.g. 5">
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" id="destFormSubmitBtn" style="background-color: var(--primary, #FFDE59); color: #111111; border: none; border-radius: 30px; padding: 14px; font-size: 16px; font-weight: 750; cursor: pointer; box-shadow: 0 6px 20px rgba(255, 222, 89, 0.2); transition: background-color 0.2s, transform 0.2s; margin-top: 10px; font-family: inherit; width: 100%;">Get a Callback</button>
+                                    </form>
+
+                                    <!-- Success Screen inside Card -->
+                                    <div id="destFormSuccess" style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 20px 0;">
+                                        <div style="font-size: 48px; margin-bottom: 12px; display: block;">🎉</div>
+                                        <h4 style="font-size: 22px; font-weight: 800; color: #16a34a; margin: 0 0 10px 0;">Request Received!</h4>
+                                        <p style="font-size: 14px; color: #475569; line-height: 1.5; font-weight: 600; margin: 0;">Thank you for getting in touch. One of our destination experts will call or WhatsApp you shortly to plan your custom <?php echo htmlspecialchars($dest['name']); ?> trip.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- AJAX form script -->
+                        <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const form = document.getElementById('destCustomEnquiryForm');
+                            const submitBtn = document.getElementById('destFormSubmitBtn');
+                            const errorBanner = document.getElementById('destFormError');
+                            const successScreen = document.getElementById('destFormSuccess');
+
+                            if (form) {
+                                form.addEventListener('submit', (e) => {
+                                    e.preventDefault();
+                                    
+                                    const name = document.getElementById('destFormName').value.trim();
+                                    const email = document.getElementById('destFormEmail').value.trim();
+                                    const phone = document.getElementById('destFormPhone').value.trim();
+                                    
+                                    if (!name || !email || !phone) {
+                                        showFormError('Please fill in all required fields.');
+                                        return;
+                                    }
+
+                                    // Email validation
+                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                    if (!emailRegex.test(email)) {
+                                        showFormError('Please enter a valid email address.');
+                                        return;
+                                    }
+
+                                    // Phone digits validation
+                                    const digits = phone.replace(/\D/g, '');
+                                    if (digits.length < 7 || digits.length > 15) {
+                                        showFormError('Please enter a valid phone number (between 7 and 15 digits).');
+                                        return;
+                                    }
+
+                                    submitBtn.disabled = true;
+                                    const originalText = submitBtn.textContent;
+                                    submitBtn.textContent = 'Submitting...';
+
+                                    const formData = new FormData(form);
+
+                                    fetch('<?php echo SITE_PATH; ?>/submit-popup.php', {
+                                        method: 'POST',
+                                        body: formData
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        submitBtn.textContent = originalText;
+                                        submitBtn.disabled = false;
+                                        
+                                        if (data.success) {
+                                            // Set flag to suppress timed-popup form
+                                            localStorage.setItem('timed_lead_submitted', 'true');
+                                            sessionStorage.setItem('timed_lead_submitted', 'true');
+                                            
+                                            // Show success screen
+                                            form.style.display = 'none';
+                                            successScreen.style.display = 'flex';
+                                        } else {
+                                            showFormError(data.error || 'Failed to submit form. Please try again.');
+                                        }
+                                    })
+                                    .catch(err => {
+                                        submitBtn.textContent = originalText;
+                                        submitBtn.disabled = false;
+                                        console.error('Submission error:', err);
+                                        showFormError('An error occurred during submission. Please try again.');
+                                    });
+                                });
+
+                                const inputs = form.querySelectorAll('input');
+                                inputs.forEach(input => {
+                                    input.addEventListener('input', () => {
+                                        errorBanner.style.display = 'none';
+                                    });
+                                });
+                            }
+
+                            function showFormError(msg) {
+                                errorBanner.textContent = msg;
+                                errorBanner.style.display = 'block';
+                            }
+                        });
+                        </script>
                     <?php
                     else:
                         $whatsappNum = preg_replace('/\D/', '', get_setting('contact_whatsapp', '919113515462'));
