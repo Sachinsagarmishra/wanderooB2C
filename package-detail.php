@@ -183,7 +183,7 @@ include 'includes/header.php';
                 $thumbClass .= " desktop-only-thumb";
             }
         ?>
-            <div class="<?php echo $thumbClass; ?>">
+            <div class="<?php echo $thumbClass; ?> thumb-<?php echo $idx; ?>">
                 <img src="<?php echo htmlspecialchars($imgUrl); ?>" alt="<?php echo htmlspecialchars($photo['alt_text'] ?? 'Travel Photo'); ?>" class="detail-gallery-img">
                 <?php if ($isLastDesktop): ?>
                     <button class="btn-view-all-images desktop-btn-view-all">View All Images</button>

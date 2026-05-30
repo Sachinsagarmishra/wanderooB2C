@@ -2681,27 +2681,27 @@ footer {
         position: relative !important;
     }
 
-    .detail-gallery-thumb:nth-of-type(1) {
+    .detail-gallery-thumb.thumb-0 {
         grid-row: 1 / 2 !important;
     }
 
-    .detail-gallery-thumb:nth-of-type(2) {
+    .detail-gallery-thumb.thumb-1 {
         grid-row: 2 / 3 !important;
     }
 
-    .detail-gallery-thumb:nth-of-type(3) {
+    .detail-gallery-thumb.thumb-2 {
         grid-row: 3 / 4 !important;
     }
 
-    .detail-gallery.gallery-count-2 .detail-gallery-thumb:nth-of-type(1) {
+    .detail-gallery.gallery-count-2 .detail-gallery-thumb.thumb-0 {
         grid-row: 1 / 2 !important;
     }
 
-    .detail-gallery.gallery-count-3 .detail-gallery-thumb:nth-of-type(1) {
+    .detail-gallery.gallery-count-3 .detail-gallery-thumb.thumb-0 {
         grid-row: 1 / 2 !important;
     }
 
-    .detail-gallery.gallery-count-3 .detail-gallery-thumb:nth-of-type(2) {
+    .detail-gallery.gallery-count-3 .detail-gallery-thumb.thumb-1 {
         grid-row: 2 / 3 !important;
     }
 
