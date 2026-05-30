@@ -423,6 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sidebar = destinationFilterLayout.querySelector('.destination-filter-sidebar');
         const openBtn = document.querySelector('.btn-mobile-filter-trigger');
         const closeBtn = destinationFilterLayout.querySelector('.btn-mobile-filter-close');
+        const applyBtn = destinationFilterLayout.querySelector('.destination-filter-apply');
 
         if (sidebar) {
             if (openBtn) {
@@ -435,6 +436,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeBtn.addEventListener('click', () => {
                     sidebar.classList.remove('open');
                     document.body.style.overflow = '';
+                });
+            }
+            if (applyBtn) {
+                applyBtn.addEventListener('click', () => {
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                        document.body.style.overflow = '';
+                    }
+                    const resultsSection = destinationFilterLayout.querySelector('.destination-filter-results');
+                    if (resultsSection && window.innerWidth <= 992) {
+                        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 });
             }
         }

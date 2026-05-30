@@ -511,6 +511,7 @@ include_once 'includes/header.php';
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
+                                <button type="button" class="destination-filter-apply">Apply Filters</button>
                                 <button type="button" class="destination-filter-clear">Clear Filters</button>
                                 <div class="mobile-filter-footer-nav">
                                     <button type="button" class="btn-mobile-filter-close">
