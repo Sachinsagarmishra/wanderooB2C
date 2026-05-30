@@ -401,8 +401,45 @@ document.addEventListener('DOMContentLoaded', () => {
     let reappearTimer;
     let countdownInterval;
 
-    // Check if the popup was already submitted successfully in this session
-    if (sessionStorage.getItem('timed_lead_submitted') === 'true') {
+    // Helper to check if user is filling another form (enquiry modal, contact form, etc.)
+    function isUserFillingOtherForm() {
+        // 1. Check if enquiry modal is open
+        const enquiryModal = document.getElementById('enquiryModal');
+        if (enquiryModal && (enquiryModal.classList.contains('show') || getComputedStyle(enquiryModal).display !== 'none')) {
+            return true;
+        }
+
+        // 2. Check if the active element is an input, textarea, or select outside the timed popup
+        const activeEl = document.activeElement;
+        if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT')) {
+            if (activeEl.id !== 'popupName' && activeEl.id !== 'popupEmail' && activeEl.id !== 'popupPhone' && 
+                activeEl.id !== 'popupDestination' && activeEl.id !== 'popupAdults' && activeEl.id !== 'popupKids' && 
+                activeEl.id !== 'popupDate' && activeEl.id !== 'popupNights' && activeEl.id !== 'popupDepCity' && 
+                activeEl.name !== 'flights_booked') {
+                return true;
+            }
+        }
+
+        // 3. Check if any inputs in other forms have values (indicating user has started typing)
+        const allForms = document.querySelectorAll('form');
+        for (let f of allForms) {
+            if (f.id === 'timedPopupForm') continue;
+            
+            const inputs = f.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
+            for (let input of inputs) {
+                if (input.value.trim() !== '') {
+                    if (input.type !== 'hidden') {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Check if the popup was already submitted successfully in this session or stored in localStorage
+    if (sessionStorage.getItem('timed_lead_submitted') === 'true' || localStorage.getItem('timed_lead_submitted') === 'true') {
         return; // Don't run the timer at all
     }
 
@@ -418,7 +455,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showPopup() {
         // Double check submission flag
-        if (sessionStorage.getItem('timed_lead_submitted') === 'true') return;
+        if (sessionStorage.getItem('timed_lead_submitted') === 'true' || localStorage.getItem('timed_lead_submitted') === 'true') return;
+
+        // Check if user is chatting with AI agent
+        const chatContainer = document.getElementById('joeyChatContainer');
+        const isChatOpen = chatContainer && chatContainer.classList.contains('active');
+        const isChatActive = sessionStorage.getItem('joey_chat_active') === 'true';
+        if (isChatOpen || isChatActive) {
+            // Re-schedule showing popup later (e.g., 3 minutes / 180000ms)
+            clearTimeout(reappearTimer);
+            reappearTimer = setTimeout(() => {
+                showPopup();
+            }, 180000);
+            return;
+        }
+
+        // Check if user is filling other forms (enquiry modal, contact form, etc.)
+        if (isUserFillingOtherForm()) {
+            // Re-schedule showing popup later (e.g., 3 minutes / 180000ms)
+            clearTimeout(reappearTimer);
+            reappearTimer = setTimeout(() => {
+                showPopup();
+            }, 180000);
+            return;
+        }
 
         popup.style.display = 'flex';
         // Set values
@@ -453,11 +513,11 @@ document.addEventListener('DOMContentLoaded', () => {
             popup.style.display = 'none';
         }, 300);
 
-        // Schedule to show again in 60 seconds
+        // Schedule to show again in 180 seconds (3 minutes)
         clearTimeout(reappearTimer);
         reappearTimer = setTimeout(() => {
             showPopup();
-        }, 60000);
+        }, 180000);
     }
 
     closeBtn.addEventListener('click', closePopup);
@@ -524,8 +584,9 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = false;
             
             if (data.success) {
-                // Set flag to never show again this session
+                // Set flag to never show again this session & permanently
                 sessionStorage.setItem('timed_lead_submitted', 'true');
+                localStorage.setItem('timed_lead_submitted', 'true');
                 clearTimeout(reappearTimer);
                 clearTimeout(popupTimer);
 

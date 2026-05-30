@@ -1384,6 +1384,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showSuccessScreen() {
+        // Mark timed lead as submitted so it won't show
+        localStorage.setItem('timed_lead_submitted', 'true');
+        sessionStorage.setItem('timed_lead_submitted', 'true');
+
         // Hide progress bar wrapper, error banner, and form container
         const progressWrapper = document.querySelector('.enquiry-progress-wrapper');
         if (progressWrapper) progressWrapper.style.display = 'none';

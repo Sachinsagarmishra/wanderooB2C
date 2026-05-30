@@ -77,6 +77,7 @@
         if (state.isOpen) {
             chatContainer.classList.add('active');
             launcher.classList.add('active');
+            sessionStorage.setItem('joey_chat_active', 'true');
             if (backdrop) {
                 backdrop.classList.add('active');
                 requestAnimationFrame(() => {
@@ -509,6 +510,8 @@
                 if (data.success) {
                     state.leadCaptured = true;
                     sessionStorage.setItem('joey_lead_submitted', 'true');
+                    localStorage.setItem('timed_lead_submitted', 'true');
+                    sessionStorage.setItem('timed_lead_submitted', 'true');
 
                     document.getElementById('joeyLeadFormInner').style.display = 'none';
                     document.getElementById('joeyLeadSuccess').style.display = 'block';

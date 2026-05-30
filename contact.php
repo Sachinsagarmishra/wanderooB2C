@@ -101,6 +101,10 @@ $contactAddress = get_setting('contact_address', "Wanderoo\nThe landmark\n2nd Fl
                     <div class="alert alert-success" style="margin-bottom: 20px; padding: 15px; background: rgba(34, 197, 94, 0.1); border: 1.5px solid #22c55e; color: #15803d; border-radius: 12px; font-family: 'Urbanist', sans-serif; font-weight: 600;">
                         <?php echo htmlspecialchars($successMsg); ?>
                     </div>
+                    <script>
+                        localStorage.setItem('timed_lead_submitted', 'true');
+                        sessionStorage.setItem('timed_lead_submitted', 'true');
+                    </script>
                 <?php elseif (!empty($errorMsg)): ?>
                     <div class="alert alert-danger" style="margin-bottom: 20px; padding: 15px; background: rgba(239, 68, 68, 0.1); border: 1.5px solid #ef4444; color: #b91c1c; border-radius: 12px; font-family: 'Urbanist', sans-serif; font-weight: 600;">
                         <?php echo htmlspecialchars($errorMsg); ?>
