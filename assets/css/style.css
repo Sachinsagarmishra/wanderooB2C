@@ -251,6 +251,7 @@ header {
     margin-bottom: 20px;
     flex: 0 0 calc((100% - 30px) / 4);
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .card-img {

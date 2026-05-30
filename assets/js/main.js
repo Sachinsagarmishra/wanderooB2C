@@ -189,6 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const diffX = currentX - startX;
             const diffY = currentY - startY;
 
+            if (Math.abs(diffX) > 10 || Math.abs(diffY) > 10) {
+                window.wanderooDragging = true;
+            }
+
             if (window.innerWidth <= 768) {
                 if (!isScrolling && !isSwiping) {
                     if (Math.abs(diffX) > 5 || Math.abs(diffY) > 5) {
@@ -260,6 +264,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             startAutoSlide();
+            setTimeout(() => {
+                window.wanderooDragging = false;
+            }, 50);
         }
         
         function getPositionX(e) {
@@ -920,4 +927,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Make package cards fully clickable
+    document.addEventListener('click', (e) => {
+        const card = e.target.closest('.package-card');
+        if (!card) return;
+
+        // Check if we are dragging a slider
+        if (window.wanderooDragging) return;
+
+        // If clicking on phone button, enquiry/request/craft button, slider dots/arrows, or any link, do not trigger card navigation
+        if (
+            e.target.closest('.btn-phone') || 
+            e.target.closest('.btn-enquire') || 
+            e.target.closest('.btn-request') || 
+            e.target.closest('.img-dot') || 
+            e.target.closest('.card-img-dots') ||
+            e.target.closest('.card-img-arrow') || 
+            e.target.closest('.slider-arrow') ||
+            e.target.tagName === 'A' ||
+            e.target.closest('a')
+        ) {
+            return;
+        }
+
+        // Find the title link to navigate to
+        const titleLink = card.querySelector('h3 a');
+        if (titleLink) {
+            window.location.href = titleLink.href;
+        }
+    });
 });
