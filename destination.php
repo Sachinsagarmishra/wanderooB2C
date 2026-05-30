@@ -124,13 +124,19 @@ include_once 'includes/header.php';
                     $packageFilterMeta = [];
                     $filterOptions = [
                         'city' => [],
-                        'occasion' => [],
+                        'occasion' => [
+                            'honeymoon' => 'Honeymoon',
+                            'family-holiday' => 'Family Holiday',
+                            'anniversary' => 'Anniversary',
+                            'birthday' => 'Birthday',
+                            'baby-moon' => 'Baby Moon',
+                            'others' => 'Others'
+                        ],
                         'duration' => [],
                         'inclusive' => []
                     ];
 
                     if (!empty($dbPkgs)) {
-                        $occasionKeywords = ['birthday', 'honeymoon', 'anniversary', 'family', 'couple', 'friends', 'solo', 'group'];
                         foreach ($dbPkgs as $filterPkg) {
                             $pkgId = intval($filterPkg['id']);
                             $stmtMetaTags = $pdo->prepare("SELECT tag_name FROM package_tags WHERE package_id = ? ORDER BY id");
@@ -158,11 +164,24 @@ include_once 'includes/header.php';
                                     $pkgFilters['city'][] = add_destination_filter_option($filterOptions['city'], $tagValue);
                                 }
 
-                                foreach ($occasionKeywords as $keyword) {
-                                    if (stripos($tagValue, $keyword) !== false) {
-                                        $pkgFilters['occasion'][] = add_destination_filter_option($filterOptions['occasion'], $tagValue);
-                                        break;
-                                    }
+                                // Occasion Mapping
+                                if (stripos($tagValue, 'honeymoon') !== false || stripos($tagValue, 'couple') !== false || stripos($tagValue, 'romantic') !== false) {
+                                    $pkgFilters['occasion'][] = 'honeymoon';
+                                }
+                                if (stripos($tagValue, 'family') !== false || stripos($tagValue, 'kid') !== false) {
+                                    $pkgFilters['occasion'][] = 'family-holiday';
+                                }
+                                if (stripos($tagValue, 'anniversary') !== false) {
+                                    $pkgFilters['occasion'][] = 'anniversary';
+                                }
+                                if (stripos($tagValue, 'birthday') !== false) {
+                                    $pkgFilters['occasion'][] = 'birthday';
+                                }
+                                if (stripos($tagValue, 'baby') !== false || stripos($tagValue, 'babymoon') !== false) {
+                                    $pkgFilters['occasion'][] = 'baby-moon';
+                                }
+                                if (stripos($tagValue, 'friends') !== false || stripos($tagValue, 'solo') !== false || stripos($tagValue, 'group') !== false || stripos($tagValue, 'other') !== false) {
+                                    $pkgFilters['occasion'][] = 'others';
                                 }
 
                                 if (preg_match('/inclusive|hotel|flight|resort/i', $tagValue)) {
@@ -449,6 +468,17 @@ include_once 'includes/header.php';
                     ?>
                         <div class="destination-package-layout">
                             <aside class="destination-filter-sidebar" aria-label="Package filters">
+                                <div class="mobile-filter-header-nav">
+                                    <div class="mobile-filter-title">
+                                        <svg class="binoculars-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M10 10h4M12 10V6M9 6h6"/>
+                                            <circle cx="7" cy="15" r="3"/>
+                                            <circle cx="17" cy="15" r="3"/>
+                                            <path d="M10 15h4"/>
+                                        </svg>
+                                        Explore by
+                                    </div>
+                                </div>
                                 <?php
                                 $filterLabels = [
                                     'city' => 'City',
@@ -482,6 +512,11 @@ include_once 'includes/header.php';
                                     </div>
                                 <?php endforeach; ?>
                                 <button type="button" class="destination-filter-clear">Clear Filters</button>
+                                <div class="mobile-filter-footer-nav">
+                                    <button type="button" class="btn-mobile-filter-close">
+                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </button>
+                                </div>
                             </aside>
                             <div class="destination-filter-results">
                     <?php
@@ -589,6 +624,19 @@ include_once 'includes/header.php';
 </main>
 
 <!-- Mobile Sticky CTA Bar -->
+<div class="mobile-filter-trigger-bar">
+    <button type="button" class="btn-mobile-filter-trigger">
+        <svg class="binoculars-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 10h4M12 10V6M9 6h6"/>
+            <circle cx="7" cy="15" r="3"/>
+            <circle cx="17" cy="15" r="3"/>
+            <path d="M10 15h4"/>
+        </svg>
+        Explore by
+        <span class="filter-chevron" style="display: inline-block; margin-left: 2px;">⌄</span>
+    </button>
+</div>
+
 <div class="mobile-sticky-cta">
     <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($slug); ?>">Craft your trip</a>
 </div>

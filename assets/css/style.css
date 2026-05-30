@@ -4023,6 +4023,15 @@ footer {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;
 }
 
+.mobile-filter-header-nav,
+.mobile-filter-footer-nav {
+    display: none;
+}
+
+.mobile-filter-trigger-bar {
+    display: none;
+}
+
 /* Responsive Styles for Destination Page */
 @media (max-width: 992px) {
     .destination-intro-grid {
@@ -4040,8 +4049,129 @@ footer {
     }
 
     .destination-filter-sidebar {
-        position: static;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        display: none !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: #ffffff !important;
+        z-index: 10000 !important;
+        flex-direction: column !important;
+        padding: 30px 20px 80px !important;
+        overflow-y: auto !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        gap: 16px !important;
+    }
+
+    .destination-filter-sidebar.open {
+        display: flex !important;
+    }
+
+    .mobile-filter-header-nav {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(12, 22, 62, 0.08);
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .mobile-filter-title {
+        font-family: 'Urbanist', sans-serif;
+        font-size: 20px;
+        font-weight: 800;
+        color: #11183e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .mobile-filter-title .binoculars-icon {
+        color: #11183e;
+        width: 24px;
+        height: 24px;
+    }
+
+    .mobile-filter-footer-nav {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        padding-top: 24px;
+        padding-bottom: 30px;
+        width: 100%;
+    }
+
+    .btn-mobile-filter-close {
+        background: #ffffff;
+        border: 1px solid rgba(12, 22, 62, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        color: #11183e;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-mobile-filter-close:active {
+        transform: scale(0.9);
+        background: #f3f4f6;
+    }
+
+    .mobile-filter-trigger-bar {
+        display: flex !important;
+        position: fixed;
+        bottom: 74px; /* Placed exactly above mobile-sticky-cta */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 998;
+        pointer-events: none;
+        width: auto;
+        justify-content: center;
+    }
+
+    .btn-mobile-filter-trigger {
+        pointer-events: auto;
+        background: #ffffff;
+        border: 1px solid rgba(12, 22, 62, 0.12);
+        box-shadow: 0 8px 24px rgba(13, 24, 58, 0.08);
+        border-radius: 30px;
+        padding: 12px 24px;
+        font-family: 'Urbanist', sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        color: #11183e;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .btn-mobile-filter-trigger .binoculars-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .btn-mobile-filter-trigger:active {
+        transform: scale(0.97);
+    }
+
+    .destination-filter-clear {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+        padding: 14px;
+        border-radius: 30px;
+        box-sizing: border-box;
     }
 
     .destination-filter-results {

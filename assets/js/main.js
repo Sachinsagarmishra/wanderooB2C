@@ -418,6 +418,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyDestinationFilters();
             });
         }
+
+        // Mobile Filter Drawer Toggle
+        const sidebar = destinationFilterLayout.querySelector('.destination-filter-sidebar');
+        const openBtn = document.querySelector('.btn-mobile-filter-trigger');
+        const closeBtn = destinationFilterLayout.querySelector('.btn-mobile-filter-close');
+
+        if (sidebar) {
+            if (openBtn) {
+                openBtn.addEventListener('click', () => {
+                    sidebar.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    sidebar.classList.remove('open');
+                    document.body.style.overflow = '';
+                });
+            }
+        }
     }
 
     // Staggered card image slideshow auto-cycle
