@@ -309,6 +309,17 @@ include_once 'includes/header.php';
                                             </div>
                                         </div>
 
+                                        <!-- Cloudflare Turnstile CAPTCHA -->
+                                        <div style="margin-top: 10px; margin-bottom: 10px;">
+                                            <div class="cf-turnstile"
+                                                 id="destTurnstile"
+                                                 data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>"
+                                                 data-callback="onDestTurnstileSuccess"
+                                                 data-expired-callback="onDestTurnstileExpired"
+                                                 data-error-callback="onDestTurnstileError">
+                                            </div>
+                                        </div>
+
                                         <button type="submit" id="destFormSubmitBtn" style="background-color: var(--primary, #FFDE59); color: #111111; border: none; border-radius: 30px; padding: 14px; font-size: 16px; font-weight: 750; cursor: pointer; box-shadow: 0 6px 20px rgba(255, 222, 89, 0.2); transition: background-color 0.2s, transform 0.2s; margin-top: 10px; font-family: inherit; width: 100%;">Get a Callback</button>
                                     </form>
 
@@ -329,6 +340,19 @@ include_once 'includes/header.php';
                             const submitBtn = document.getElementById('destFormSubmitBtn');
                             const errorBanner = document.getElementById('destFormError');
                             const successScreen = document.getElementById('destFormSuccess');
+
+                            // Define Turnstile callbacks
+                            window.onDestTurnstileSuccess = function(token) {
+                                errorBanner.style.display = 'none';
+                            };
+                            window.onDestTurnstileExpired = function() {
+                                if (typeof turnstile !== 'undefined') {
+                                    try { turnstile.reset('#destTurnstile'); } catch(e) {}
+                                }
+                            };
+                            window.onDestTurnstileError = function() {
+                                showFormError('CAPTCHA failed to load. Please refresh the page and try again.');
+                            };
 
                             if (form) {
                                 form.addEventListener('submit', (e) => {
@@ -357,6 +381,13 @@ include_once 'includes/header.php';
                                         return;
                                     }
 
+                                    // Check Turnstile token
+                                    const turnstileInput = document.querySelector('#destTurnstile [name="cf-turnstile-response"]');
+                                    if (!turnstileInput || !turnstileInput.value) {
+                                        showFormError('Please complete the CAPTCHA verification.');
+                                        return;
+                                    }
+
                                     submitBtn.disabled = true;
                                     const originalText = submitBtn.textContent;
                                     submitBtn.textContent = 'Submitting...';
@@ -382,6 +413,9 @@ include_once 'includes/header.php';
                                             successScreen.style.display = 'flex';
                                         } else {
                                             showFormError(data.error || 'Failed to submit form. Please try again.');
+                                            if (typeof turnstile !== 'undefined') {
+                                                try { turnstile.reset('#destTurnstile'); } catch(e) {}
+                                            }
                                         }
                                     })
                                     .catch(err => {
@@ -389,6 +423,9 @@ include_once 'includes/header.php';
                                         submitBtn.disabled = false;
                                         console.error('Submission error:', err);
                                         showFormError('An error occurred during submission. Please try again.');
+                                        if (typeof turnstile !== 'undefined') {
+                                            try { turnstile.reset('#destTurnstile'); } catch(e) {}
+                                        }
                                     });
                                 });
 

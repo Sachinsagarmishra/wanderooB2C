@@ -91,6 +91,17 @@
                     </div>
                 </div>
                 
+                <!-- Cloudflare Turnstile CAPTCHA -->
+                <div class="timed-popup-group" style="margin-bottom: 12px;">
+                    <div class="cf-turnstile"
+                         id="timedPopupTurnstile"
+                         data-sitekey="<?php echo TURNSTILE_SITE_KEY; ?>"
+                         data-callback="onTimedPopupTurnstileSuccess"
+                         data-expired-callback="onTimedPopupTurnstileExpired"
+                         data-error-callback="onTimedPopupTurnstileError">
+                    </div>
+                </div>
+                
                 <button type="submit" class="timed-popup-submit-btn" id="popupSubmitBtn">Submit</button>
             </form>
             
@@ -502,6 +513,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        if (typeof turnstile !== 'undefined') {
+            try { turnstile.reset('#timedPopupTurnstile'); } catch(e) {}
+        }
+
         setTimeout(() => {
             popup.classList.add('show');
             document.body.style.overflow = 'hidden';
@@ -535,6 +550,19 @@ document.addEventListener('DOMContentLoaded', () => {
             closePopup();
         }
     });
+
+    // Define Turnstile callbacks
+    window.onTimedPopupTurnstileSuccess = function(token) {
+        errorBanner.style.display = 'none';
+    };
+    window.onTimedPopupTurnstileExpired = function() {
+        if (typeof turnstile !== 'undefined') {
+            try { turnstile.reset('#timedPopupTurnstile'); } catch(e) {}
+        }
+    };
+    window.onTimedPopupTurnstileError = function() {
+        showError('CAPTCHA failed to load. Please refresh the page and try again.');
+    };
 
     // Hide error banner when inputs are modified
     const inputs = form.querySelectorAll('input, select');
@@ -571,6 +599,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const digits = phone.replace(/\D/g, '');
         if (digits.length < 7 || digits.length > 15) {
             showError('Please enter a valid phone number (between 7 and 15 digits).');
+            return;
+        }
+
+        // Check Turnstile token
+        const turnstileInput = document.querySelector('#timedPopupTurnstile [name="cf-turnstile-response"]');
+        if (!turnstileInput || !turnstileInput.value) {
+            showError('Please complete the CAPTCHA verification.');
             return;
         }
 
@@ -619,6 +654,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } else {
                 showError(data.error || 'Failed to submit form. Please try again.');
+                if (typeof turnstile !== 'undefined') {
+                    try { turnstile.reset('#timedPopupTurnstile'); } catch(e) {}
+                }
             }
         })
         .catch(err => {
@@ -626,6 +664,9 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = false;
             console.error('Submission error:', err);
             showError('An error occurred during submission. Please try again.');
+            if (typeof turnstile !== 'undefined') {
+                try { turnstile.reset('#timedPopupTurnstile'); } catch(e) {}
+            }
         });
     });
 
