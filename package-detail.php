@@ -357,7 +357,7 @@ include 'includes/header.php';
 
                 <div class="sidebar-divider"></div>
 
-                <button class="btn-quote btn-enquire sidebar-cta-btn" data-destination="<?php echo htmlspecialchars($destSlug); ?>">
+                <button class="btn-quote btn-enquire sidebar-cta-btn" data-destination="<?php echo htmlspecialchars($destSlug); ?>" data-package="<?php echo htmlspecialchars($tourTitle); ?>">
                     Send Enquiry
                 </button>
             </div>
@@ -392,7 +392,7 @@ include 'includes/header.php';
 
 <!-- Mobile Sticky CTA Bar -->
 <div class="mobile-sticky-cta">
-    <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>">Craft your trip</a>
+    <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>" data-package="<?php echo htmlspecialchars($tourTitle); ?>">Craft your trip</a>
 </div>
 
 <?php include 'includes/footer.php'; ?>

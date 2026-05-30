@@ -102,7 +102,8 @@ function send_lead_notification($leadData) {
         // Content layout
         $mail->isHTML(true);
         $typeLabel = $leadData['type'] === 'enquiry' ? 'Popup Multi-step Enquiry' : 'Contact Form Submission';
-        $mail->Subject = 'New Lead Alert: [' . $typeLabel . '] from ' . $leadData['fullname'];
+        $pkgSuffix = !empty($leadData['package_name']) ? ' [Package: ' . $leadData['package_name'] . ']' : '';
+        $mail->Subject = 'New Lead Alert: [' . $typeLabel . ']' . $pkgSuffix . ' from ' . $leadData['fullname'];
 
         // Build HTML Body Content
         $html = '<div style="font-family: \'Urbanist\', \'Helvetica Neue\', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #f8fafc;">';
@@ -131,6 +132,10 @@ function send_lead_notification($leadData) {
 
         // Enquiry-specific Info
         if ($leadData['type'] === 'enquiry') {
+            if (!empty($leadData['package_name'])) {
+                $html .= '<tr><td style="padding: 8px 10px; font-weight: 700; color: #334155; border-bottom: 1px solid #e2e8f0;">Enquired Package</td>';
+                $html .= '<td style="padding: 8px 10px; color: #1e3a8a; font-weight: 700; border-bottom: 1px solid #e2e8f0;">' . htmlspecialchars($leadData['package_name']) . '</td></tr>';
+            }
             $html .= '<tr><td style="padding: 8px 10px; font-weight: 700; color: #334155; border-bottom: 1px solid #e2e8f0;">Destination</td>';
             $html .= '<td style="padding: 8px 10px; color: #0f172a; border-bottom: 1px solid #e2e8f0; text-transform: capitalize;">' . htmlspecialchars($leadData['destination']) . '</td></tr>';
 

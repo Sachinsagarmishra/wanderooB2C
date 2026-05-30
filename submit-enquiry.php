@@ -32,6 +32,7 @@ try {
     $phone = $country_code . ' ' . $phone_raw;
     $email = trim($_POST['email'] ?? '');
     $notes = trim($_POST['notes'] ?? '');
+    $package_name = trim($_POST['package_name'] ?? '');
     $source_page = trim($_POST['source_page'] ?? '');
     if (empty($source_page) && !empty($_SERVER['HTTP_REFERER'])) {
         $source_page = $_SERVER['HTTP_REFERER'];
@@ -52,10 +53,15 @@ try {
         exit;
     }
 
+    $subject = !empty($package_name) ? "Enquiry for: " . $package_name : null;
+    if (!empty($package_name)) {
+        $notes = "Package: " . $package_name . "\n" . $notes;
+    }
+
     $stmt = $pdo->prepare("INSERT INTO leads (
-        type, fullname, email, phone, destination, departure_date, nights, companion, rooms_config, notes, source_page
+        type, fullname, email, phone, destination, departure_date, nights, companion, rooms_config, subject, notes, source_page
     ) VALUES (
-        'enquiry', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        'enquiry', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )");
     
     $stmt->execute([
@@ -67,6 +73,7 @@ try {
         $nights,
         $companion,
         $rooms_config,
+        $subject,
         $notes,
         $source_page
     ]);
@@ -83,6 +90,8 @@ try {
             'nights' => $nights,
             'companion' => $companion,
             'rooms_config' => $rooms_config,
+            'subject' => $subject,
+            'package_name' => $package_name,
             'notes' => $notes,
             'source_page' => $source_page
         ];

@@ -10,6 +10,7 @@
             <form id="timedPopupForm" class="timed-popup-form" method="POST">
                 <?php csrf_input(); ?>
                 <input type="hidden" name="source_page" id="popupSourcePage" value="">
+                <input type="hidden" name="package_name" id="popupPackageName" value="">
                 
                 <div id="popupErrorBanner" class="popup-error-banner" style="display: none;"></div>
 
@@ -485,6 +486,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const srcPageInput = document.getElementById('popupSourcePage');
         if (srcPageInput) {
             srcPageInput.value = window.location.href;
+        }
+
+        // Set package name context
+        const pkgInput = document.getElementById('popupPackageName');
+        if (pkgInput) {
+            pkgInput.value = window.currentPagePackage || '';
         }
 
         // Auto pre-fill destination from current page context if available

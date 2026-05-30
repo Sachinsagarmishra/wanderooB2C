@@ -506,6 +506,12 @@ function showLead(lead) {
         }
         
         html += `
+            ${lead.subject ? `
+            <div class="lead-detail-row" style="margin-bottom: 16px;">
+                <span class="lead-detail-label">Enquired Package</span>
+                <span class="lead-detail-value" style="font-weight: bold; color: var(--accent);">${escapeHtml(lead.subject)}</span>
+            </div>
+            ` : ''}
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                 <div class="lead-detail-row">
                     <span class="lead-detail-label">Destination</span>

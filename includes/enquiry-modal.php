@@ -67,6 +67,7 @@
             <form action="#" method="POST" id="enquiryForm" class="enquiry-form-container">
                 <?php csrf_input(); ?>
                 <input type="hidden" name="source_page" id="enquirySourcePage" value="">
+                <input type="hidden" name="package_name" id="enquiryPackageName" value="">
                 <!-- Step 1: Select Destination -->
                 <div class="enquiry-form-step active" data-step="1">
                     <h3 class="enquiry-step-title">Select Destination</h3>
@@ -1029,6 +1030,16 @@ window.currentPageDestination = <?php
     echo json_encode($detectedSlug); 
 ?>;
 
+// Expose the current page's package title to Javascript
+window.currentPagePackage = <?php 
+    $detectedPkg = '';
+    $currentScript = basename($_SERVER['SCRIPT_NAME']);
+    if ($currentScript === 'package-detail.php' && isset($tourTitle)) {
+        $detectedPkg = $tourTitle;
+    }
+    echo json_encode($detectedPkg); 
+?>;
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('enquiryModal');
     const closeBtn = document.getElementById('closeEnquiryModal');
@@ -1055,11 +1066,12 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             e.stopPropagation();
             const dest = btn.getAttribute('data-destination');
-            openModal(dest);
+            const pkg = btn.getAttribute('data-package');
+            openModal(dest, pkg);
         });
     });
 
-    function openModal(dest) {
+    function openModal(dest, pkg) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
@@ -1067,6 +1079,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const srcPageInput = document.getElementById('enquirySourcePage');
         if (srcPageInput) {
             srcPageInput.value = window.location.href;
+        }
+
+        // Track the package name context
+        const activePkg = pkg || window.currentPagePackage;
+        const pkgInput = document.getElementById('enquiryPackageName');
+        if (pkgInput) {
+            pkgInput.value = activePkg || '';
         }
 
         setTimeout(() => {

@@ -22,6 +22,7 @@ try {
     $nights = trim($_POST['nights'] ?? '');
     $departure_city = trim($_POST['departure_city'] ?? '');
     $flights_booked = trim($_POST['flights_booked'] ?? 'No');
+    $package_name = trim($_POST['package_name'] ?? '');
 
     if (empty($fullname) || empty($email) || empty($phone) || empty($destination)) {
         echo json_encode(['success' => false, 'error' => 'Required fields are missing.']);
@@ -47,6 +48,10 @@ try {
 
     // Format notes column to store Departure City & Flight status
     $notes = "Departure City: " . $departure_city . "\nFlights Booked: " . $flights_booked;
+    $subject = !empty($package_name) ? "Enquiry for: " . $package_name : null;
+    if (!empty($package_name)) {
+        $notes = "Package: " . $package_name . "\n" . $notes;
+    }
 
     $source_page = $_POST['source_page'] ?? '';
     if (empty($source_page) && !empty($_SERVER['HTTP_REFERER'])) {
@@ -55,9 +60,9 @@ try {
 
     // Insert into database leads table
     $stmt = $pdo->prepare("INSERT INTO leads (
-        type, fullname, email, phone, destination, departure_date, nights, companion, rooms_config, notes, source_page
+        type, fullname, email, phone, destination, departure_date, nights, companion, rooms_config, subject, notes, source_page
     ) VALUES (
-        'enquiry', ?, ?, ?, ?, ?, ?, 'Family', ?, ?, ?
+        'enquiry', ?, ?, ?, ?, ?, ?, 'Family', ?, ?, ?, ?
     )");
     
     $stmt->execute([
@@ -68,6 +73,7 @@ try {
         $departure_date,
         $nights,
         $rooms_config,
+        $subject,
         $notes,
         $source_page
     ]);
@@ -84,6 +90,8 @@ try {
             'nights' => $nights,
             'companion' => 'Family',
             'rooms_config' => $rooms_config,
+            'subject' => $subject,
+            'package_name' => $package_name,
             'notes' => $notes,
             'source_page' => $source_page
         ];
