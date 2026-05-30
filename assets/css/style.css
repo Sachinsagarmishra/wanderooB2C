@@ -2714,6 +2714,8 @@ footer {
     }
 
     .mobile-view-all-overlay {
+        font-size: 12px;
+        padding: 0px;
         display: flex !important;
     }
 
