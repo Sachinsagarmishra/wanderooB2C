@@ -249,7 +249,7 @@ include_once 'includes/header.php';
                                 <div class="empty-dest-info">
                                     <span style="color: #FFb800; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: inline-block; background: rgba(255,222,89,0.1); padding: 6px 12px; border-radius: 20px; width: fit-content;">Bespoke Travel Planning</span>
                                     <h3 style="font-family: 'Playfair Display', serif; font-size: 32px; font-style: italic; font-weight: 700; color: #1e293b; margin: 0 0 16px 0; line-height: 1.2;">Plan a Custom Trip to <?php echo htmlspecialchars($dest['name']); ?></h3>
-                                    <p style="font-size: 16px; color: #475569; line-height: 1.6; margin: 0 0 24px 0;">While we don't have ready-made itineraries online for <?php echo htmlspecialchars($dest['name']); ?> at the moment, our destination experts can craft a <strong>100% tailor-made package</strong> just for you.</p>
+                                    <p style="font-size: 16px; color: #475569; line-height: 1.6; margin: 0 0 24px 0;">Experience <?php echo htmlspecialchars($dest['name']); ?> exactly the way you envision it. Our destination experts craft 100% tailor-made holidays designed around your interests, pace, and budget—complete with handpicked accommodations, unique experiences, and dedicated support throughout your journey.</p>
                                     
                                     <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px;">
                                         <li style="display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #334155;">
