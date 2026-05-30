@@ -17,7 +17,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     max-width: 100%;
     overflow-x: hidden;
 }
@@ -681,7 +682,7 @@ header {
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
     }
 
-    .nav-glass.active > a,
+    .nav-glass.active>a,
     .nav-glass.active .nav-dropdown-trigger {
         width: 100%;
         min-height: 46px;
@@ -1858,6 +1859,7 @@ footer {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
     }
+
     .detail-gallery.gallery-count-1 .detail-gallery-main {
         grid-column: 1 / 2;
         grid-row: 1 / 2;
@@ -1868,11 +1870,13 @@ footer {
         grid-template-columns: 2fr 1fr;
         grid-template-rows: 1fr;
     }
+
     .detail-gallery.gallery-count-2 .detail-gallery-main {
         grid-column: 1 / 2;
         grid-row: 1 / 2;
         height: 480px;
     }
+
     .detail-gallery.gallery-count-2 .detail-gallery-thumb {
         grid-column: 2 / 3;
         grid-row: 1 / 2;
@@ -1883,16 +1887,19 @@ footer {
         grid-template-columns: 2fr 1fr;
         grid-template-rows: 1fr 1fr;
     }
+
     .detail-gallery.gallery-count-3 .detail-gallery-main {
         grid-column: 1 / 2;
         grid-row: 1 / 3;
         height: 480px;
     }
+
     .detail-gallery.gallery-count-3 .detail-gallery-thumb:nth-of-type(1) {
         grid-column: 2 / 3;
         grid-row: 1 / 2;
         height: 232px;
     }
+
     .detail-gallery.gallery-count-3 .detail-gallery-thumb:nth-of-type(2) {
         grid-column: 2 / 3;
         grid-row: 2 / 3;
@@ -1903,21 +1910,25 @@ footer {
         grid-template-columns: 2fr 1fr 1fr;
         grid-template-rows: 1fr 1fr;
     }
+
     .detail-gallery.gallery-count-4 .detail-gallery-main {
         grid-column: 1 / 2;
         grid-row: 1 / 3;
         height: 480px;
     }
+
     .detail-gallery.gallery-count-4 .detail-gallery-thumb:nth-of-type(1) {
         grid-column: 2 / 3;
         grid-row: 1 / 2;
         height: 232px;
     }
+
     .detail-gallery.gallery-count-4 .detail-gallery-thumb:nth-of-type(2) {
         grid-column: 2 / 3;
         grid-row: 2 / 3;
         height: 232px;
     }
+
     .detail-gallery.gallery-count-4 .detail-gallery-thumb:nth-of-type(3) {
         grid-column: 3 / 4;
         grid-row: 1 / 3;
@@ -1928,26 +1939,31 @@ footer {
         grid-template-columns: 2fr 1fr 1fr;
         grid-template-rows: 1fr 1fr;
     }
+
     .detail-gallery.gallery-count-5 .detail-gallery-main {
         grid-column: 1 / 2;
         grid-row: 1 / 3;
         height: 480px;
     }
+
     .detail-gallery.gallery-count-5 .detail-gallery-thumb:nth-of-type(1) {
         grid-column: 2 / 3;
         grid-row: 1 / 2;
         height: 232px;
     }
+
     .detail-gallery.gallery-count-5 .detail-gallery-thumb:nth-of-type(2) {
         grid-column: 2 / 3;
         grid-row: 2 / 3;
         height: 232px;
     }
+
     .detail-gallery.gallery-count-5 .detail-gallery-thumb:nth-of-type(3) {
         grid-column: 3 / 4;
         grid-row: 1 / 2;
         height: 232px;
     }
+
     .detail-gallery.gallery-count-5 .detail-gallery-thumb:nth-of-type(4) {
         grid-column: 3 / 4;
         grid-row: 2 / 3;
@@ -2604,17 +2620,17 @@ footer {
     .detail-hero-banner {
         margin: 20px 10px;
         border-radius: 20px;
-        padding: 95px 15px 15px 15px;
+        padding: 75px 15px 15px 15px !important;
     }
 
     .detail-gallery {
         display: grid !important;
         grid-template-columns: 2.2fr 1fr !important;
         grid-template-rows: repeat(3, 1fr) !important;
-        gap: 8px !important;
-        margin: 15px auto !important;
-        padding: 0 15px !important;
-        height: 240px !important;
+        gap: 5px !important;
+        margin: 10px auto !important;
+        padding: 0 0px !important;
+        height: 210px !important;
     }
 
     .detail-gallery.gallery-count-1 {
@@ -2859,7 +2875,7 @@ footer {
     }
 
     .mobile-btn-view-all {
-        display: block;
+        display: none;
         position: absolute;
         bottom: 15px;
         right: 15px;
@@ -3128,7 +3144,9 @@ footer {
 }
 
 /* Contact Us, About Us & Destination Page Custom Styling */
-.contact-hero-banner, .about-hero-banner, .destination-hero-banner {
+.contact-hero-banner,
+.about-hero-banner,
+.destination-hero-banner {
     position: relative;
     padding-top: 180px;
     padding-bottom: 140px;
@@ -3141,7 +3159,9 @@ footer {
     text-align: center;
 }
 
-.contact-hero-bg, .about-hero-bg, .destination-hero-bg {
+.contact-hero-bg,
+.about-hero-bg,
+.destination-hero-bg {
     position: absolute;
     top: 0;
     left: 0;
@@ -3151,7 +3171,9 @@ footer {
     z-index: -1;
 }
 
-.contact-hero-overlay, .about-hero-overlay, .destination-hero-overlay {
+.contact-hero-overlay,
+.about-hero-overlay,
+.destination-hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -3161,12 +3183,16 @@ footer {
     z-index: -1;
 }
 
-.contact-hero-content, .about-hero-content, .destination-hero-content {
+.contact-hero-content,
+.about-hero-content,
+.destination-hero-content {
     z-index: 1;
     color: #ffffff;
 }
 
-.contact-breadcrumb-text, .about-breadcrumb-text, .destination-breadcrumb-text {
+.contact-breadcrumb-text,
+.about-breadcrumb-text,
+.destination-breadcrumb-text {
     font-family: 'Urbanist', sans-serif;
     font-size: 14px;
     letter-spacing: 1px;
@@ -3174,12 +3200,16 @@ footer {
     opacity: 0.9;
 }
 
-.contact-breadcrumb-text a, .about-breadcrumb-text a, .destination-breadcrumb-text a {
+.contact-breadcrumb-text a,
+.about-breadcrumb-text a,
+.destination-breadcrumb-text a {
     color: #ffffff;
     text-decoration: none;
 }
 
-.contact-hero-title, .about-hero-title, .destination-hero-title {
+.contact-hero-title,
+.about-hero-title,
+.destination-hero-title {
     font-family: 'Urbanist', sans-serif;
     font-size: 48px;
     font-weight: 800;
@@ -3437,48 +3467,53 @@ footer {
 
 /* Contact Us & About Us Page Responsive Styles */
 @media (max-width: 768px) {
-    .contact-hero-banner, .about-hero-banner, .destination-hero-banner {
+
+    .contact-hero-banner,
+    .about-hero-banner,
+    .destination-hero-banner {
         padding-top: 120px;
         padding-bottom: 80px;
     }
-    
-    .contact-hero-title, .about-hero-title, .destination-hero-title {
+
+    .contact-hero-title,
+    .about-hero-title,
+    .destination-hero-title {
         font-size: 36px;
     }
-    
+
     .contact-section-desc {
         font-size: 16px;
     }
-    
+
     .contact-header-section {
         flex-direction: column;
         gap: 20px;
         margin-bottom: 40px;
     }
-    
+
     .contact-section-title {
         font-size: 28px !important;
     }
-    
+
     .contact-grid {
         grid-template-columns: 1fr;
         gap: 30px;
     }
-    
+
     .contact-form-col {
         padding: 30px 20px;
     }
-    
+
     .contact-form .form-row {
         flex-direction: column;
         gap: 20px;
     }
-    
+
     .btn-send-message {
         width: 100%;
         text-align: center;
     }
-    
+
     .info-card {
         padding: 20px;
     }
@@ -3545,7 +3580,7 @@ footer {
         grid-template-columns: 1fr;
         gap: 40px;
     }
-    
+
     .about-image-col img {
         height: 380px;
     }
@@ -3555,15 +3590,15 @@ footer {
     .about-container {
         padding: 40px 20px;
     }
-    
+
     .about-main-heading {
         font-size: 26px !important;
     }
-    
+
     .about-content-col p {
         font-size: 16px !important;
     }
-    
+
     .about-image-col img {
         height: 300px;
     }
@@ -3713,7 +3748,7 @@ footer {
         width: 100%;
         text-align: left;
     }
-    
+
     .nav-dropdown .dropdown-menu {
         position: static;
         transform: none;
@@ -3735,11 +3770,11 @@ footer {
         gap: 6px;
         padding: 6px 0 8px;
     }
-    
+
     .nav-dropdown .dropdown-menu::before {
         display: none;
     }
-    
+
     .nav-dropdown .dropdown-menu a {
         color: rgba(255, 255, 255, 0.7) !important;
         padding: 9px 10px;
@@ -3751,13 +3786,13 @@ footer {
         border-radius: 10px;
         background: rgba(255, 255, 255, 0.06);
     }
-    
+
     .nav-dropdown .dropdown-menu a .dropdown-icon {
         width: 16px;
         height: 16px;
         filter: brightness(0) invert(1);
     }
-    
+
     .nav-dropdown .dropdown-menu a:hover {
         background: rgba(255, 222, 89, 0.16);
         color: var(--primary) !important;
@@ -3992,7 +4027,7 @@ footer {
         grid-template-columns: 1fr;
         gap: 30px;
     }
-    
+
     .destination-packages-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
@@ -4017,15 +4052,15 @@ footer {
     .destination-container {
         padding: 40px 20px;
     }
-    
+
     .destination-main-heading {
         font-size: 32px !important;
     }
-    
+
     .destination-intro-right p {
         font-size: 16px !important;
     }
-    
+
     .destination-packages-grid {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -4092,6 +4127,7 @@ footer {
         transform: scale(1);
         opacity: 0.7;
     }
+
     100% {
         transform: scale(1.6);
         opacity: 0;
@@ -4101,11 +4137,13 @@ footer {
 /* Avoid overlapping with mobile sticky CTA */
 @media (max-width: 768px) {
     .whatsapp-float-btn {
-        bottom: 95px; /* Floats above the mobile sticky bar */
+        bottom: 95px;
+        /* Floats above the mobile sticky bar */
         left: 20px;
         width: 50px;
         height: 50px;
     }
+
     .whatsapp-svg-icon {
         width: 26px;
         height: 26px;
@@ -4167,7 +4205,8 @@ footer {
 }
 
 .policy-tab-link.active {
-    background: var(--primary); /* Brand Yellow */
+    background: var(--primary);
+    /* Brand Yellow */
     border-color: var(--primary);
     color: var(--text-dark);
     font-weight: 700;
@@ -4190,7 +4229,8 @@ footer {
     padding-bottom: 25px;
     margin-bottom: 35px;
     border-bottom: 1.5px solid #f1f5f9;
-    scroll-margin-top: 120px; /* Offset for smooth scroll sticky header */
+    scroll-margin-top: 120px;
+    /* Offset for smooth scroll sticky header */
 }
 
 .policy-content-section:last-child {
@@ -4270,6 +4310,7 @@ footer {
     }
 
     .policy-content-section {
-        scroll-margin-top: 140px; /* larger offset for mobile horizontal bar */
+        scroll-margin-top: 140px;
+        /* larger offset for mobile horizontal bar */
     }
 }
