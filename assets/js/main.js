@@ -19,10 +19,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const navDropdownTrigger = document.querySelector('.nav-dropdown-trigger');
     const navDropdown = document.querySelector('.nav-dropdown');
     if (navDropdownTrigger && navDropdown) {
+        // Desktop Hover Persistence Handling
+        navDropdown.addEventListener('mouseenter', () => {
+            if (window.innerWidth > 1024) {
+                navDropdown.classList.add('hover-active');
+            }
+        });
+
+        // Click Handler (Mobile toggle / Desktop toggle)
         navDropdownTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
             if (window.innerWidth <= 1024) {
-                e.preventDefault();
                 navDropdown.classList.toggle('active');
+            } else {
+                navDropdown.classList.toggle('hover-active');
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navDropdown.contains(e.target)) {
+                navDropdown.classList.remove('hover-active');
+            }
+        });
+
+        // Close dropdown when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navDropdown.classList.remove('hover-active');
             }
         });
     }

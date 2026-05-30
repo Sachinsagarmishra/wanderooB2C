@@ -3496,11 +3496,17 @@ footer {
     border-color: transparent transparent rgba(255, 255, 255, 0.95) transparent;
 }
 
-.nav-dropdown:hover .dropdown-menu {
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown.hover-active .dropdown-menu {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
     margin-top: 10px;
+}
+
+.nav-dropdown:hover .nav-dropdown-trigger,
+.nav-dropdown.hover-active .nav-dropdown-trigger {
+    color: var(--primary) !important;
 }
 
 .nav-dropdown .dropdown-menu a {
@@ -3555,7 +3561,8 @@ footer {
         border-color: transparent transparent rgba(18, 34, 34, 0.86) transparent;
     }
 
-    .nav-dropdown:hover .dropdown-menu {
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown.hover-active .dropdown-menu {
         margin-top: 12px;
     }
 
