@@ -4271,48 +4271,33 @@ footer {
 @media (max-width: 992px) {
     .policy-layout-container {
         flex-direction: column;
-        gap: 30px;
-        padding: 40px 20px 60px;
+        gap: 20px;
+        padding: 30px 20px 50px;
     }
 
     .policy-sidebar {
-        width: 100%;
-        position: sticky;
-        top: 70px;
-        background: #f8fafc;
-        padding: 12px 20px;
-        margin: 0 -20px;
-        z-index: 10;
-        flex-direction: row;
-        overflow-x: auto;
-        white-space: nowrap;
-        gap: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        border-bottom: 1px solid #e2e8f0;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .policy-sidebar::-webkit-scrollbar {
-        display: none;
-    }
-
-    .policy-sidebar-title {
-        display: none;
-    }
-
-    .policy-tab-link {
-        display: inline-block;
-        padding: 10px 16px;
-        font-size: 13px;
-        border-radius: 20px;
-    }
-
-    .policy-tab-link:hover {
-        transform: none;
+        display: none !important;
     }
 
     .policy-content-section {
-        scroll-margin-top: 140px;
-        /* larger offset for mobile horizontal bar */
+        scroll-margin-top: 80px;
+        padding-bottom: 20px;
+        margin-bottom: 25px;
+    }
+
+    .policy-content-section h2 {
+        font-size: 18px !important;
+        margin-bottom: 10px;
+    }
+
+    .policy-content-section p {
+        font-size: 14px !important;
+        line-height: 1.6;
+        margin-bottom: 12px;
+    }
+
+    .policy-updated {
+        font-size: 12px !important;
+        margin-bottom: 20px;
     }
 }
