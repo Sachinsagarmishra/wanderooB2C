@@ -174,11 +174,24 @@ include 'includes/header.php';
         foreach ($thumbPhotos as $idx => $photo):
             $isExternal = (strpos($photo['image_path'], 'http://') === 0 || strpos($photo['image_path'], 'https://') === 0);
             $imgUrl = $isExternal ? $photo['image_path'] : SITE_PATH . '/' . $photo['image_path'];
+            
+            $isLastDesktop = ($idx === count($thumbPhotos) - 1);
+            $isLastMobile = ($idx === min(2, count($thumbPhotos) - 1));
+            
+            $thumbClass = "detail-gallery-thumb";
+            if ($idx >= 3) {
+                $thumbClass .= " desktop-only-thumb";
+            }
         ?>
-            <div class="detail-gallery-thumb">
+            <div class="<?php echo $thumbClass; ?>">
                 <img src="<?php echo htmlspecialchars($imgUrl); ?>" alt="<?php echo htmlspecialchars($photo['alt_text'] ?? 'Travel Photo'); ?>" class="detail-gallery-img">
-                <?php if ($idx === count($thumbPhotos) - 1): ?>
-                    <button class="btn-view-all-images">View All Images</button>
+                <?php if ($isLastDesktop): ?>
+                    <button class="btn-view-all-images desktop-btn-view-all">View All Images</button>
+                <?php endif; ?>
+                <?php if ($isLastMobile): ?>
+                    <div class="btn-view-all-images mobile-view-all-overlay">
+                        <span>View All</span>
+                    </div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
