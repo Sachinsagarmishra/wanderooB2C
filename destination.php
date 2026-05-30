@@ -185,10 +185,68 @@ include_once 'includes/header.php';
 
                     if (empty($dbPkgs)):
                     ?>
-                        <div class="empty-dest-container" style="grid-column: 1 / -1; width: 100%;">
-                            <div class="empty-dest-wrapper" style="display: flex; gap: 40px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 24px; padding: 40px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); flex-wrap: wrap;">
+                        <style>
+                        .empty-dest-wrapper {
+                            display: flex;
+                            gap: 40px;
+                            background: #ffffff;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 24px;
+                            padding: 40px;
+                            margin-top: 20px;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+                            flex-wrap: wrap;
+                            box-sizing: border-box;
+                            width: 100%;
+                        }
+                        .empty-dest-info {
+                            flex: 1;
+                            min-width: 300px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            font-family: 'Urbanist', sans-serif;
+                            box-sizing: border-box;
+                        }
+                        .empty-dest-form-card {
+                            flex: 1.2;
+                            min-width: 320px;
+                            background: #f8fafc;
+                            border-radius: 20px;
+                            padding: 30px;
+                            border: 1px solid #edf2f7;
+                            font-family: 'Urbanist', sans-serif;
+                            box-sizing: border-box;
+                        }
+                        .empty-dest-form-grid-row {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            gap: 15px;
+                        }
+                        @media (max-width: 768px) {
+                            .empty-dest-wrapper {
+                                padding: 24px 16px !important;
+                                gap: 24px !important;
+                                border-radius: 16px !important;
+                            }
+                            .empty-dest-info {
+                                min-width: 100% !important;
+                            }
+                            .empty-dest-form-card {
+                                min-width: 100% !important;
+                                padding: 20px 16px !important;
+                            }
+                            .empty-dest-form-grid-row {
+                                grid-template-columns: 1fr !important;
+                                gap: 16px !important;
+                            }
+                        }
+                        </style>
+
+                        <div class="empty-dest-container" style="grid-column: 1 / -1; width: 100%; box-sizing: border-box;">
+                            <div class="empty-dest-wrapper">
                                 <!-- Left Info Block -->
-                                <div class="empty-dest-info" style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; font-family: 'Urbanist', sans-serif;">
+                                <div class="empty-dest-info">
                                     <span style="color: #FFb800; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: inline-block; background: rgba(255,222,89,0.1); padding: 6px 12px; border-radius: 20px; width: fit-content;">Bespoke Travel Planning</span>
                                     <h3 style="font-family: 'Playfair Display', serif; font-size: 32px; font-style: italic; font-weight: 700; color: #1e293b; margin: 0 0 16px 0; line-height: 1.2;">Plan a Custom Trip to <?php echo htmlspecialchars($dest['name']); ?></h3>
                                     <p style="font-size: 16px; color: #475569; line-height: 1.6; margin: 0 0 24px 0;">While we don't have ready-made itineraries online for <?php echo htmlspecialchars($dest['name']); ?> at the moment, our destination experts can craft a <strong>100% tailor-made package</strong> just for you.</p>
@@ -210,7 +268,7 @@ include_once 'includes/header.php';
                                 </div>
 
                                 <!-- Right Form Block -->
-                                <div class="empty-dest-form-card" style="flex: 1.2; min-width: 320px; background: #f8fafc; border-radius: 20px; padding: 30px; border: 1px solid #edf2f7; font-family: 'Urbanist', sans-serif;">
+                                <div class="empty-dest-form-card">
                                     <h4 style="font-size: 18px; font-weight: 750; color: #0f172a; margin: 0 0 8px 0;">Request a Free Callback</h4>
                                     <p style="font-size: 13px; color: #64748b; margin: 0 0 20px 0;">Fill in your details and our expert will get in touch with you shortly.</p>
 
@@ -222,32 +280,32 @@ include_once 'includes/header.php';
                                             echo $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; 
                                         ?>">
 
-                                        <div style="display: none; background-color: #fee2e2; border: 1px solid #fecaca; color: #ef4444; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600;" id="destFormError"></div>
+                                        <div style="display: none; background-color: #fee2e2; border: 1px solid #fecaca; color: #ef4444; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; box-sizing: border-box;" id="destFormError"></div>
 
                                         <div style="display: flex; flex-direction: column; gap: 6px;">
                                             <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormName">Full Name*</label>
-                                            <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="text" id="destFormName" name="fullname" placeholder="Enter your full name" required>
+                                            <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff; box-sizing: border-box;" type="text" id="destFormName" name="fullname" placeholder="Enter your full name" required>
                                         </div>
 
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                        <div class="empty-dest-form-grid-row">
                                             <div style="display: flex; flex-direction: column; gap: 6px;">
                                                 <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormEmail">Email Address*</label>
-                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="email" id="destFormEmail" name="email" placeholder="Enter email address" required>
+                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff; box-sizing: border-box;" type="email" id="destFormEmail" name="email" placeholder="Enter email address" required>
                                             </div>
                                             <div style="display: flex; flex-direction: column; gap: 6px;">
                                                 <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormPhone">WhatsApp / Phone*</label>
-                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="tel" id="destFormPhone" name="phone" placeholder="Enter contact number" required>
+                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff; box-sizing: border-box;" type="tel" id="destFormPhone" name="phone" placeholder="Enter contact number" required>
                                             </div>
                                         </div>
 
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                        <div class="empty-dest-form-grid-row">
                                             <div style="display: flex; flex-direction: column; gap: 6px;">
                                                 <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormDate">Travel Date</label>
-                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="date" id="destFormDate" name="departure_date" min="<?php echo date('Y-m-d'); ?>">
+                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff; box-sizing: border-box;" type="date" id="destFormDate" name="departure_date" min="<?php echo date('Y-m-d'); ?>">
                                             </div>
                                             <div style="display: flex; flex-direction: column; gap: 6px;">
                                                 <label style="font-size: 13px; font-weight: 700; color: #475569;" for="destFormNights">Duration (Nights)</label>
-                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff;" type="number" id="destFormNights" name="nights" min="1" placeholder="e.g. 5">
+                                                <input style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 15px; outline: none; background: #ffffff; box-sizing: border-box;" type="number" id="destFormNights" name="nights" min="1" placeholder="e.g. 5">
                                             </div>
                                         </div>
 
