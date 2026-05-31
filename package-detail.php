@@ -403,9 +403,29 @@ include 'includes/header.php';
     <div class="gallery-modal-thumbs" id="galleryModalThumbs"></div>
 </div>
 
+<?php
+$whatsappNum = preg_replace('/\D/', '', get_setting('contact_whatsapp', '919113515462'));
+$requestScheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$packageUrl = SITE_PATH . '/' . $destSlug . '/' . $dbPackage['slug'];
+$packageAbsUrl = $requestScheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . $packageUrl;
+$whatsappMessage = "Hi Wanderoo, I am interested in the package \"" . $dbPackage['title'] . "\" for " . ucfirst($destSlug) . ".\nLink: " . $packageAbsUrl;
+$whatsappUrl = 'https://wa.me/' . $whatsappNum . '?text=' . urlencode($whatsappMessage);
+?>
+
 <!-- Mobile Sticky CTA Bar -->
 <div class="mobile-sticky-cta">
-    <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>" data-package="<?php echo htmlspecialchars($tourTitle); ?>">Craft your trip</a>
+    <div class="mobile-sticky-cta-flex">
+        <a href="<?php echo htmlspecialchars($whatsappUrl); ?>" class="btn-phone-sticky" target="_blank" rel="noopener" title="Ask on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </a>
+        <a href="#" class="btn-quote btn-enquire btn-craft-trip" data-destination="<?php echo htmlspecialchars($destSlug); ?>" data-package="<?php echo htmlspecialchars($tourTitle); ?>">
+            <svg class="ticket-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+                <path d="M13 5v14M9 9h.01M9 15h.01"/>
+            </svg>
+            Get a quote
+        </a>
+    </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
